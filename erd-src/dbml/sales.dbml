@@ -1,0 +1,352 @@
+// UniPOS · sales-service · generated from @Entity code (origin/dev 29f5481)
+
+Table sales.processing_fee_ranges [note: 'entity ProcessingFeeRange'] {
+  processing_fee_range_id integer [pk]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  min_amount numeric(19) [not null]
+  max_amount numeric(19) [not null]
+  fee_type varchar(50)
+  fee_amount numeric(19)
+  currency varchar(50)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table sales.sales_hub_incentive_settings [note: 'entity SalesHubIncentiveSetting'] {
+  sales_hub_incentive_setting_id uuid [pk]
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  percentage numeric [not null]
+  start_date date [not null]
+  remarks varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table sales.sales_hub_incentive_setting_history [note: 'entity SalesHubIncentiveSettingHistory'] {
+  sales_hub_incentive_setting_history_id uuid [pk]
+  sales_hub_incentive_setting_id uuid [not null]
+  percentage numeric [not null]
+  start_date date [not null]
+  to_date date [not null]
+  remarks varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table sales.sales_invoices [note: 'entity SalesInvoice'] {
+  sales_invoice_id uuid [pk]
+  sales_invoice_number varchar(255) [not null]
+  order_id uuid
+  sales_type_id integer [not null, note: 'reference inferred from the column name']
+  terminal_id varchar(255)
+  terminal_ip varchar(50)
+  sales_date timestamp [not null]
+  mrp_total "double precision" [not null]
+  invoice_total "double precision" [not null]
+  discount_amount "double precision" [not null]
+  additional_discount "double precision"
+  grand_total "double precision" [not null]
+  tax_amount "double precision" [not null]
+  vat_amount "double precision" [not null]
+  customer_account_id varchar(50) [not null, note: '→ accounts.customer_accounts.customer_account_id (other service, no FK)']
+  is_returned boolean [not null]
+  returned_date timestamp
+  remarks varchar(250) [not null]
+  number_of_mushak_copy_printed integer [not null]
+  shipping_charge "double precision" [not null]
+  sales_by_employee_id varchar(50) [note: '→ authentication.employees.id (other service, no FK)']
+  cash_received "double precision" [not null]
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  sales_offer_id bigint
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table sales.sales_invoice_gift_voucher_extensions [note: 'entity SalesInvoiceGiftVoucherExtension'] {
+  sales_invoice_gift_voucher_extension_id uuid [pk]
+  sales_invoice_id uuid [not null]
+  transactional_card_number varchar(150)
+  has_gift_voucher boolean [not null]
+  gift_voucher_id varchar(255)
+  gift_voucher_number varchar(255)
+  gift_voucher_amount "double precision"
+  is_coupon_sale boolean [not null]
+  coupon_number varchar(50)
+  coupon_amount "double precision"
+}
+
+Table sales.sales_invoice_hire_extensions [note: 'entity SalesInvoiceHireExtension'] {
+  sales_invoice_hire_extension_id uuid [pk]
+  sales_invoice_id uuid [not null]
+  hire_cash_price "double precision" [not null]
+  hmrp "double precision" [not null]
+  hire_outstanding "double precision" [not null]
+  hire_value "double precision" [not null]
+  processing_fee "double precision" [not null]
+  mark_value "double precision" [not null]
+  hmrp_profit "double precision" [not null]
+  number_of_installment integer [not null]
+  is_lpr_completed boolean [not null]
+  lpr_date date
+  is_reverted boolean [not null]
+  reverted_date date
+  operating_cost "double precision" [not null]
+  next_installment_date date
+  installment_day integer [not null]
+  hot_sale_addition_amount "double precision" [not null]
+  micr_cheque_number varchar(50)
+}
+
+Table sales.sales_invoice_hire_guarantors [note: 'entity SalesInvoiceHireGuarantor'] {
+  sales_invoice_hire_guarantor_id uuid [pk]
+  sales_invoice_id uuid [not null]
+  person_id uuid [not null, note: '→ customer.persons.person_id (other service, no FK)']
+  priority varchar(50) [not null]
+  employee_id varchar(255)
+  person_assigned_role_id uuid
+}
+
+Table sales.sales_invoice_retail_extensions [note: 'entity SalesInvoiceRetailExtension'] {
+  sales_invoice_retail_extension_id uuid [pk]
+  sales_invoice_id uuid [not null]
+  is_emi_based boolean [not null]
+  emi_bank_id bigint
+  emi_card_id varchar(50)
+  emi_commission_rate "double precision"
+  emi_commission_amount "double precision"
+  emi_machine_bank_id varchar(50)
+  emi_machine_charge_rate "double precision"
+  emi_machine_amount "double precision"
+  is_mobile_banking boolean [not null]
+  is_bank_card_holder boolean [not null]
+  is_reference_sale boolean [not null]
+  reference_employee_id varchar(50) [note: '→ authentication.employees.id (other service, no FK)']
+  micr_cheque_number varchar(50)
+  transactional_card_number varchar(150)
+}
+
+Table sales.sales_offers [note: 'entity SalesOffer'] {
+  sales_offer_id bigint [pk]
+  offer_title varchar(150) [not null]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  start_date date
+  end_date date
+  sales_type_code varchar(50)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table sales.policy_execution_logs [note: 'entity PolicyExecutionLog'] {
+  policy_execution_log_id uuid [pk]
+  invoice_number varchar(50) [not null]
+  engine varchar(50) [not null]
+  policy_id uuid [not null]
+  status varchar(50) [not null]
+  message varchar(250) [not null]
+}
+
+Table sales.transaction_prefix_configurations [note: 'entity TransactionPrefixConfiguration'] {
+  transaction_prefix_config_id bigint [pk]
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  operation_type varchar(50) [not null]
+  prefix varchar(50) [not null]
+  code_length integer [not null]
+  next_sequence_number bigint [not null]
+  description varchar(250)
+  bin_short_code varchar(50)
+}
+
+Table sales.sales_lines [note: 'entity SalesLine'] {
+  sales_line_id uuid [pk]
+  sales_invoice_id uuid [not null]
+  sales_line_hierarchy_level varchar(50) [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  mrp_rate "double precision" [not null]
+  quantity integer [not null]
+  discount_total "double precision" [not null]
+  additional_discount "double precision"
+  tax_rate "double precision" [not null]
+  tax_amount "double precision" [not null]
+  vat_rate "double precision" [not null]
+  vat_total "double precision" [not null]
+  line_net_total "double precision" [not null]
+  grand_total "double precision"
+  unit_cost "double precision"
+  grade varchar(50)
+  product_price_history_id varchar(50)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table sales.sales_serial_numbers [note: 'entity SalesSerialNumber'] {
+  id uuid [pk]
+  sales_line_id uuid [not null]
+  barcode_number varchar(255) [not null]
+  batch_number varchar(255) [not null]
+  expiry_date date
+  inventory_receive_date date
+  color_code varchar(255)
+  purchase_price "double precision"
+  transaction_number varchar(255)
+  return_date date
+  is_registered boolean
+  status varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table sales.sales_returns [note: 'entity SalesReturn'] {
+  sales_return_id uuid [pk]
+  sale_return_invoice_number varchar(50) [not null]
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  customer_id uuid [not null, note: '→ customer.persons.person_id (other service, no FK)']
+  return_date date [not null]
+  total_refund_amount numeric [not null]
+  refund_mode varchar(50) [not null]
+  return_reason varchar(250)
+  master_invoice_number varchar(5)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table sales.sales_return_line [note: 'entity SalesReturnLine'] {
+  sales_return_line_id uuid [pk]
+  sales_return_id uuid [not null]
+  sale_line_id uuid [not null]
+  product_hierarchy_level_id integer [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  quantity_sold numeric [not null]
+  quantity_returned numeric [not null]
+  unit_price numeric [not null]
+  refund_amount numeric [not null]
+  return_reason_id varchar(255) [not null]
+  restock_flag boolean [not null]
+  condition varchar(50) [not null]
+  remarks varchar(255) [not null]
+}
+
+Table sales.sales_return_serial_numbers [note: 'entity SalesReturnSerialNumber'] {
+  id uuid [pk]
+  sales_return_line_id uuid [not null]
+  barcode_number varchar(255) [not null]
+  condition varchar(50) [not null]
+  inspection_status varchar(50) [not null]
+  remarks varchar(255) [not null]
+}
+
+Table sales.sales_target_monthly [note: 'entity SalesTargetMonthly'] {
+  sales_target_monthly_id uuid [pk]
+  sales_target_yearly_id uuid [not null]
+  month_number integer [not null]
+  sales_target_head_id uuid [not null]
+  target_amount "double precision" [not null]
+  achieved_amount "double precision" [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table sales.sales_target_yearly [note: 'entity SalesTargetYearly'] {
+  sales_target_yearly_id uuid [pk]
+  fiscal_year bigint [not null]
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  sales_target_head_id uuid [not null]
+  target_amount "double precision" [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table sales.sales_target_heads [note: 'entity TargetHead'] {
+  target_head_id uuid [pk]
+  target_head_type_id uuid [not null]
+  is_for_yearly_target boolean [not null]
+  is_amount_based varchar(50) [not null]
+  head_name varchar(255) [not null]
+  head_code varchar(255) [not null]
+  display_order bigint [not null]
+  is_for_sales_types boolean [not null]
+  description varchar(255) [not null]
+  threshold_percentage "double precision" [not null]
+  deductable_percentage "double precision" [not null]
+  point bigint [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table sales.sales_target_head_types [note: 'entity TargetHeadType'] {
+  target_head_type_id uuid [pk]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  target_head_type_name varchar(255) [not null]
+  target_head_type_code varchar(255) [not null]
+  description varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table sales.sales_types [note: 'entity SalesType'] {
+  id integer [pk]
+  parent_id integer
+  code varchar(50) [not null]
+  name varchar(150) [not null]
+  default_engine varchar(50)
+  allowed_engines varchar(150)
+  routing_mode varchar(50)
+  description varchar(250)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Ref: sales.sales_hub_incentive_setting_history.sales_hub_incentive_setting_id > sales.sales_hub_incentive_settings.sales_hub_incentive_setting_id
+Ref: sales.sales_invoices.sales_type_id > sales.sales_types.id // id only, no FK
+Ref: sales.sales_invoices.sales_offer_id > sales.sales_offers.sales_offer_id
+Ref: sales.sales_invoice_gift_voucher_extensions.sales_invoice_id - sales.sales_invoices.sales_invoice_id
+Ref: sales.sales_invoice_hire_extensions.sales_invoice_id - sales.sales_invoices.sales_invoice_id
+Ref: sales.sales_invoice_hire_guarantors.sales_invoice_id > sales.sales_invoices.sales_invoice_id
+Ref: sales.sales_invoice_retail_extensions.sales_invoice_id - sales.sales_invoices.sales_invoice_id
+Ref: sales.sales_lines.sales_invoice_id > sales.sales_invoices.sales_invoice_id
+Ref: sales.sales_serial_numbers.sales_line_id > sales.sales_lines.sales_line_id
+Ref: sales.sales_return_line.sales_return_id > sales.sales_returns.sales_return_id
+Ref: sales.sales_return_line.sale_line_id > sales.sales_lines.sales_line_id
+Ref: sales.sales_return_serial_numbers.sales_return_line_id > sales.sales_return_line.sales_return_line_id
+Ref: sales.sales_target_monthly.sales_target_yearly_id > sales.sales_target_yearly.sales_target_yearly_id
+Ref: sales.sales_target_monthly.sales_target_head_id > sales.sales_target_heads.target_head_id
+Ref: sales.sales_target_yearly.sales_target_head_id > sales.sales_target_heads.target_head_id
+Ref: sales.sales_target_heads.target_head_type_id > sales.sales_target_head_types.target_head_type_id

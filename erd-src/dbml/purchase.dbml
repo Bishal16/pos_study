@@ -1,0 +1,530 @@
+// UniPOS · purchase-service · generated from @Entity code (origin/dev 44ed78e)
+
+Table purchase.delivery_orders [note: 'entity DeliveryOrder'] {
+  delivery_order_id uuid [pk]
+  do_number varchar(255) [not null]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  operating_unit_id integer [not null]
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  source_type varchar(30) [not null]
+  source_id uuid
+  total_do_item_quantity integer [not null]
+  do_item_received_quantity integer
+  do_received_flag boolean [not null]
+  challan_number varchar(255)
+  challan_date date [not null]
+  delivery_date date [not null]
+  total_price numeric [not null]
+  vat_amount numeric [not null]
+  tax_amount numeric [not null]
+  status varchar(50) [not null]
+  delivery_reference_no varchar(255)
+  delivery_order_note varchar(255)
+  ebs_customer_id varchar(50)
+  is_accounting_completed boolean [not null]
+  transaction_type varchar(255)
+  value varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table purchase.delivery_order_items [note: 'entity DeliveryOrderItem'] {
+  do_product_controller_item_id uuid [pk]
+  do_product_controller_id uuid [not null]
+  barcode varchar(255) [not null, unique]
+  item_grade varchar(50) [not null]
+  color_code varchar(50)
+  price numeric [not null]
+  mushak_price numeric [not null]
+  vat_amount numeric [not null]
+  tax_amount numeric [not null]
+  status varchar(50) [not null]
+  received_date date
+  process_flag boolean
+}
+
+Table purchase.do_product_controllers [note: 'entity DoProductController'] {
+  id uuid [pk]
+  delivery_order_id uuid [not null]
+  product_hierarchy_level integer [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  item_grade varchar(50) [not null]
+  customer_order_number varchar(255)
+  total_quantity numeric [not null]
+  total_received_quantity numeric
+  unit_price numeric [not null]
+  vat_rate numeric [not null]
+  vat_amount numeric [not null]
+  tax_rate numeric [not null]
+  tax_amount numeric [not null]
+  total_price numeric [not null]
+  mushak_unit_price numeric
+  total_mushak numeric
+  remarks varchar(255)
+  ebs_inventory_item_id varchar(255)
+}
+
+Table purchase.supplier_legal_entities [note: 'entity SupplierLegalEntity'] {
+  legal_entity_id integer [pk]
+  supplier_id integer [not null]
+  legal_entity_name varchar(255) [not null]
+  business_identity_number varchar(255) [not null]
+  tax_id varchar(255) [not null]
+  address varchar(255) [not null]
+  country_id varchar(255) [not null]
+  email varchar(255) [not null, unique]
+  phone varchar(255) [not null]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table purchase.supplier_operating_units [note: 'entity SupplierOperatingUnit'] {
+  operating_unit_id integer [pk]
+  legal_entity_id integer [not null]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  operating_unit_name varchar(255) [not null]
+  code integer [not null]
+  short_code varchar(20) [not null]
+  operating_bin varchar(255)
+  operating_address varchar(255) [not null]
+  vat_number varchar(50) [not null]
+  vat_address varchar(150) [not null]
+  vat_percentage "double precision" [not null]
+  phone_number varchar(20)
+  sort_order integer [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table purchase.outbox [note: 'entity Outbox'] {
+  id uuid [pk]
+  aggregate_id uuid [not null]
+  aggregate_type varchar(50) [not null]
+  event_type varchar(50) [not null]
+  payload varchar(255) [not null]
+  processed boolean [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table purchase.proforma_invoices [note: 'entity ProformaInvoice'] {
+  proforma_invoice_id uuid [pk]
+  operating_unit_id integer
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  issue_date date [not null]
+  status varchar(50) [not null]
+  proforma_invoice_number varchar(50)
+  valid_until date
+  currency varchar(50)
+  subtotal numeric
+  discount_total numeric
+  tax_total numeric
+  grand_total numeric
+  remarks varchar(255)
+  purchase_order_number varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table purchase.proforma_invoice_items [note: 'entity ProformaInvoiceItem'] {
+  proforma_invoice_item_id uuid [pk]
+  proforma_invoice_id uuid [not null]
+  product_scope_id integer [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  quantity integer
+  unit_price numeric
+  discount numeric
+  tax_rate numeric
+  tax_amount numeric
+  line_total numeric
+}
+
+Table purchase.service_proforma_invoices [note: 'entity ServiceProformaInvoice'] {
+  service_proforma_invoice_id uuid [pk]
+  service_rfq_response_id uuid [not null]
+  issue_date date [not null]
+  total_amount numeric [not null]
+  payment_terms varchar(255) [not null]
+  status varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table purchase.purchase_orders [note: 'entity PurchaseOrder'] {
+  purchase_order_id uuid [pk]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  requester_id integer [note: '→ authentication.users.user_id (other service, no FK)']
+  po_number varchar(50) [not null]
+  operating_unit_id integer [not null]
+  purchase_request_id uuid
+  order_date date [not null]
+  expected_delivery_date date [not null]
+  currency varchar(10)
+  shipping_date date [not null]
+  subtotal numeric(15) [not null]
+  tax_total numeric(15) [not null]
+  discount_total numeric(15) [not null]
+  grand_total numeric(15) [not null]
+  status varchar(50) [not null]
+  notes varchar(100)
+  approval_id uuid [note: '→ approval.approval_requests.approval_request_id (other service, no FK)']
+  payment_terms varchar(255)
+  requester_type varchar(50)
+  approval_path_id uuid [note: '→ approval.approval_paths.approval_path_id (other service, no FK)']
+  workflow_id uuid [note: '→ approval.approval_workflows.workflow_id (other service, no FK)']
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table purchase.purchase_order_audit_item_log [note: 'entity PurchaseOrderAuditItemLog'] {
+  purchase_order_audit_item_log_id uuid [pk]
+  purchase_order_audit_log_id uuid [not null]
+  product_hierarchy_level varchar(50)
+  related_id uuid [note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  previous_quantity numeric
+  current_quantity numeric
+  previous_unit_price numeric(15) [not null]
+  current_unit_price numeric(15) [not null]
+  previous_tax_rate numeric(5)
+  current_tax_rate numeric(5)
+  previous_tax_amount numeric(15)
+  current_tax_amount numeric(15)
+  previous_discount numeric(15)
+  current_discount numeric(15)
+  previous_line_total numeric(15) [not null]
+  current_line_total numeric(15) [not null]
+}
+
+Table purchase.purchase_order_audit_log [note: 'entity PurchaseOrderAuditLog'] {
+  purchase_order_audit_log_id uuid [pk]
+  purchase_order_id uuid [not null]
+  status varchar(50) [not null]
+  action_category varchar(50)
+  performed_by uuid
+  approval_status varchar(50)
+  order_date date [not null]
+  expected_delivery_date date
+  currency varchar(10)
+  subtotal numeric(15)
+  tax_total numeric(15)
+  discount_total numeric(15)
+  grand_total numeric(15)
+  notes varchar(100)
+  is_raising_record boolean
+  shipping_date date
+  payment_terms varchar(255)
+}
+
+Table purchase.purchase_order_items [note: 'entity PurchaseOrderItem'] {
+  purchase_order_item_id uuid [pk]
+  purchase_order_id uuid [not null]
+  product_hierarchy_level integer
+  related_id uuid [note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  ordered_quantity numeric
+  approved_quantity integer
+  received_quantity numeric
+  unit_price numeric(15) [not null]
+  tax_rate numeric(5)
+  tax_amount numeric(15)
+  discount numeric(15)
+  line_total numeric(15) [not null]
+  status varchar(20)
+}
+
+Table purchase.service_purchase_orders [note: 'entity ServicePurchaseOrder'] {
+  service_purchase_order_id uuid [pk]
+  service_proforma_invoice_id uuid [not null]
+  order_date date [not null]
+  agreed_cost numeric [not null]
+  status varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table purchase.purchase_requests [note: 'entity PurchaseRequest'] {
+  purchase_request_id uuid [pk]
+  request_number varchar(255) [not null, unique]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  purchase_request_title varchar(255) [not null]
+  requester_id integer [note: '→ authentication.users.user_id (other service, no FK)']
+  requested_date date [not null]
+  required_date date [not null]
+  status varchar(50) [not null]
+  notes varchar(255) [not null]
+  total_estimated_cost numeric [not null]
+  is_changed_by_approver boolean [not null]
+  approval_id uuid [note: '→ approval.approval_requests.approval_request_id (other service, no FK)']
+  requester_type varchar(50)
+  approval_path_id uuid [note: '→ approval.approval_paths.approval_path_id (other service, no FK)']
+  workflow_id uuid [note: '→ approval.approval_workflows.workflow_id (other service, no FK)']
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table purchase.purchase_request_audit_log [note: 'entity PurchaseRequestAuditLog'] {
+  purchase_request_audit_log_id uuid [pk]
+  purchase_request_id uuid [not null]
+  status varchar(50) [not null]
+  action_category varchar(50) [not null]
+  performed_by uuid
+  approval_status varchar(50) [not null]
+  note varchar(255)
+  total_estimated_cost numeric [not null]
+  is_raising_record boolean [not null]
+}
+
+Table purchase.purchase_request_histories [note: 'entity PurchaseRequestHistory'] {
+  purchase_request_history_id uuid [pk]
+  purchase_request_id uuid [not null]
+  requester_id uuid [not null, note: '→ authentication.users.user_id (other service, no FK)']
+  department_id bigint [not null]
+  requested_date date [not null]
+  status varchar(50) [not null]
+  total_cost numeric [not null]
+  is_changed_by_approver boolean [not null]
+  title varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table purchase.purchase_request_history_products [note: 'entity PurchaseRequestHistoryProduct'] {
+  purchase_request_history_product_id uuid [pk]
+  product_scope_id integer [not null]
+  rfq_product_id uuid [not null]
+  confirmed_quantity numeric [not null]
+  confirmed_price numeric [not null]
+  delivery_date date [not null]
+}
+
+Table purchase.purchase_request_items [note: 'entity PurchaseRequestItem'] {
+  purchase_request_item_id uuid [pk]
+  purchase_request_id uuid [not null]
+  product_hierarchy_level integer [not null]
+  related_id uuid [note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  requested_quantity numeric [not null]
+  approved_quantity numeric
+  unit_estimated_price numeric [not null]
+  total_estimated_price numeric [not null]
+}
+
+Table purchase.purchase_request_item_audit_log [note: 'entity PurchaseRequestItemAuditLog'] {
+  purchase_request_item_audit_log_id uuid [pk]
+  purchase_request_audit_log_id uuid [not null]
+  product_hierarchy_level integer [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  previous_quantity numeric [not null]
+  current_quantity numeric
+  approved_quantity numeric
+  unit_estimated_price numeric [not null]
+  total_estimated_price numeric [not null]
+}
+
+Table purchase.sourcing_ranking_criterias [note: 'entity SourcingRankingCriteria'] {
+  ranking_criteria_id uuid [pk]
+  criteria_name varchar(255) [not null]
+  sequence_number bigint [not null]
+  weight_percentage numeric [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table purchase.supplier_ranking_scores [note: 'entity SupplierRankingScore'] {
+  supplier_score_id uuid [pk]
+  supplier_id integer [not null]
+  ranking_criteria_id uuid [not null]
+  ranking_criteria_score integer [not null]
+  total_score numeric [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table purchase.request_for_quotations [note: 'entity RequestForQuotation'] {
+  request_for_quotation_id uuid [pk]
+  operating_unit_id integer [not null]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  rfq_title varchar(255) [not null]
+  total_amount numeric [not null]
+  currency varchar(50) [not null]
+  delivery_date date
+  delivery_time_days integer [not null]
+  payment_terms varchar(255) [not null]
+  status varchar(50) [not null]
+  remarks varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table purchase.request_for_quotation_products [note: 'entity RequestForQuotationProduct'] {
+  rfq_product_id uuid [pk]
+  request_for_quotation_id uuid [not null]
+  product_scope_id integer [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  product_specification varchar(255) [not null]
+  quantity integer [not null]
+  unit_price numeric [not null]
+  total_price numeric
+  delivery_date date [not null]
+  brand_id uuid
+}
+
+Table purchase.rfq_response [note: 'entity RfqResponse'] {
+  rfq_response_id uuid [pk]
+  request_for_quotation_id uuid [not null]
+  operating_unit_id integer [not null]
+  response_date date [not null]
+  status varchar(50) [not null]
+  title varchar(255) [not null]
+  currency varchar(50) [not null]
+  total_amount numeric [not null]
+  valid_until date [not null]
+  delivery_time_days integer [not null]
+  payment_terms varchar(255) [not null]
+  remarks varchar(255) [not null]
+  is_selected boolean [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table purchase.rfq_response_products [note: 'entity RfqResponseProduct'] {
+  rfq_response_product_id uuid [pk]
+  rfq_response_id uuid [not null]
+  product_scope_id integer [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  quantity numeric [not null]
+  unit_price numeric [not null]
+  total_price numeric [not null]
+  brand_id uuid
+  specification varchar(255)
+  estimated_delivery_date date [not null]
+}
+
+Table purchase.service_rfqs [note: 'entity ServiceRfq'] {
+  service_rfq_id uuid [pk]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  service_description varchar(255) [not null]
+  expected_duration varchar(255) [not null]
+  completion_date date [not null]
+  status varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table purchase.service_rfq_responses [note: 'entity ServiceRfqResponse'] {
+  service_rfq_response_id uuid [pk]
+  service_rfq_id uuid [not null]
+  service_provider_id bigint [not null]
+  response_date date [not null]
+  pricing_model varchar(50) [not null]
+  hourly_rate numeric [not null]
+  fixed_cost numeric [not null]
+  estimated_completion_date date [not null]
+  status varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table purchase.product_supplier_groups [note: 'entity ProductSupplierGroup'] {
+  supplier_id integer [pk]
+  supplier_type_id integer [not null]
+  supplier_name varchar(255) [not null]
+  ranking bigint [not null]
+  primary_contact varchar(255) [not null]
+  email varchar(255) [not null, unique]
+  phone_number varchar(255) [not null]
+  website varchar(255) [not null]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table purchase.product_supplier_types [note: 'entity ProductSupplierType'] {
+  supplier_type_id integer [pk]
+  supplier_type_name varchar(255) [not null]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  description varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Ref: purchase.delivery_orders.operating_unit_id > purchase.supplier_operating_units.operating_unit_id
+Ref: purchase.delivery_order_items.do_product_controller_id > purchase.do_product_controllers.id
+Ref: purchase.do_product_controllers.delivery_order_id > purchase.delivery_orders.delivery_order_id
+Ref: purchase.supplier_legal_entities.supplier_id > purchase.product_supplier_groups.supplier_id
+Ref: purchase.supplier_operating_units.legal_entity_id > purchase.supplier_legal_entities.legal_entity_id
+Ref: purchase.proforma_invoice_items.proforma_invoice_id > purchase.proforma_invoices.proforma_invoice_id
+Ref: purchase.service_proforma_invoices.service_rfq_response_id - purchase.service_rfq_responses.service_rfq_response_id
+Ref: purchase.purchase_orders.operating_unit_id > purchase.supplier_operating_units.operating_unit_id
+Ref: purchase.purchase_orders.purchase_request_id > purchase.purchase_requests.purchase_request_id
+Ref: purchase.purchase_order_audit_item_log.purchase_order_audit_log_id > purchase.purchase_order_audit_log.purchase_order_audit_log_id
+Ref: purchase.purchase_order_audit_log.purchase_order_id > purchase.purchase_orders.purchase_order_id
+Ref: purchase.purchase_order_items.purchase_order_id > purchase.purchase_orders.purchase_order_id
+Ref: purchase.service_purchase_orders.service_proforma_invoice_id > purchase.service_proforma_invoices.service_proforma_invoice_id
+Ref: purchase.purchase_request_audit_log.purchase_request_id > purchase.purchase_requests.purchase_request_id
+Ref: purchase.purchase_request_histories.purchase_request_id > purchase.purchase_requests.purchase_request_id
+Ref: purchase.purchase_request_items.purchase_request_id > purchase.purchase_requests.purchase_request_id
+Ref: purchase.purchase_request_item_audit_log.purchase_request_audit_log_id > purchase.purchase_request_audit_log.purchase_request_audit_log_id
+Ref: purchase.supplier_ranking_scores.supplier_id > purchase.supplier_operating_units.operating_unit_id
+Ref: purchase.supplier_ranking_scores.ranking_criteria_id > purchase.sourcing_ranking_criterias.ranking_criteria_id
+Ref: purchase.request_for_quotation_products.request_for_quotation_id > purchase.request_for_quotations.request_for_quotation_id
+Ref: purchase.rfq_response.request_for_quotation_id > purchase.request_for_quotations.request_for_quotation_id
+Ref: purchase.rfq_response.operating_unit_id > purchase.supplier_operating_units.operating_unit_id
+Ref: purchase.rfq_response_products.rfq_response_id > purchase.rfq_response.rfq_response_id
+Ref: purchase.service_rfq_responses.service_rfq_id > purchase.service_rfqs.service_rfq_id
+Ref: purchase.product_supplier_groups.supplier_type_id > purchase.product_supplier_types.supplier_type_id

@@ -1,0 +1,141 @@
+// UniPOS · payment-service · generated from @Entity code (origin/dev 639ee59)
+
+Table payment.bank_deposits [note: 'entity BankDeposit'] {
+  bank_deposit_id uuid [pk]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  deposit_number varchar(50) [unique]
+  bank_id bigint [not null, note: '→ accounts.banks.bank_id (other service, no FK)']
+  bank_account_id bigint [not null, note: '→ accounts.bank_accounts.bank_account_id (other service, no FK)']
+  account_number varchar(50) [not null]
+  amount numeric(19) [not null]
+  currency varchar(10) [not null]
+  deposit_date date [not null]
+  deposited_by bigint [not null]
+  verified_by bigint
+  verification_date date
+  reference_document varchar(150)
+  source varchar(150)
+  remarks varchar(250)
+  status varchar(20) [not null]
+  receipt_number varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table payment.payments [note: 'entity Payment'] {
+  payment_id uuid [pk]
+  payment_no varchar(50) [not null, unique]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  customer_account_number varchar(50)
+  terminal_id integer
+  total_amount numeric(19) [not null]
+  currency varchar(10) [not null]
+  payment_type varchar(20) [not null]
+  payment_status varchar(20) [not null]
+  payment_date timestamp
+  reference_id uuid
+  reference_type varchar(20)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table payment.payment_allocations [note: 'entity PaymentAllocation'] {
+  payment_allocation_id uuid [pk]
+  payment_id uuid [not null]
+  reference_type varchar(20)
+  reference_number varchar(50)
+  allocated_amount numeric(19) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table payment.payment_audit_logs [note: 'entity PaymentAuditLog'] {
+  payment_audit_log_id uuid [pk]
+  payment_id uuid [not null, note: 'reference inferred from the column name']
+  entity_id varchar(30) [not null]
+  action varchar(20) [not null]
+  old_value varchar(255)
+  new_value varchar(255)
+  changed_by varchar(100)
+  changed_at timestamp [not null]
+}
+
+Table payment.payment_details [note: 'entity PaymentDetail'] {
+  payment_detail_id uuid [pk]
+  payment_id uuid [not null]
+  method_id integer [not null]
+  amount numeric(19) [not null]
+  transaction_ref varchar(150)
+  metadata varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table payment.payment_methods [note: 'entity PaymentMethod'] {
+  method_id integer [pk]
+  method_code varchar(20) [not null]
+  method_name varchar(150) [not null]
+  method_category varchar(20) [not null]
+  requires_reference boolean [not null]
+  supports_partial boolean [not null]
+  supports_refund boolean [not null]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table payment.payment_prefix_configurations [note: 'entity PaymentPrefixConfiguration'] {
+  payment_prefix_configuration_id bigint [pk]
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  operation_type varchar(50) [not null]
+  prefix varchar(50) [not null]
+  code_length integer [not null]
+  next_sequence_number bigint [not null]
+  description varchar(250)
+  bin_short_code varchar(50)
+}
+
+Table payment.payment_status_logs [note: 'entity PaymentStatusLog'] {
+  payment_status_log_id uuid [pk]
+  payment_id uuid [not null, note: 'reference inferred from the column name']
+  old_status varchar(20)
+  new_status varchar(20) [not null]
+  changed_at timestamp [not null]
+}
+
+Table payment.refunds [note: 'entity Refund'] {
+  refund_id uuid [pk]
+  payment_id uuid [not null]
+  amount numeric(19) [not null]
+  reason varchar(255)
+  status varchar(20) [not null]
+  refund_date timestamp
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Ref: payment.payment_allocations.payment_id > payment.payments.payment_id
+Ref: payment.payment_audit_logs.payment_id > payment.payments.payment_id // id only, no FK
+Ref: payment.payment_details.payment_id > payment.payments.payment_id
+Ref: payment.payment_status_logs.payment_id > payment.payments.payment_id // id only, no FK
+Ref: payment.refunds.payment_id > payment.payments.payment_id

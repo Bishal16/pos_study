@@ -1,0 +1,437 @@
+// UniPOS · vat-service · generated from @Entity code (origin/dev bd42faa)
+
+Table vat.goods_transfer_vat_invoices [note: 'entity GoodsTransferVatInvoice'] {
+  goods_transfer_vat_invoice_id uuid [pk]
+  merchant_bin_number varchar(255)
+  sender_sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  sender_address varchar(255)
+  receiver_sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  receiver_address varchar(255)
+  transfer_invoice_id uuid
+  transfer_invoice_number varchar(255)
+  transfer_invoice_date date
+  comment varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.goods_transfer_vat_invoice_details [note: 'entity GoodsTransferVatInvoiceDetail'] {
+  goods_transfer_vat_invoice_detail_id uuid [pk]
+  goods_transfer_vat_invoice_id uuid [not null]
+  hierarchy_level_id varchar(50)
+  related_id uuid [note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  quantity integer
+  applicable_tax_amount numeric
+  value_without_tax numeric
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.penalty_adjustments [note: 'entity PenaltyAdjustment'] {
+  penalty_adjustment_id uuid [pk]
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  entry_date date
+  adjustment_type varchar(50)
+  vat_nature varchar(50)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.product_vat_settings [note: 'entity ProductVatSetting'] {
+  product_vat_setting uuid [pk]
+  input_tax_code_id bigint [not null]
+  output_tax_code_id bigint [not null]
+  hierarchy_level_id integer
+  related_id uuid [note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  start_date date
+  end_date date
+  vat_apply_on varchar(50)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.purchase_invoice_vats [note: 'entity PurchaseInvoiceVat'] {
+  purchase_invoice_vat_id uuid [pk]
+  merchant_bin_number varchar(50)
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  sales_id uuid
+  operating_unit_id integer
+  operating_unit_bin varchar(255)
+  operating_unit_address varchar(255)
+  challan_number varchar(255)
+  do_number varchar(255)
+  purchase_invoice_id uuid
+  purchase_invoice_number varchar(255)
+  purchase_invoice_date date
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.purchase_invoice_vat_details [note: 'entity PurchaseInvoiceVatDetail'] {
+  purchase_invoice_vat_detail_id uuid [pk]
+  purchase_invoice_vat_id uuid [not null]
+  hierarchy_level_id integer
+  related_id uuid [note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  quantity integer
+  unit_price numeric
+  purchase_amount numeric
+  vat_rate numeric
+  vat_amount numeric
+  total_purchase_amount numeric
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.purchase_return_vat_invoices [note: 'entity PurchaseReturnVatInvoice'] {
+  purchase_return_vat_invoice_id uuid [pk]
+  supplier_id integer
+  supplier_bin_number varchar(255)
+  purchase_return_id uuid
+  purchase_return_invoice_number varchar(255)
+  purchase_return_date date
+  purchase_return_amount numeric
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  return_reason varchar(255)
+  merchant_bin_number varchar(255)
+  vehicle_nature varchar(50)
+  vehicle_number varchar(50)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.purchase_return_vat_invoice_details [note: 'entity PurchaseReturnVatInvoiceDetail'] {
+  purchase_return_vat_invoice_detail_id uuid [pk]
+  purchase_return_vat_invoice_id uuid [not null]
+  hierarchy_level_id varchar(50)
+  related_id uuid [note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  quantity integer
+  return_amount numeric
+  vat_amount numeric
+  purchase_invoice_id uuid
+  purchase_invoice_number varchar(150)
+  challan_date date
+  challan_number varchar(150)
+  do_number varchar(150)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.sales_invoice_vats [note: 'entity SalesInvoiceVat'] {
+  sales_invoice_vat_id uuid [pk]
+  merchant_bin_number varchar(50)
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  customer_account_number varchar(255)
+  customer_address varchar(255)
+  customer_account_id uuid [note: '→ accounts.customer_accounts.customer_account_id (other service, no FK)']
+  customer_contact_number varchar(255)
+  customer_bin_number varchar(255)
+  customer_type varchar(255)
+  used_vehicle_type varchar(50)
+  used_vehicle_number varchar(255)
+  destination_address varchar(255)
+  sales_id uuid
+  sales_invoice_number varchar(255)
+  sales_invoice_date timestamp
+  installment_collection_id uuid
+  operation_name varchar(50)
+  output_tax_code_id bigint
+  vat_rate numeric
+  vat_apply_on varchar(50)
+  total_purchase_cost numeric
+  is_dp_deduction_consumed boolean
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.sales_invoice_vat_collections [note: 'entity SalesInvoiceVatCollection'] {
+  sales_invoice_vat_collection_id uuid [pk]
+  sales_invoice_vat_id uuid [not null]
+  customer_due_collection_id uuid
+  collected_amount numeric [not null]
+  vat_base numeric [not null]
+  vat_amount numeric [not null]
+  applied_purchase_deduction boolean [not null]
+  collected_date date [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.sales_invoice_vat_details [note: 'entity SalesInvoiceVatDetail'] {
+  sales_invoice_vat_detail_id uuid [pk]
+  sales_invoice_vat_id uuid [not null]
+  hierarchy_level_id integer
+  related_id uuid [note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  quantity integer
+  unit_price numeric
+  total_price_without_vat numeric
+  vat_rate numeric
+  vat_amount numeric
+  total_price_with_vat numeric
+  sd_rate numeric
+  sd_amount numeric
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.sales_return_vat_invoices [note: 'entity SalesReturnVatInvoice'] {
+  sales_return_vat_invoice_id uuid [pk]
+  sales_invoice_vat_id uuid [note: 'reference inferred from the column name']
+  sales_return_id uuid
+  sales_return_invoice_number varchar(255)
+  customer_id uuid [note: '→ customer.persons.person_id (other service, no FK)']
+  merchant_bin_number varchar(255)
+  return_invoice_date date
+  return_reason varchar(255)
+  installment_collection_id uuid
+  operation_name varchar(50)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.sales_return_vat_invoice_details [note: 'entity SalesReturnVatInvoiceDetail'] {
+  sales_return_vat_invoice_detail_id uuid [pk]
+  sales_return_vat_invoice_id uuid [not null]
+  hierarchy_level_id varchar(50)
+  related_id uuid [note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  quantity integer
+  unit_price numeric
+  return_amount numeric
+  vat_amount numeric
+  sd_rate numeric
+  sd_amount numeric
+  adjustable_sd_amount numeric
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.sub_form_umas [note: 'entity SubFormUma'] {
+  sub_form_uma_id uuid [pk]
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  sales_hub_used_bin varchar(255)
+  customer_bin varchar(255)
+  customer_name varchar(255)
+  customer_address varchar(255)
+  vat_amount numeric
+  vds_source_name varchar(255)
+  invoice_number varchar(50)
+  invoice_date timestamp
+  tax_paid_acc_code varchar(255)
+  remarks varchar(255)
+  is_editable boolean
+  entry_date date
+  invoice_amount numeric
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.tax_codes [note: 'entity TaxCode'] {
+  tax_code_id bigint [pk]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  code varchar(50)
+  tax_name varchar(250)
+  vat_rate "double precision"
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.tax_code_history [note: 'entity TaxCodeHistory'] {
+  tax_code_history_id bigint [pk]
+  tax_code_id bigint [not null]
+  code varchar(50)
+  tax_name varchar(250)
+  vat_rate "double precision"
+  start_date date
+  end_date date
+}
+
+Table vat.vats [note: 'entity Vat'] {
+  vat_id uuid [pk]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.vat_adjustments [note: 'entity VatAdjustment'] {
+  vat_adjustment_id uuid [pk]
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  invoice_id uuid [note: '→ sales.sales_invoices.sales_invoice_id (other service, no FK)']
+  invoice_number varchar(255)
+  invoice_date date
+  barcode varchar(255)
+  offertype varchar(50)
+  vat_rate numeric(19)
+  sales_type varchar(50)
+  invoice_amount numeric
+  invoice_vat_amount numeric
+  offered_value numeric(19)
+  offered_vat_amount numeric
+  transaction_date date
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.vat_periods [note: 'entity VatPeriod'] {
+  vat_period_id uuid [pk]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  period_title varchar(255)
+  period_type varchar(50) [not null]
+  start_date date [not null]
+  end_date date [not null]
+  fiscal_year varchar(255)
+  status varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.vat_register_books [note: 'entity VatRegisterBook'] {
+  vat_register_book_id uuid [pk]
+  row_number bigint
+  transaction_type varchar(50) [not null]
+  transaction_no varchar(50)
+  transaction_date timestamp
+  opening_quantity integer
+  opening_rate "double precision"
+  opening_amount "double precision"
+  transaction_quantity integer
+  transaction_rate "double precision"
+  transaction_amount "double precision"
+  closing_quantity integer
+  closing_rate "double precision"
+  closing_amount "double precision"
+  merchant_bin_number varchar(50)
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  vat_period_id uuid [note: 'reference inferred from the column name']
+  vat_period_id uuid [note: 'reference inferred from the column name']
+  supplier_id integer
+  customer_account_id uuid [note: '→ accounts.customer_accounts.customer_account_id (other service, no FK)']
+  challan_num varchar(255)
+  voucher_type varchar(255)
+  product_hierarchy_level_id integer
+  related_id uuid [note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  vat_amount "double precision"
+  source_reference_no varchar(255)
+  source_reference_name varchar(255)
+  remarks varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table vat.vat_return_submission_form [note: 'entity VatReturnSubmissionForm'] {
+  vat_return_submission_form_id uuid [pk]
+  bin_number varchar(255)
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  vat_period_id uuid [note: 'reference inferred from the column name']
+  code varchar(255) [unique]
+  std_vatable_sales_amount numeric
+  std_sales_vat numeric
+  exempted_vatable_sales_amount numeric
+  exempted_sales_vat numeric
+  other_vatable_sales_amount numeric
+  other_sales_vat numeric
+  except_exempted_vatable_sales_amount numeric
+  except_exempted_sales_vat numeric
+  except_std_vatable_sales_amount numeric
+  except_std_sales_vat numeric
+  vatable_purchase_amount numeric
+  purchase_vat_amount numeric
+  non_rebatable_purchase_amount numeric
+  exempted_purchase_amount numeric
+  other_adjusted_payable_amount numeric
+  provision_vds numeric
+  previous_month_balance numeric
+  previous_month_note_54 numeric
+  previous_month_note_56 numeric
+  sales_return_vat_amount numeric
+  purchase_return_vat_amount numeric
+  vds_vat_amount numeric
+  adjusted_increasing_vat numeric
+  adjusted_decreasing_vat numeric
+  campaigned_offer_adjusted_vat numeric
+  mushak_18_6_note_54 numeric
+  adjusted_penalty_amount numeric
+  net_payable_amount numeric
+  treasury_deposit_amount numeric
+  is_deposited boolean
+  deposit_date date
+  deposited_by uuid
+  note_29 numeric
+  note_33 numeric
+  adjusted_mushak_16_6_note_56 numeric
+  closing_balance numeric
+  penalty_interest_note_44 numeric
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Ref: vat.goods_transfer_vat_invoice_details.goods_transfer_vat_invoice_id > vat.goods_transfer_vat_invoices.goods_transfer_vat_invoice_id
+Ref: vat.product_vat_settings.input_tax_code_id > vat.tax_codes.tax_code_id
+Ref: vat.product_vat_settings.output_tax_code_id > vat.tax_codes.tax_code_id
+Ref: vat.purchase_invoice_vat_details.purchase_invoice_vat_id > vat.purchase_invoice_vats.purchase_invoice_vat_id
+Ref: vat.purchase_return_vat_invoice_details.purchase_return_vat_invoice_id > vat.purchase_return_vat_invoices.purchase_return_vat_invoice_id
+Ref: vat.sales_invoice_vat_collections.sales_invoice_vat_id > vat.sales_invoice_vats.sales_invoice_vat_id
+Ref: vat.sales_invoice_vat_details.sales_invoice_vat_id > vat.sales_invoice_vats.sales_invoice_vat_id
+Ref: vat.sales_return_vat_invoices.sales_invoice_vat_id > vat.sales_invoice_vats.sales_invoice_vat_id // id only, no FK
+Ref: vat.sales_return_vat_invoice_details.sales_return_vat_invoice_id > vat.sales_return_vat_invoices.sales_return_vat_invoice_id
+Ref: vat.tax_code_history.tax_code_id > vat.tax_codes.tax_code_id
+Ref: vat.vat_register_books.vat_period_id > vat.vat_periods.vat_period_id // id only, no FK
+Ref: vat.vat_register_books.vat_period_id > vat.vat_periods.vat_period_id
+Ref: vat.vat_return_submission_form.vat_period_id > vat.vat_periods.vat_period_id // id only, no FK

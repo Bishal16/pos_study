@@ -1,0 +1,339 @@
+// UniPOS · inventory-service · generated from @Entity code (origin/dev f662e05)
+
+Table inventory.consumeable_item_ledgers [note: 'entity ConsumeableItemLedger'] {
+  consumeable_ledger_id uuid [pk]
+  consumeable_stock_id uuid [not null]
+  movement_type varchar(50) [not null]
+  transaction_number_type varchar(50) [not null]
+  associated_transaction_number varchar(255) [not null]
+  transaction_date timestamp [not null]
+  opening_quantity numeric(18) [not null]
+  opening_rate numeric(18) [not null]
+  opening_amount numeric(18) [not null]
+  receiving_quantity numeric(18) [not null]
+  receiving_rate numeric(18) [not null]
+  receiving_amount numeric(18) [not null]
+  issueing_quantity numeric(18) [not null]
+  issueing_rate numeric(18) [not null]
+  issueing_amount numeric(18) [not null]
+  closing_quantity numeric(18) [not null]
+  closing_rate numeric(18) [not null]
+  closing_amount numeric(18) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table inventory.consumeable_stocks [note: 'entity ConsumeableStock'] {
+  consumeable_stock_id uuid [pk]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  consumeable_item_id uuid [not null]
+  store_location_level varchar(50)
+  related_id uuid [note: 'polymorphic → inventory.pos_store_houses | inventory.pos_store_house_zones | inventory.pos_store_zone_lines | inventory.store_zone_line_racks | inventory.line_rack_grids | inventory.line_rack_floors | inventory.rack_grid_containers']
+  quantity numeric(18) [not null]
+  reserved_quantity numeric(18)
+  available_quantity numeric
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table inventory.goods_receive_notes [note: 'entity GoodReceiveNote'] {
+  grn_id uuid [pk]
+  do_number uuid [not null]
+  received_by varchar(255) [not null]
+  received_date date [not null]
+  purchase_invoice_number varchar(255) [not null]
+  mushak_number varchar(255) [not null]
+  status varchar(50) [not null]
+  remarks varchar(255) [not null]
+  received_quantity numeric [not null]
+  uploaded_files varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table inventory.inventory_stock_thresholds [note: 'entity InventoryStockThreshold'] {
+  inventory_stock_threshold_id uuid [pk]
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  hierarchy_level integer [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  min_stock_qty numeric [not null]
+  max_stock_qty numeric [not null]
+  reorder_point_qty numeric [not null]
+  buffer_qty numeric [not null]
+  priority bigint [not null]
+  start_date date [not null]
+  note varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table inventory.inventory_stock_threshold_history [note: 'entity InventoryStockThresholdHistory'] {
+  inventory_stock_threshold_history_id uuid [pk]
+  inventory_stock_threshold_id uuid [not null]
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  hierarchy_level integer [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  min_stock_qty numeric [not null]
+  max_stock_qty numeric [not null]
+  reorder_point_qty numeric [not null]
+  buffer_qty numeric [not null]
+  priority bigint [not null]
+  start_date timestamp [not null]
+  end_date timestamp [not null]
+  note varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table inventory.item_ledgers [note: 'entity ItemLedger'] {
+  item_ledger_id uuid [pk]
+  stock_summary_id uuid [not null]
+  transaction_number_type varchar(50) [not null]
+  associated_transaction_number varchar(255) [not null]
+  transaction_date timestamp [not null]
+  transaction_type varchar(50) [not null]
+  operation_name varchar(50) [not null]
+  item_level_id bigint [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  opening_quantity numeric [not null]
+  opening_rate numeric [not null]
+  opening_amount numeric [not null]
+  receiving_quantity numeric [not null]
+  receiving_rate numeric [not null]
+  receiving_amount numeric [not null]
+  issueing_quantity numeric [not null]
+  issueing_rate numeric [not null]
+  issueing_amount numeric [not null]
+  closing_quantity numeric [not null]
+  closing_rate numeric [not null]
+  closing_amount numeric [not null]
+  reference_doc varchar(255) [not null]
+  challan_number varchar(255)
+  row_number bigint [not null, unique]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table inventory.line_rack_floors [note: 'entity LineRackFloor'] {
+  rack_floor_id uuid [pk]
+  grid_id uuid [not null]
+  floor_name varchar(255) [not null]
+  description varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table inventory.line_rack_grids [note: 'entity LineRackGrid'] {
+  rack_grid_id uuid [pk]
+  rack_id uuid [not null]
+  grid_name varchar(255) [not null]
+  description varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table inventory.outbox [note: 'entity Outbox'] {
+  id uuid [pk]
+  aggregate_id uuid [not null]
+  aggregate_type varchar(50) [not null]
+  event_type varchar(50) [not null]
+  payload varchar(255) [not null]
+  processed boolean [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table inventory.pos_store_houses [note: 'entity PosStoreHouse'] {
+  pos_store_id uuid [pk]
+  store_house_name varchar(255) [not null]
+  store_house_type_id uuid [not null]
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  incharge_name varchar(255) [not null]
+  incharge_contact varchar(255) [not null]
+  address varchar(255) [not null]
+  description varchar(255) [not null]
+  is_shareable boolean [not null]
+  advance_amount numeric
+  monthly_rent numeric
+  area_size_sf numeric
+  display_size_sf numeric
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table inventory.pos_store_house_rents [note: 'entity PosStoreHouseRent'] {
+  pos_store_house_rent_id uuid [pk]
+  pos_store_id uuid [not null]
+  rent_type varchar(50) [not null]
+  from_date timestamp
+  rent "double precision"
+}
+
+Table inventory.pos_store_house_rent_history [note: 'entity PosStoreHouseRentHistory'] {
+  pos_store_house_rent_history_id uuid [pk]
+  pos_store_id uuid [not null]
+  from_date timestamp
+  to_date timestamp
+  rent "double precision"
+}
+
+Table inventory.pos_store_house_zones [note: 'entity PosStoreHouseZone'] {
+  pos_store_house_zone_id uuid [pk]
+  store_zone_type varchar(50) [not null]
+  zone_name varchar(255) [not null]
+  pos_store_id uuid [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table inventory.pos_store_zone_lines [note: 'entity PosStoreZoneLine'] {
+  pos_store_zone_line_id uuid [pk]
+  pos_store_house_zone_id uuid [not null]
+  zone_line_name varchar(255) [not null]
+  description varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table inventory.product_instances [note: 'entity ProductInstance'] {
+  instance_id uuid [pk]
+  stock_summary_id uuid [not null]
+  delivery_product_controller_id uuid [not null, note: '→ purchase.do_product_controllers.id (other service, no FK)']
+  serial_number varchar(255) [not null]
+  store_location_level_id integer
+  related_id uuid [note: 'polymorphic → inventory.pos_store_houses | inventory.pos_store_house_zones | inventory.pos_store_zone_lines | inventory.store_zone_line_racks | inventory.line_rack_grids | inventory.line_rack_floors | inventory.rack_grid_containers']
+  status varchar(50) [not null]
+  manufacturing_date date
+  color_code varchar(255)
+  expiry_date date
+  received_date date [not null]
+  purchase_price "double precision"
+  transaction_number varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table inventory.product_stock_summary [note: 'entity ProductStockSummary'] {
+  stock_summary_id uuid [pk]
+  stock_level_id integer [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  grade varchar(50) [not null]
+  available_quantity numeric [not null]
+  faulty_stock_quantity numeric [not null]
+  actual_stock numeric [not null]
+  last_receiving_date timestamp
+  last_sales_date date
+  return_date date
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table inventory.rack_grid_containers [note: 'entity RackGridContainer'] {
+  rack_container_id uuid [pk]
+  rack_floor_id uuid [not null]
+  side_number varchar(50) [not null]
+  bin_name varchar(255) [not null]
+  description varchar(255) [not null]
+  capacity_quantity bigint [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table inventory.sales_hub_allocated_spaces [note: 'entity SalesHubAllocatedSpace'] {
+  sales_hub_allocated_space_id uuid [pk]
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  product_hierarchy_level varchar(50)
+  related_id uuid [note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  allocated_space_sf numeric [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table inventory.store_house_types [note: 'entity StoreHouseType'] {
+  store_house_type_id uuid [pk]
+  type_name varchar(255) [not null]
+  inventory_type varchar(50) [not null]
+  product_type_id uuid
+  description varchar(255) [not null]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  is_logical_inventory boolean [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table inventory.store_zone_line_racks [note: 'entity StoreZoneLineRack'] {
+  rack_id uuid [pk]
+  pos_store_zone_line_id uuid [not null]
+  rack_name varchar(255) [not null]
+  number_of_sides bigint [not null]
+  description varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Ref: inventory.consumeable_item_ledgers.consumeable_stock_id > inventory.consumeable_stocks.consumeable_stock_id
+Ref: inventory.inventory_stock_threshold_history.inventory_stock_threshold_id > inventory.inventory_stock_thresholds.inventory_stock_threshold_id
+Ref: inventory.item_ledgers.stock_summary_id > inventory.product_stock_summary.stock_summary_id
+Ref: inventory.line_rack_floors.grid_id > inventory.line_rack_grids.rack_grid_id
+Ref: inventory.line_rack_grids.rack_id > inventory.store_zone_line_racks.rack_id
+Ref: inventory.pos_store_houses.store_house_type_id > inventory.store_house_types.store_house_type_id
+Ref: inventory.pos_store_house_rents.pos_store_id > inventory.pos_store_houses.pos_store_id
+Ref: inventory.pos_store_house_rent_history.pos_store_id > inventory.pos_store_houses.pos_store_id
+Ref: inventory.pos_store_house_zones.pos_store_id > inventory.pos_store_houses.pos_store_id
+Ref: inventory.pos_store_zone_lines.pos_store_house_zone_id > inventory.pos_store_house_zones.pos_store_house_zone_id
+Ref: inventory.product_instances.stock_summary_id > inventory.product_stock_summary.stock_summary_id
+Ref: inventory.rack_grid_containers.rack_floor_id > inventory.line_rack_floors.rack_floor_id
+Ref: inventory.store_zone_line_racks.pos_store_zone_line_id > inventory.pos_store_zone_lines.pos_store_zone_line_id

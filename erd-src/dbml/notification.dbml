@@ -1,0 +1,126 @@
+// UniPOS · notification-service · generated from @Entity code (origin/dev 46a12a0)
+
+Table notification.email_template_contents [note: 'entity EmailTemplateContent'] {
+  email_template_content_id uuid [pk]
+  template_id uuid [not null]
+  subject_template varchar(255) [not null]
+  body_template varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table notification.in_app_template_contents [note: 'entity InAppTemplateContent'] {
+  in_app_template_content_id uuid [pk]
+  template_id uuid [not null]
+  title_template varchar(255) [not null]
+  message_template varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table notification.notification_channels [note: 'entity NotificationChannel'] {
+  notification_channel_id uuid [pk]
+  channel_code varchar(255) [not null]
+  description varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table notification.notification_delivery_logs [note: 'entity NotificationDeliveryLog'] {
+  notification_delivery_log_id uuid [pk]
+  queue_id uuid [not null]
+  status varchar(50) [not null]
+  response varchar(255) [not null]
+  attempted_at date [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table notification.notification_events [note: 'entity NotificationEvent'] {
+  notification_event_id uuid [pk]
+  event_code varchar(255) [not null]
+  description varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table notification.notification_queue [note: 'entity NotificationQueue'] {
+  notification_queue_id uuid [pk]
+  user_id uuid [not null, note: '→ authentication.users.user_id (other service, no FK)']
+  template_id uuid [not null]
+  event_id uuid [not null]
+  channel_id uuid [not null]
+  payload varchar(255) [not null]
+  status varchar(50) [not null]
+  retry_count bigint [not null]
+  scheduled_at date [not null]
+  sent_at date [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table notification.notification_templates [note: 'entity NotificationTemplate'] {
+  notification_template_id uuid [pk]
+  template_code varchar(255) [not null]
+  event_id uuid [not null]
+  channel_id uuid [not null]
+  language_code varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table notification.notification_user_preferences [note: 'entity NotificationUserPreference'] {
+  notification_user_preference_id uuid [pk]
+  user_id uuid [not null, note: '→ authentication.users.user_id (other service, no FK)']
+  channel_id uuid [not null]
+  event_id uuid [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table notification.sms_template_contents [note: 'entity SmsTemplateContent'] {
+  sms_template_content_id uuid [pk]
+  template_id uuid [not null]
+  body_template varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Ref: notification.email_template_contents.template_id - notification.notification_templates.notification_template_id
+Ref: notification.in_app_template_contents.template_id - notification.notification_templates.notification_template_id
+Ref: notification.notification_delivery_logs.queue_id > notification.notification_queue.notification_queue_id
+Ref: notification.notification_queue.template_id > notification.notification_templates.notification_template_id
+Ref: notification.notification_queue.event_id > notification.notification_events.notification_event_id
+Ref: notification.notification_queue.channel_id > notification.notification_channels.notification_channel_id
+Ref: notification.notification_templates.event_id > notification.notification_events.notification_event_id
+Ref: notification.notification_templates.channel_id > notification.notification_channels.notification_channel_id
+Ref: notification.notification_user_preferences.channel_id > notification.notification_channels.notification_channel_id
+Ref: notification.notification_user_preferences.event_id > notification.notification_events.notification_event_id
+Ref: notification.sms_template_contents.template_id - notification.notification_templates.notification_template_id

@@ -1,0 +1,161 @@
+// UniPOS · authorization-service · generated from @Entity code (origin/dev a273781)
+
+Table authorization.merchant_permission_groups [note: 'entity MerchantPermissionGroup'] {
+  merchant_permission_group_id bigint [pk]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  permission_group_id bigint [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table authorization.permission_groups [note: 'entity PermissionGroup'] {
+  permission_group_id bigint [pk]
+  group_code varchar(100) [not null]
+  group_name varchar(150) [not null]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  description varchar(512)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table authorization.permission_group_permissions [note: 'entity PermissionGroupPermission'] {
+  permission_group_permission_id bigint [pk]
+  permission_group_id bigint [not null]
+  permission_id bigint [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table authorization.role_permission_groups [note: 'entity RolePermissionGroup'] {
+  role_permission_group_id bigint [pk]
+  role_id bigint [not null]
+  permission_group_id bigint [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table authorization.user_permission_groups [note: 'entity UserPermissionGroup'] {
+  user_permission_group_id bigint [pk]
+  user_id uuid [not null, note: '→ authentication.users.user_id (other service, no FK)']
+  permission_group_id bigint [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table authorization.menus [note: 'entity Menu'] {
+  menu_id bigint [pk]
+  bangla_name varchar(100) [not null]
+  english_name varchar(100) [not null]
+  menu_code varchar(50) [not null]
+  display_order integer [not null]
+  route varchar(250)
+  description varchar(512) [not null]
+  icon varchar(50) [not null]
+  api_endpoint varchar(255)
+  parent_id bigint
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table authorization.merchant_permissions [note: 'entity MerchantPermission'] {
+  merchant_permission_id bigint [pk]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  permission_id bigint [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table authorization.permissions [note: 'entity Permission'] {
+  permission_id bigint [pk]
+  permission_code varchar(100) [not null, unique]
+  permission_name varchar(150) [not null]
+  action varchar(30) [not null]
+  description varchar(512)
+  menu_id bigint [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table authorization.roles [note: 'entity Role'] {
+  role_id bigint [pk]
+  role_code varchar(50) [not null]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  role_name varchar(100) [not null]
+  description varchar(512)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table authorization.role_permissions [note: 'entity RolePermission'] {
+  role_permission_id bigint [pk]
+  role_id bigint [not null]
+  permission_id bigint [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table authorization.user_permissions [note: 'entity UserPermission'] {
+  user_permission_id bigint [pk]
+  user_id uuid [not null, note: '→ authentication.users.user_id (other service, no FK)']
+  permission_id bigint [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table authorization.user_roles [note: 'entity UserRole'] {
+  user_role_id bigint [pk]
+  user_id uuid [not null, note: '→ authentication.users.user_id (other service, no FK)']
+  role_id bigint [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Ref: authorization.merchant_permission_groups.permission_group_id > authorization.permission_groups.permission_group_id
+Ref: authorization.permission_group_permissions.permission_group_id > authorization.permission_groups.permission_group_id
+Ref: authorization.permission_group_permissions.permission_id > authorization.permissions.permission_id
+Ref: authorization.role_permission_groups.role_id > authorization.roles.role_id
+Ref: authorization.role_permission_groups.permission_group_id > authorization.permission_groups.permission_group_id
+Ref: authorization.user_permission_groups.permission_group_id > authorization.permission_groups.permission_group_id
+Ref: authorization.menus.parent_id > authorization.menus.menu_id
+Ref: authorization.merchant_permissions.permission_id > authorization.permissions.permission_id
+Ref: authorization.permissions.menu_id > authorization.menus.menu_id
+Ref: authorization.role_permissions.role_id > authorization.roles.role_id
+Ref: authorization.role_permissions.permission_id > authorization.permissions.permission_id
+Ref: authorization.user_permissions.permission_id > authorization.permissions.permission_id
+Ref: authorization.user_roles.role_id > authorization.roles.role_id

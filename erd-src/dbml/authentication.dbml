@@ -1,0 +1,181 @@
+// UniPOS · authentication-service · generated from @Entity code (origin/dev 6db4775)
+
+Table authentication.password_reset_token [note: 'entity PasswordResetToken'] {
+  id bigint [pk]
+  user_id uuid [not null]
+  token varchar(255) [not null, unique]
+  expires_at timestamp [not null]
+  created_by varchar(255) [note: 'inherited from BaseEntity']
+  created_at timestamp [note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+}
+
+Table authentication.refresh_tokens [note: 'entity RefreshToken'] {
+  refresh_token_id bigint [pk]
+  user_id uuid [not null]
+  refresh_token varchar(255) [not null]
+  expires_at timestamp [not null]
+  is_revoked boolean [not null]
+  created_by varchar(255) [note: 'inherited from BaseEntity']
+  created_at timestamp [note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+}
+
+Table authentication.user_tokens [note: 'entity UserToken'] {
+  token_id uuid [pk]
+  user_id uuid [not null]
+  access_token varchar(255) [not null]
+  refresh_token varchar(255) [not null]
+  expires_at timestamp
+  is_revoked boolean
+  created_by varchar(255) [note: 'inherited from BaseEntity']
+  created_at timestamp [note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+}
+
+Table authentication.employees [note: 'entity Employee'] {
+  id bigint [pk]
+  department varchar(255)
+  designation varchar(255)
+  employee_name varchar(150) [not null]
+  status varchar(50)
+  location varchar(255)
+  mobile varchar(20)
+  operating_unit varchar(150)
+  section varchar(255)
+  sub_section_name varchar(255)
+  employee_id varchar(20) [not null, unique]
+  sales_hub_id uuid [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  assessment_start_date date
+  employee_grade_code varchar(20)
+  team varchar(150)
+  sub_team varchar(150)
+  joining_date date
+  photo_name varchar(150)
+  role_id integer [note: '→ authorization.roles.role_id (other service, no FK)']
+  role_title varchar(150)
+  emp_incharge_title varchar(150)
+  product_title varchar(255)
+  gender varchar(20)
+  emp_cat_title varchar(150)
+  email varchar(150)
+  designation_order varchar(150)
+  product_group_title varchar(150)
+  data_source varchar(150)
+  available_credit_limit "double precision"
+  nationality_id varchar(150)
+  short_code varchar(20)
+  alkp_operating_unit_title varchar(150)
+  is_visible boolean
+  created_by varchar(255) [note: 'inherited from BaseEntity']
+  created_at timestamp [note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+}
+
+Table authentication.outbox_events [note: 'entity OutboxEvent'] {
+  id bigint [pk]
+  topic varchar(255)
+  payload varchar(255)
+  sent boolean
+  created_at timestamp
+}
+
+Table authentication.integration_sync_state [note: 'entity IntegrationSyncState'] {
+  id uuid [pk]
+  integration_name varchar(100) [not null]
+  last_modified_at timestamp
+  last_success_at timestamp
+  status varchar(30)
+  error_message varchar(255)
+}
+
+Table authentication.users [note: 'entity User'] {
+  user_id uuid [pk]
+  username varchar(255)
+  email varchar(255)
+  password_hash varchar(255)
+  is_active boolean
+  last_login timestamp
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  start_date date
+  full_name varchar(255)
+  gender varchar(255)
+  dob date
+  phone varchar(255)
+  password_changed_at timestamp
+  profile_picture_url varchar(255)
+  two_factor_enabled boolean
+  created_by varchar(255) [note: 'inherited from BaseEntity']
+  created_at timestamp [note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+}
+
+Table authentication.user_business_areas [note: 'entity UserBusinessArea'] {
+  id uuid [pk]
+  user_id uuid [not null]
+  business_area_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+}
+
+Table authentication.user_documents [note: 'entity UserDocument'] {
+  id uuid [pk]
+  user_id uuid [not null]
+  document_type varchar(50) [not null]
+  object_key varchar(255) [not null]
+  original_filename varchar(255) [not null]
+  content_type varchar(255) [not null]
+  size_bytes bigint [not null]
+  status varchar(50) [not null]
+  created_by varchar(255) [note: 'inherited from BaseEntity']
+  created_at timestamp [note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+}
+
+Table authentication.user_employee_references [note: 'entity UserEmployeeReference'] {
+  user_employee_ref_id uuid [pk]
+  user_id uuid [not null]
+  employee_id varchar(255) [not null, note: 'reference inferred from the column name']
+  source_system varchar(255) [not null]
+  created_by varchar(255) [note: 'inherited from BaseEntity']
+  created_at timestamp [note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+}
+
+Table authentication.user_failed_logins [note: 'entity UserFailedLogins'] {
+  attempt_id bigint [pk]
+  user_id uuid [not null]
+  ip_address varchar(255) [not null]
+  attempt_time timestamp [not null]
+  created_by varchar(255) [note: 'inherited from BaseEntity']
+  created_at timestamp [note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+}
+
+Table authentication.user_working_location_history [note: 'entity UserWorkingLocationHistory'] {
+  user_working_location_history_id uuid [pk]
+  user_id uuid [not null]
+  business_area_id uuid [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  start_date date [not null]
+  end_date date [not null]
+  created_by varchar(255) [note: 'inherited from BaseEntity']
+  created_at timestamp [note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+}
+
+Ref: authentication.password_reset_token.user_id > authentication.users.user_id
+Ref: authentication.refresh_tokens.user_id > authentication.users.user_id
+Ref: authentication.user_tokens.user_id > authentication.users.user_id
+Ref: authentication.user_business_areas.user_id > authentication.users.user_id
+Ref: authentication.user_documents.user_id > authentication.users.user_id
+Ref: authentication.user_employee_references.user_id > authentication.users.user_id
+Ref: authentication.user_employee_references.employee_id > authentication.employees.id // id only, no FK
+Ref: authentication.user_failed_logins.user_id > authentication.users.user_id
+Ref: authentication.user_working_location_history.user_id > authentication.users.user_id

@@ -1,0 +1,295 @@
+// UniPOS · policy-service · generated from @Entity code (origin/dev b16ae57)
+
+Table policy.condition_type_meta [note: 'entity ConditionTypeMeta'] {
+  condition_type_meta_id uuid [pk]
+  code varchar(255) [not null]
+  name varchar(255) [not null]
+  value_type varchar(255) [not null]
+  allowed_operators varchar(255) [not null]
+  ui_input_type varchar(255) [not null]
+  description varchar(255) [not null]
+  is_system_defined boolean [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table policy.engine_policy_maps [note: 'entity EnginePolicyMap'] {
+  engine_policy_map_id uuid [pk]
+  engine_id uuid [not null]
+  policy_id uuid [not null]
+  execution_order integer
+  priority integer
+  is_enabled boolean
+  stackable_override boolean
+  aggregation_mode varchar(50)
+  effective_from date
+  effective_to date
+  config_json varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table policy.outbox [note: 'entity Outbox'] {
+  id uuid [pk]
+  aggregate_id uuid [not null]
+  aggregate_type varchar(50) [not null]
+  event_type varchar(50) [not null]
+  payload varchar(255) [not null]
+  processed boolean [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table policy.policy_categories [note: 'entity PolicyCategory'] {
+  id uuid [pk]
+  code varchar(255) [not null]
+  name varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table policy.policy_conditions [note: 'entity PolicyCondition'] {
+  id uuid [pk]
+  policy_id uuid [not null]
+  group_no integer
+  execution_order integer
+  comparable_field varchar(150) [not null]
+  operator varchar(50) [not null]
+  comparable_value varchar(50) [not null]
+  connecting_logical_operator varchar(50)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table policy.policy_condition_outcomes [note: 'entity PolicyConditionOutcome'] {
+  id uuid [pk]
+  policy_id uuid [not null]
+  condition_group_no integer [not null]
+  outcome_type varchar(50)
+  calc_type varchar(50)
+  outcome_value "double precision"
+  currency_code varchar(50)
+  max_cap_value "double precision"
+  min_cap_value "double precision"
+  apply_on varchar(50)
+  rounding_strategy varchar(50)
+  is_taxable boolean
+  config_json varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table policy.policy_engines [note: 'entity PolicyEngine'] {
+  engine_id uuid [pk]
+  engine_code varchar(255) [not null]
+  name varchar(255) [not null]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  description varchar(255) [not null]
+  execution_mode varchar(50)
+  policy_conflict_strategy varchar(50)
+  policy_aggregation_mode varchar(50)
+  max_stackable_policies integer
+  apply_global_cap boolean
+  global_cap_type varchar(50)
+  global_cap_value "double precision"
+  stop_on_first_match boolean
+  output_merge_strategy varchar(50)
+  config_json varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table policy.policy_operators [note: 'entity PolicyOperator'] {
+  policy_operator_id integer [pk]
+  value_member varchar(50) [not null]
+  display_member varchar(150) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table policy.policy_outcomes [note: 'entity PolicyOutcome'] {
+  id uuid [pk]
+  policy_id uuid [not null]
+  outcome_type varchar(50)
+  calc_type varchar(50)
+  outcome_value "double precision"
+  currency_code varchar(50)
+  max_cap_value "double precision"
+  min_cap_value "double precision"
+  apply_on varchar(50)
+  rounding_strategy varchar(50)
+  is_taxable boolean
+  config_json varchar(250)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table policy.policy_types [note: 'entity PolicyType'] {
+  policy_type_id integer [pk]
+  policy_type_name varchar(150) [not null]
+  description varchar(250)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table policy.policy_type_details [note: 'entity PolicyTypeDetail'] {
+  policy_type_detail_id uuid [pk]
+  policy_type_id integer [not null]
+  field_name varchar(150) [not null]
+  has_custom_value boolean
+  value_type varchar(50)
+  associated_value varchar(50)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table policy.sales_policies [note: 'entity SalesPolicy'] {
+  policy_id uuid [pk]
+  code varchar(50) [not null]
+  name varchar(150) [not null]
+  description varchar(250)
+  category_id uuid
+  outcome_scope varchar(50)
+  group_execution_mode varchar(50)
+  status varchar(50)
+  effective_from date
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table policy.sales_policy_action [note: 'entity SalesPolicyAction'] {
+  action_id uuid [pk]
+  policy_id uuid [not null]
+  action_type varchar(255) [not null]
+  action_value varchar(255) [not null]
+  target_product_level varchar(50)
+  target_product_id varchar(255)
+  free_product_level varchar(50)
+  free_product_id varchar(255)
+  min_quantity numeric
+  max_quantity numeric [not null]
+  max_discount numeric
+  action_description varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table policy.sales_policy_condition_group [note: 'entity SalesPolicyConditionGroup'] {
+  group_id uuid [pk]
+  policy_id uuid [not null]
+  group_name varchar(255) [not null]
+  group_operator varchar(50) [not null]
+  evaluation_order bigint [not null]
+  condition_expression varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table policy.sales_policy_history [note: 'entity SalesPolicyHistory'] {
+  sales_policy_history_id uuid [pk]
+  policy_id uuid [not null]
+  policy_code varchar(50)
+  version varchar(50)
+  policy_snapshot varchar(255)
+  start_date date
+  end_date date
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table policy.sales_policy_target [note: 'entity SalesPolicyTarget'] {
+  target_id uuid [pk]
+  policy_id uuid [not null]
+  target_type varchar(255) [not null]
+  target_value varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table policy.sale_types [note: 'entity SalesType'] {
+  id bigint [pk]
+  parent_id bigint
+  code varchar(50) [not null]
+  name varchar(150) [not null]
+  default_engine varchar(50)
+  allowed_engines varchar(150)
+  routing_mode varchar(50)
+  description varchar(250)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table policy.sales_type_engines [note: 'entity SalesTypeEngine'] {
+  sales_type_engine_id uuid [pk]
+  sales_type_id bigint [not null]
+  engine_id uuid [not null]
+  sequence_no integer [not null]
+  is_mandatory boolean
+  stop_on_failure boolean
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Ref: policy.engine_policy_maps.engine_id > policy.policy_engines.engine_id
+Ref: policy.engine_policy_maps.policy_id > policy.sales_policies.policy_id
+Ref: policy.policy_conditions.policy_id > policy.sales_policies.policy_id
+Ref: policy.policy_condition_outcomes.policy_id > policy.sales_policies.policy_id
+Ref: policy.policy_outcomes.policy_id > policy.sales_policies.policy_id
+Ref: policy.policy_type_details.policy_type_id > policy.policy_types.policy_type_id
+Ref: policy.sales_policies.category_id > policy.policy_categories.id
+Ref: policy.sales_policy_action.policy_id > policy.sales_policies.policy_id
+Ref: policy.sales_policy_condition_group.policy_id > policy.sales_policies.policy_id
+Ref: policy.sales_policy_history.policy_id > policy.sales_policies.policy_id
+Ref: policy.sales_policy_target.policy_id > policy.sales_policies.policy_id
+Ref: policy.sales_type_engines.engine_id > policy.policy_engines.engine_id

@@ -1,0 +1,329 @@
+{
+ "generatedAt": "2026-10-18T17:34",
+ "ref": "origin/dev",
+ "fetchOk": false,
+ "fetchSkipped": true,
+ "fetch": {
+  "authentication": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "authorization": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "configuration": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "product": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "customer": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "purchase": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "approval": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "inventory": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "sales": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "policy": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "promotion": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "payment": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "accounts": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "vat": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "report": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "compliance": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "notification": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  },
+  "frontend": {
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
+  }
+ },
+ "repos": {
+  "authentication": {
+   "branch": "origin/dev",
+   "commit": "6db4775",
+   "date": "2026-10-14",
+   "author": "Sonjoy Tripura",
+   "subject": "updated business area id",
+   "full": "6db47751db9e5c118ce2932c0d4ad1dc68b53761",
+   "fetchedAt": "2026-10-18T17:21",
+   "new": 0,
+   "commits": []
+  },
+  "authorization": {
+   "branch": "origin/dev",
+   "commit": "a273781",
+   "date": "2026-10-17",
+   "author": "Sonjoy Tripura",
+   "subject": "added menu tree with permissions",
+   "full": "a273781b60761bcba68284385b601e1ba4590b62",
+   "fetchedAt": "2026-10-18T17:21",
+   "new": 0,
+   "commits": []
+  },
+  "configuration": {
+   "branch": "origin/dev",
+   "commit": "caf2626",
+   "date": "2026-10-14",
+   "author": "imranpranto00",
+   "subject": "Implemented @authenticated and new pagination in other APIs as well",
+   "full": "caf2626756b105474347d7ea677a4539b07c68d4",
+   "fetchedAt": "2026-10-18T17:22",
+   "new": 0,
+   "commits": []
+  },
+  "product": {
+   "branch": "origin/dev",
+   "commit": "962dcdf",
+   "date": "2026-10-13",
+   "author": "alihossain_t239",
+   "subject": "fixed operatingUnitId issue",
+   "full": "962dcdf8b322d6f4c5a103899574cc4c305ecfc0",
+   "fetchedAt": "2026-10-18T17:22",
+   "new": 0,
+   "commits": []
+  },
+  "customer": {
+   "branch": "origin/dev",
+   "commit": "966b0ec",
+   "date": "2026-10-15",
+   "author": "imranpranto00",
+   "subject": "fixed saleshub",
+   "full": "966b0ece0b2f6892313c9ea6ecc054ad475a42ee",
+   "fetchedAt": "2026-10-18T17:22",
+   "new": 0,
+   "commits": []
+  },
+  "purchase": {
+   "branch": "origin/dev",
+   "commit": "44ed78e",
+   "date": "2026-10-17",
+   "author": "imranpranto00",
+   "subject": "fixed merchant wise data",
+   "full": "44ed78ef91f5aa9a461a2c2c94669a729f339610",
+   "fetchedAt": "2026-10-18T17:22",
+   "new": 0,
+   "commits": []
+  },
+  "approval": {
+   "branch": "origin/dev",
+   "commit": "1555a24",
+   "date": "2026-10-14",
+   "author": "imranpranto00",
+   "subject": "for approval process",
+   "full": "1555a24dbd9c3bcc33d87032aa97c87bd8153fbb",
+   "fetchedAt": "2026-10-18T17:22",
+   "new": 0,
+   "commits": []
+  },
+  "inventory": {
+   "branch": "origin/dev",
+   "commit": "f662e05",
+   "date": "2026-10-07",
+   "author": "alihossain_t239",
+   "subject": "Merge branch 'inventory-merchant' into dev",
+   "full": "f662e050b95fe809589d21dc5fd4f4efaeacd1c7",
+   "fetchedAt": "2026-10-18T17:22",
+   "new": 0,
+   "commits": []
+  },
+  "sales": {
+   "branch": "origin/dev",
+   "commit": "29f5481",
+   "date": "2026-10-13",
+   "author": "Kumaresh Chandra Baruri",
+   "subject": "Optimized codes - WIP",
+   "full": "29f5481a4fcd912314fcd0098a05de7dddad0e92",
+   "fetchedAt": "2026-10-18T17:22",
+   "new": 0,
+   "commits": []
+  },
+  "policy": {
+   "branch": "origin/dev",
+   "commit": "b16ae57",
+   "date": "2026-09-23",
+   "author": "Kumaresh Chandra Baruri",
+   "subject": "Modified terraform scripts",
+   "full": "b16ae576f768c4118b3a9be634ddf909e6410b31",
+   "fetchedAt": "2026-10-18T17:22",
+   "new": 0,
+   "commits": []
+  },
+  "promotion": {
+   "branch": "origin/dev",
+   "commit": "7e0d7f6",
+   "date": "2026-10-05",
+   "author": "alihossain_t239",
+   "subject": "added filter by merchantId",
+   "full": "7e0d7f605e21695528859486ca152b935a62970b",
+   "fetchedAt": "2026-10-18T17:22",
+   "new": 0,
+   "commits": []
+  },
+  "payment": {
+   "branch": "origin/dev",
+   "commit": "639ee59",
+   "date": "2026-10-12",
+   "author": "alihossain_t239",
+   "subject": "implemented bankDeposit",
+   "full": "639ee596b6fa0f8831ed2668eb30f455178ab82e",
+   "fetchedAt": "2026-10-18T17:22",
+   "new": 0,
+   "commits": []
+  },
+  "accounts": {
+   "branch": "origin/dev",
+   "commit": "35d7000",
+   "date": "2026-10-14",
+   "author": "imranpranto00",
+   "subject": "Implemented @authenticated in em, bank card, commisionRate and new pagination in this response and changed types uuid to integer",
+   "full": "35d7000318eaba767f871ce40f9671fd19eb7519",
+   "fetchedAt": "2026-10-18T17:22",
+   "new": 0,
+   "commits": []
+  },
+  "vat": {
+   "branch": "origin/dev",
+   "commit": "bd42faa",
+   "date": "2026-10-13",
+   "author": "alihossain_t239",
+   "subject": "operatingUnitId type fixed",
+   "full": "bd42faa35b55df01ba4d1230090cd445aa123cce",
+   "fetchedAt": "2026-10-18T17:22",
+   "new": 0,
+   "commits": []
+  },
+  "report": {
+   "branch": "origin/dev",
+   "commit": "0061597",
+   "date": "2026-10-17",
+   "author": "bishal16",
+   "subject": "Income statemnet first verson completed",
+   "full": "00615971b3bb7eb6e904b184b99cb1bd52b59475",
+   "fetchedAt": "2026-10-18T17:22",
+   "new": 0,
+   "commits": []
+  },
+  "compliance": {
+   "branch": "origin/dev",
+   "commit": "07609ab",
+   "date": "2026-10-15",
+   "author": "alihossain_t239",
+   "subject": "secured apis and added pagination",
+   "full": "07609ab59f0f308ae409181e4e97a76a5d344261",
+   "fetchedAt": "2026-10-18T17:22",
+   "new": 0,
+   "commits": []
+  },
+  "notification": {
+   "branch": "origin/dev",
+   "commit": "46a12a0",
+   "date": "2026-09-30",
+   "author": "Kumaresh Chandra Baruri",
+   "subject": "Cleaned up codes.",
+   "full": "46a12a06fe48b20423d2ad7b9f0a3e3690055424",
+   "fetchedAt": "2026-10-18T17:22",
+   "new": 0,
+   "commits": []
+  },
+  "frontend": {
+   "branch": "origin/dev",
+   "commit": "217cb984",
+   "date": "2026-10-17",
+   "author": "Abu Sadat",
+   "subject": "Merge branch 'sadat' into 'dev'",
+   "full": "217cb9846d1a9cee0dae011b4dae93d3a0e297c8",
+   "fetchedAt": "2026-10-18T17:22",
+   "new": 0,
+   "commits": []
+  }
+ },
+ "changes": {
+  "baseline": false,
+  "schema": [],
+  "ops": [],
+  "calls": [],
+  "kafka": []
+ },
+ "counts": {
+  "commits": 0,
+  "repos": 0,
+  "schema": 0,
+  "ops": 0,
+  "calls": 0,
+  "kafka": 0,
+  "drift": 0
+ },
+ "drift": [],
+ "history": [
+  {
+   "at": "2026-10-18T17:34",
+   "fetchOk": false,
+   "fetchSkipped": true,
+   "commits": 0,
+   "repos": 0,
+   "schema": 0,
+   "ops": 0,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 0
+  },
+  {
+   "at": "2026-10-18T17:24",
+   "fetchOk": false,
+   "fetchSkipped": true,
+   "commits": 0,
+   "repos": 0,
+   "schema": 0,
+   "ops": 0,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 0
+  }
+ ],
+ "published": {
+  "at": "2026-10-18T17:25",
+  "generatedAt": "2026-10-18T17:24",
+  "atlas": "https://claude.ai/artifact/J1ojWaAaKu9scBELETi8XT (v2)",
+  "erd": "https://claude.ai/artifact/FQvTjhc7gQTpodBGgL6YnG (v2)"
+ }
+}

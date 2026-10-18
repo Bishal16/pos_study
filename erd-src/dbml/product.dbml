@@ -1,0 +1,391 @@
+// UniPOS · product-service · generated from @Entity code (origin/dev 962dcdf)
+
+Table product.brands [note: 'entity Brand'] {
+  brand_id integer [pk]
+  brane_name varchar(255) [not null]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  root_code varchar(255) [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.business_controllers [note: 'entity BusinessController'] {
+  business_controller_id uuid [pk]
+  level_id integer [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  has_mandatory_price_declaration boolean [not null]
+  is_taxable boolean [not null]
+  is_vatable boolean [not null]
+  has_mandatory_barcode boolean [not null]
+  special_note varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.consumable_suppliers [note: 'entity ConsumableSupplier'] {
+  consumable_supplier_id integer [pk]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  name varchar(150) [not null]
+  contact_person varchar(150)
+  phone varchar(20)
+  email varchar(150)
+  address varchar(150)
+  payment_terms varchar(150)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.consumeable_categories [note: 'entity ConsumeableCategory'] {
+  consumeable_category_id uuid [pk]
+  parent_id uuid
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  category_name varchar(255) [not null]
+  consumption_type varchar(50)
+  requires_approval boolean [not null]
+  track_waste boolean [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.consumable_items [note: 'entity ConsumeableItem'] {
+  consumeable_item_id uuid [pk]
+  consumeable_category_id uuid [not null]
+  consumeable_item_name varchar(255) [not null]
+  code varchar(50) [not null]
+  unit varchar(50) [not null]
+  is_divisible boolean [not null]
+  track_inventory boolean [not null]
+  minimum_stock_level integer [not null]
+  reorder_quantity integer [not null]
+  is_reusable boolean [not null]
+  has_expiry boolean [not null]
+  reuse_cycles integer [not null]
+  expiry_days integer [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.product_hierarchy_levels [note: 'entity HierarchyLevel'] {
+  level_id uuid [pk]
+  code varchar(255) [not null]
+  level_name varchar(255) [not null]
+  position integer [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.price_types [note: 'entity PriceType'] {
+  price_type_id uuid [pk]
+  type_name varchar(255) [not null]
+  code varchar(255) [not null]
+  category varchar(50) [not null]
+  calculation_method varchar(50) [not null]
+  is_tax_inclusive boolean [not null]
+  is_mandatory_display boolean [not null]
+  description varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.product_attributes [note: 'entity ProductAttribute'] {
+  product_attribute_id uuid [pk]
+  attribute_title varchar(255) [not null]
+  code varchar(255) [not null]
+  hierarchy_level_id varchar(50) [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  control_type varchar(50) [not null]
+  is_required boolean [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.product_attribute_assigned_values [note: 'entity ProductAttributeAssignedValue'] {
+  attribute_assigned_value_id uuid [pk]
+  product_attribute_id uuid [not null, note: 'reference inferred from the column name']
+  attribute_value_id uuid
+  assigned_value varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.product_attribute_predefined_values [note: 'entity ProductAttributeDefinedValue'] {
+  attribute_defined_value_id uuid [pk]
+  product_attribute_id uuid [not null]
+  display_member varchar(255) [not null]
+  value_member varchar(255) [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.product_batches [note: 'entity ProductBatch'] {
+  product_batch_id uuid [pk]
+  product_sku_id uuid [not null]
+  batch_number varchar(255) [not null]
+  stock_quantity numeric [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.product_categories [note: 'entity ProductCategory'] {
+  category_id uuid [pk]
+  parent_category_id uuid
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  product_type_id integer [not null]
+  category_name varchar(255) [not null]
+  code varchar(255) [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.product_declared_price [note: 'entity ProductDeclaredPrice'] {
+  product_declared_price_id uuid [pk]
+  bin_id uuid [not null, note: '→ configuration.merchant_bins.merchant_bin_id (other service, no FK)']
+  price_declared_number varchar(255) [not null, unique]
+  is_submitted boolean [not null]
+  submission_date date
+  submitted_by varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.product_declared_price_details [note: 'entity ProductDeclaredPriceDetail'] {
+  product_declared_price_detail_id uuid [pk]
+  product_declared_price_id uuid [not null]
+  purchase_type varchar(50) [not null]
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  hierarchy_level_id integer [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  proposed_amount "double precision" [not null]
+  purchase_price "double precision" [not null]
+  value_added_amount "double precision"
+  vatable_amount "double precision"
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.product_hierarchy_level_definitions [note: 'entity ProductHierarchyLevel'] {
+  hierarchy_level_id integer [pk]
+  hierarchy_level_code varchar(50) [not null]
+  hierarchy_level_name varchar(150) [not null]
+  parent_hierarchy_level_id integer
+  hierarchy_sequence integer [not null]
+  is_leaf_level boolean [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.product_images [note: 'entity ProductImage'] {
+  product_image_assigned_id uuid [pk]
+  hierarchy_level_id integer [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  image_url varchar(255) [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.product_lines [note: 'entity ProductLine'] {
+  product_line_id uuid [pk]
+  category_id uuid [not null]
+  product_code varchar(255) [not null]
+  product_line_name varchar(255) [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.product_models [note: 'entity ProductModel'] {
+  product_model_id uuid [pk]
+  product_line_id uuid [not null]
+  model_name varchar(255) [not null]
+  model_code varchar(255) [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.product_price [note: 'entity ProductPrice'] {
+  product_price_id uuid [pk]
+  hierarchy_level_id integer [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  price_type_id uuid [not null]
+  grade_level varchar(50) [not null]
+  price numeric [not null]
+  start_date date [not null]
+  enterprice_sku_id uuid
+  enterprice_price_list_line_id uuid
+  currency varchar(50) [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.product_price_history [note: 'entity ProductPriceHistory'] {
+  product_price_history_id uuid [pk]
+  product_price_id uuid [not null, note: 'reference inferred from the column name']
+  hierarchy_level_id integer [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  price_type_id uuid [not null]
+  grade_level varchar(50) [not null]
+  price numeric [not null]
+  start_date timestamp [not null]
+  end_date timestamp [not null]
+  enterprice_sku_id uuid
+  enterprice_price_list_line_id uuid
+  currency varchar(50) [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.product_skus [note: 'entity ProductSKU'] {
+  product_sku_id uuid [pk]
+  product_model_id uuid [not null]
+  sku_code varchar(255) [not null]
+  brand_id integer [not null]
+  uom_id integer [not null]
+  product_type_id integer [not null]
+  operating_unit_id integer
+  ebs_inventory_item_id uuid
+  is_hot_sale boolean
+  ebs_item_code varchar(255)
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.product_types [note: 'entity ProductType'] {
+  product_type_id integer [pk]
+  product_type_name varchar(255) [not null]
+  code varchar(255) [not null]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.stock_controllers [note: 'entity StockController'] {
+  stock_controller_id uuid [pk]
+  level_id integer [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  uom_id integer [not null]
+  minimum_stock_quantity numeric [not null]
+  maximum_stock_quantity numeric [not null]
+  safety_stock_quantity numeric [not null]
+  coo_id varchar(255)
+  is_grn_required boolean [not null]
+  has_stock_issuance boolean [not null]
+  "is_Transfer_allowed" boolean [not null]
+  has_stock_valuation boolean [not null]
+  is_fifo_based boolean [not null]
+  has_manufacturing_date boolean [not null]
+  has_low_stock_alert boolean [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table product.unit_of_measurements [note: 'entity UnitOfMeasurement'] {
+  uom_id integer [pk]
+  code varchar(255) [not null]
+  symbol varchar(255) [not null]
+  uom_type varchar(255) [not null]
+  uom_name varchar(255) [not null]
+  description varchar(255)
+  has_decimal boolean [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Ref: product.consumable_items.consumeable_category_id > product.consumeable_categories.consumeable_category_id
+Ref: product.product_attribute_assigned_values.product_attribute_id > product.product_attributes.product_attribute_id // id only, no FK
+Ref: product.product_attribute_predefined_values.product_attribute_id > product.product_attributes.product_attribute_id
+Ref: product.product_batches.product_sku_id > product.product_skus.product_sku_id
+Ref: product.product_categories.product_type_id > product.product_types.product_type_id
+Ref: product.product_declared_price_details.product_declared_price_id > product.product_declared_price.product_declared_price_id
+Ref: product.product_lines.category_id > product.product_categories.category_id
+Ref: product.product_models.product_line_id > product.product_lines.product_line_id
+Ref: product.product_price.price_type_id > product.price_types.price_type_id
+Ref: product.product_price_history.product_price_id > product.product_price.product_price_id // id only, no FK
+Ref: product.product_price_history.price_type_id > product.price_types.price_type_id
+Ref: product.product_skus.product_model_id > product.product_models.product_model_id
+Ref: product.product_skus.brand_id > product.brands.brand_id
+Ref: product.product_skus.uom_id > product.unit_of_measurements.uom_id
+Ref: product.product_skus.product_type_id > product.product_types.product_type_id
+Ref: product.stock_controllers.uom_id > product.unit_of_measurements.uom_id

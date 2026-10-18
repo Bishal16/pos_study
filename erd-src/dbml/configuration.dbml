@@ -1,0 +1,313 @@
+// UniPOS · configuration-service · generated from @Entity code (origin/dev caf2626)
+
+Table configuration.business_areas [note: 'entity BusinessArea'] {
+  business_area_id integer [pk]
+  business_area_name varchar(255)
+  parent_area_id integer
+  business_area_type_id integer
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.business_area_types [note: 'entity BusinessAreaType'] {
+  business_area_type_id integer [pk]
+  merchant_id uuid [not null]
+  business_type_name varchar(255) [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.commissionerates [note: 'entity Commissionerate'] {
+  commissionerate_id uuid [pk]
+  name varchar(150) [not null]
+  code varchar(20) [not null]
+  email varchar(150) [not null, unique]
+  phone varchar(50) [unique]
+  address varchar(250) [not null]
+  region varchar(50) [not null]
+  short_code varchar(20) [not null]
+  fax varchar(50)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.bd_adm_district [note: 'entity District'] {
+  id bigint [pk]
+  division_id bigint [not null]
+  district_name varchar(255) [not null]
+}
+
+Table configuration.bd_adm_division [note: 'entity Division'] {
+  id bigint [pk]
+  division_name varchar(255) [not null]
+}
+
+Table configuration.bd_adm_upazila [note: 'entity Upazila'] {
+  id bigint [pk]
+  district_id bigint [not null]
+  upazila_name varchar(255) [not null]
+}
+
+Table configuration.benefit_distributions [note: 'entity BenefitDistribution'] {
+  benefit_distribution_id uuid [pk]
+  role_id uuid [not null, note: '→ authorization.roles.role_id (other service, no FK)']
+  percentage_amount numeric(10) [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.incentive_schemes [note: 'entity IncentiveScheme'] {
+  incentive_scheme_id uuid [pk]
+  merchant_id uuid [not null]
+  scheme_name varchar(255) [not null]
+  scheme_code varchar(255) [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.incentive_scheme_percentages [note: 'entity IncentiveSchemePercentage'] {
+  scheme_allocated_percentage_id uuid [pk]
+  incentive_schemes varchar(255)[] [not null]
+  allocated_percentages numeric[] [not null]
+  execution_notes varchar(255)[] [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.incentive_scheme_percentage_history [note: 'entity IncentiveSchemePercentageHistory'] {
+  incentive_scheme_percentage_history_id uuid [pk]
+  scheme_allocated_percentage_id uuid [not null]
+  amounts numeric[] [not null]
+  from_date timestamp [not null]
+  to_date timestamp [not null]
+  execution_notes varchar(255)[] [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.scheme_profit_percentages [note: 'entity SchemeProfitPercentage'] {
+  scheme_profit_percent_mapping_id uuid [pk]
+  role_benefit_scheme_id uuid [not null]
+  amount numeric(19) [not null]
+  execution_note varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.scheme_profit_percentage_history [note: 'entity SchemeProfitPercentageHistory'] {
+  scheme_profit_percent_mapping_id uuid [pk]
+  role_benefit_scheme_id uuid [not null]
+  amount numeric(19) [not null]
+  from_date timestamp [not null]
+  to_date timestamp [not null]
+  execution_note varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.merchants [note: 'entity Merchant'] {
+  merchant_id uuid [pk]
+  merchant_name varchar(255) [not null]
+  tax_id varchar(255) [not null]
+  authority varchar(255) [not null]
+  start_date date [not null]
+  end_date date [not null]
+  code varchar(255) [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.merchant_bins [note: 'entity MerchantBin'] {
+  merchant_bin_id uuid [pk]
+  merchant_id uuid [not null]
+  commissionerate_id uuid [not null]
+  bin_number varchar(150) [not null]
+  registration_date date
+  economic_code varchar(255)
+  tax_payer_name varchar(255)
+  tax_paying_address varchar(255)
+  payer_mobile_number varchar(255)
+  start_date date
+  type_of_ownership varchar(50)
+  business_nature varchar(50)
+  bin_short_code varchar(255)
+  is_active boolean [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.opening_entries [note: 'entity OpeningEntry'] {
+  opening_entry_id uuid [pk]
+  business_area_id integer [not null]
+  coa_id integer [not null]
+  opening_credit_balance numeric [not null]
+  opening_debt_balance numeric [not null]
+  opening_date date [not null]
+  notes varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.sales_hub_address [note: 'entity SalesHubAddress'] {
+  sales_hub_address_id uuid [pk]
+  business_area_id integer [not null]
+  division bigint
+  district bigint
+  police_station bigint
+  address_type varchar(50)
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.sales_hub_details [note: 'entity SalesHubDetail'] {
+  sales_hub_detail_id integer [pk]
+  business_area_id integer [not null, unique]
+  merchant_bin_id uuid
+  country_code varchar(50)
+  currency_code varchar(255)
+  manager_name varchar(255)
+  contact_number varchar(255)
+  email varchar(255) [unique]
+  default_language varchar(255)
+  longitude numeric
+  lattitude numeric
+  operating_hours varchar(255)
+  time_zone varchar(255)
+  sales_hub_code varchar(255)
+  ebs_customer_id varchar(255)
+  bn_sales_hub_name varchar(255)
+  sales_hub_open_date date
+  sales_hub_category varchar(50)
+  acc_start_date date
+  acc_flag boolean
+  sales_start_date date
+  upazila_id bigint
+  sales_hub_distance numeric
+  cluster_level varchar(50)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.sales_hub_documents [note: 'entity SalesHubDocument'] {
+  sales_hub_document_id uuid [pk]
+  business_area_id integer [not null]
+  document_type varchar(50)
+  object_key varchar(255)
+  original_filename varchar(255)
+  content_type varchar(255)
+  size_bytes bigint
+  status varchar(50)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.sales_hub_stores [note: 'entity SalesHubStore'] {
+  store_id uuid [pk]
+  business_area_id integer [not null]
+  store_name varchar(255)
+  address varchar(255)
+  incharge_name varchar(255)
+  contact_number varchar(255)
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.system_parameters [note: 'entity SystemParameter'] {
+  system_parameter_id uuid [pk]
+  scope_id varchar(50) [not null]
+  related_id varchar(255) [not null, note: 'polymorphic → ']
+  configuration_key varchar(255) [not null]
+  configuration_value varchar(255) [not null]
+  value_type varchar(255) [not null]
+  description varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Table configuration.version_histories [note: 'entity VersionHistory'] {
+  version_id uuid [pk]
+  product_type varchar(50) [not null]
+  version_number varchar(255) [not null]
+  short_description varchar(255) [not null]
+  deployed_by varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+}
+
+Ref: configuration.business_areas.business_area_type_id > configuration.business_area_types.business_area_type_id
+Ref: configuration.business_area_types.merchant_id > configuration.merchants.merchant_id
+Ref: configuration.bd_adm_district.division_id > configuration.bd_adm_division.id
+Ref: configuration.bd_adm_upazila.district_id > configuration.bd_adm_district.id
+Ref: configuration.incentive_schemes.merchant_id > configuration.merchants.merchant_id
+Ref: configuration.incentive_scheme_percentage_history.scheme_allocated_percentage_id > configuration.incentive_scheme_percentages.scheme_allocated_percentage_id
+Ref: configuration.scheme_profit_percentages.role_benefit_scheme_id > configuration.benefit_distributions.benefit_distribution_id
+Ref: configuration.scheme_profit_percentage_history.role_benefit_scheme_id > configuration.scheme_profit_percentages.scheme_profit_percent_mapping_id
+Ref: configuration.merchant_bins.merchant_id > configuration.merchants.merchant_id
+Ref: configuration.merchant_bins.commissionerate_id > configuration.commissionerates.commissionerate_id
+Ref: configuration.opening_entries.business_area_id > configuration.business_areas.business_area_id
+Ref: configuration.sales_hub_address.business_area_id > configuration.business_areas.business_area_id
+Ref: configuration.sales_hub_details.business_area_id - configuration.business_areas.business_area_id
+Ref: configuration.sales_hub_details.merchant_bin_id > configuration.merchant_bins.merchant_bin_id // id only, no FK
+Ref: configuration.sales_hub_details.upazila_id > configuration.bd_adm_upazila.id // id only, no FK
+Ref: configuration.sales_hub_documents.business_area_id > configuration.business_areas.business_area_id
+Ref: configuration.sales_hub_stores.business_area_id > configuration.business_areas.business_area_id

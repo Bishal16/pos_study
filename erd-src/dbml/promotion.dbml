@@ -1,0 +1,268 @@
+// UniPOS · promotion-service · generated from @Entity code (origin/dev 7e0d7f6)
+
+Table promotion.customer_feedback [note: 'entity CustomerFeedback'] {
+  feedback_id uuid [pk]
+  customer_id varchar(255) [not null, note: '→ customer.persons.person_id (other service, no FK)']
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  preferred_email varchar(255) [not null, unique]
+  feedback_type varchar(50) [not null]
+  prefers_push_notifications boolean [not null]
+  description varchar(255) [not null]
+  feedback_date date [not null]
+  status varchar(50)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table promotion.customer_loyalty [note: 'entity CustomerLoyalty'] {
+  customer_loyalty_point_id uuid [pk]
+  customer_id varchar(255) [not null, note: '→ customer.persons.person_id (other service, no FK)']
+  current_points numeric
+  lifetime_points_earned numeric
+  lifetime_points_redeemed numeric
+  current_tier_id uuid
+  tier_updated_at timestamp
+  last_transaction_at timestamp
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table promotion.customer_loyalty_points [note: 'entity CustomerLoyaltyPoint'] {
+  point_id uuid [pk]
+  customer_id varchar(255) [not null, note: '→ customer.persons.person_id (other service, no FK)']
+  program_id uuid [not null]
+  transaction_id varchar(255) [not null]
+  points_earned numeric [not null]
+  points_redeemed numeric [not null]
+  balance numeric [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table promotion.customer_loyalty_program_ledgers [note: 'entity CustomerLoyaltyProgramLedger'] {
+  customer_loyalty_program_ledger_id uuid [pk]
+  customer_id varchar(255) [not null, note: '→ customer.persons.person_id (other service, no FK)']
+  transaction_type varchar(50) [not null]
+  points integer [not null]
+  reference_type varchar(50)
+  reference_id varchar(255)
+  metadata varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table promotion.customer_loyalty_tiers [note: 'entity CustomerLoyaltyTier'] {
+  customer_loyalty_tier_id uuid [pk]
+  customer_id varchar(255) [not null, note: '→ customer.persons.person_id (other service, no FK)']
+  date_joined date [not null]
+  tier_id uuid [not null]
+  available_points numeric [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table promotion.customer_preferences [note: 'entity CustomerPreference'] {
+  customer_preference_id uuid [pk]
+  customer_id varchar(255) [not null, note: '→ customer.persons.person_id (other service, no FK)']
+  preferred_email varchar(255)
+  preferred_sms varchar(255)
+  marketing_opt_in boolean
+  prefers_push_notifications boolean
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table promotion.customer_reward_redeemptions [note: 'entity CustomerRewardRedeemption'] {
+  reward_redeemption_id uuid [pk]
+  customer_id varchar(255) [not null, note: '→ customer.persons.person_id (other service, no FK)']
+  reward_id uuid [not null]
+  date_redeemed date [not null]
+  points_used numeric [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table promotion.discount_rules [note: 'entity DiscountRule'] {
+  discount_rule_id uuid [pk]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  discount_name varchar(255) [not null]
+  rule_type varchar(50) [not null]
+  applicable_level_id integer [not null]
+  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  discount_value numeric [not null]
+  min_qty numeric [not null]
+  max_qty numeric [not null]
+  start_date date [not null]
+  end_date date
+  priority varchar(50)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table promotion.loyalty_programs [note: 'entity LoyaltyProgram'] {
+  program_id uuid [pk]
+  program_name varchar(255) [not null]
+  points_per_taka numeric [not null]
+  redemption_rate numeric [not null]
+  start_date date [not null]
+  end_date date [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table promotion.loyalty_tiers [note: 'entity LoyaltyTier'] {
+  tier_id uuid [pk]
+  code varchar(255)
+  tier_name varchar(255) [not null]
+  minimum_points_required numeric [not null]
+  description varchar(255) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table promotion.outbox [note: 'entity Outbox'] {
+  id uuid [pk]
+  aggregate_id uuid [not null]
+  aggregate_type varchar(50) [not null]
+  event_type varchar(50) [not null]
+  payload varchar(255) [not null]
+  processed boolean [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table promotion.product_offerings [note: 'entity ProductOffering'] {
+  bonus_product_id uuid [pk]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  sales_channel_number varchar(50)
+  source_level_id integer [not null]
+  source_related_id uuid [not null]
+  offering_product_level_id integer [not null]
+  offering_product_related_id uuid [not null]
+  is_available boolean [not null]
+  offering_quantity numeric
+  start_date date [not null]
+  end_date date [not null]
+  status varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table promotion.promotional_code_offers [note: 'entity PromotionalCodeOffer'] {
+  promo_code_offering_id uuid [pk]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  promo_code varchar(255) [not null]
+  mobile_number varchar(255) [not null]
+  surokha_card_number varchar(255) [not null]
+  otp varchar(255) [not null]
+  csd_party_id varchar(255)
+  rule_type varchar(50) [not null]
+  start_date date [not null]
+  end_date date [not null]
+  amount numeric [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table promotion.registered_products [note: 'entity RegisteredProduct'] {
+  registered_product_id uuid [pk]
+  barcode varchar(150) [not null, unique]
+  product_type varchar(255)
+  brand varchar(255)
+  model varchar(255)
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  sales_date date [not null]
+  return_date date
+  is_returned boolean
+  customer_name varchar(150)
+  customer_address varchar(250)
+  sales_type varchar(50)
+  usage_level varchar(50)
+  sold_by_sales_hub_id integer
+  sold_by_sales_hub_mobile_number varchar(20)
+  customer_details varchar(255)
+  customer_nid varchar(255)
+  is_emi_sales boolean
+  emi_duration integer
+  emi_type varchar(50)
+  is_special boolean
+  discount_percentage "double precision"
+  is_campaigned_sales boolean
+  campaign_name varchar(150)
+  is_online_sales boolean
+  is_registered boolean
+  registration_remarks varchar(250)
+  campaign_offer_title varchar(150)
+  offered_sms varchar(250)
+  offer_win_type varchar(50)
+  stock_date date
+  offer_win_date date
+  offer_win_amount "double precision"
+  offer_win_segment varchar(150)
+  is_exchanged_sales boolean
+  exchange_name varchar(150)
+  sales_serial_id bigint
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table promotion.reward [note: 'entity Reward'] {
+  reward_id uuid [pk]
+  reward_name varchar(255) [not null]
+  points_required numeric [not null]
+  reward_type varchar(255) [not null]
+  start_date date [not null]
+  end_date date [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Ref: promotion.customer_loyalty_points.program_id > promotion.loyalty_programs.program_id
+Ref: promotion.customer_loyalty_tiers.tier_id > promotion.loyalty_tiers.tier_id
+Ref: promotion.customer_reward_redeemptions.reward_id > promotion.reward.reward_id

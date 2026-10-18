@@ -1,0 +1,255 @@
+// UniPOS · report-service · generated from @Entity code (origin/dev 0061597)
+
+Table report.chart_of_accounts [note: 'entity ChartOfAccountSnapshot'] {
+  account_id integer [pk]
+  account_code varchar(50)
+  account_name varchar(250)
+  account_type varchar(20)
+  parent_account_id integer
+  approval_status varchar(20)
+  source_is_active boolean
+  deleted boolean [not null]
+  source_updated_at timestamptz
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table report.gl_transactions [note: 'entity GlTransaction'] {
+  gl_transaction_id uuid [pk]
+  source_type varchar(10) [not null]
+  source_entry_id uuid [not null]
+  source_line_id uuid [not null]
+  source_updated_at timestamptz [not null]
+  status varchar(10) [not null]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  merchant_name varchar(150)
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  sales_hub_name varchar(150)
+  sales_hub_address varchar(250)
+  sales_contact_no varchar(20)
+  gl_date date [not null]
+  coa_id integer [not null]
+  debit_amount numeric(18) [not null]
+  credit_amount numeric(18) [not null]
+  transaction_type varchar(50)
+  reference_number varchar(50)
+  particulars varchar(250)
+  narration varchar(500)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table report.invoice_report_item_snapshots [note: 'entity InvoiceReportItemSnapshot'] {
+  invoice_report_item_snapshot_id uuid [pk]
+  invoice_report_snapshot_id uuid [not null]
+  sales_invoice_number varchar(50)
+  serial_number varchar(50)
+  hierarchy_level_id integer
+  related_id uuid [note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  quantity integer
+  unit_price numeric(18)
+  discount numeric(18)
+  vat numeric(18)
+  line_total numeric(18)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table report.invoice_report_snapshots [note: 'entity InvoiceReportSnapshot'] {
+  invoice_report_snapshot_id uuid [pk]
+  sales_invoice_number varchar(50)
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  invoice_no varchar(50)
+  customer_type varchar(50)
+  customer_account_number varchar(50)
+  customer_name varchar(150)
+  customer_address varchar(250)
+  customer_mobile varchar(30)
+  sales_executive_id varchar(50)
+  sales_hub_id varchar(255) [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  sales_hub_name varchar(150)
+  sales_hub_contact_no varchar(50)
+  total_amount numeric(18)
+  discount_amount numeric(18)
+  vat_amount numeric(18)
+  paid_amount numeric(18)
+  due_amount numeric(18)
+  payment_status varchar(50)
+  invoice_date timestamp
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table report.item_ledger_entry_snapshots [note: 'entity ItemLedgerEntrySnapshot'] {
+  item_ledger_entry_snapshot_id uuid [pk]
+  source_item_ledger_id uuid
+  product_id uuid
+  product_description varchar(250)
+  product_code varchar(100)
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  sales_hub_name varchar(150)
+  sales_hub_address varchar(250)
+  transaction_date date
+  particulars varchar(250)
+  transaction_type varchar(50)
+  voucher_number varchar(50)
+  opening_qty numeric(18)
+  opening_rate numeric(18)
+  opening_value numeric(18)
+  received_qty numeric(18)
+  received_rate numeric(18)
+  received_value numeric(18)
+  issue_qty numeric(18)
+  issue_rate numeric(18)
+  issue_value numeric(18)
+  consum_rate numeric(18)
+  closing_qty numeric(18)
+  closing_rate numeric(18)
+  closing_value numeric(18)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table report.mushak_sales_summary_reports [note: 'entity MushakSalesSummaryReport'] {
+  mushak_sales_summary_report_id uuid [pk]
+  sales_invoice_id varchar(50) [note: '→ sales.sales_invoices.sales_invoice_id (other service, no FK)']
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  sales_hub_id varchar(50) [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  invoice_no varchar(50)
+  invoice_date timestamp
+  invoice_amount numeric(18)
+  total_quantity integer
+  total_price_without_vat numeric(18)
+  total_price_with_vat numeric(18)
+  total_vat numeric(18)
+  purchaser_name varchar(150)
+  purchaser_destination varchar(150)
+  purchaser_mobile_number varchar(20)
+  purchaser_account_number varchar(20)
+  purchase_bin_number varchar(20)
+  sales_hub_name varchar(150)
+  sales_hub_address varchar(150)
+  sales_hub_mobile varchar(20)
+  merchant_name varchar(150)
+  vat_address varchar(150)
+  vat_reg_number varchar(150)
+  sold_by_id varchar(20)
+  sold_by_name varchar(150)
+  remarks varchar(250)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table report.mushak_sales_summary_skus [note: 'entity MushakSalesSummarySku'] {
+  mushak_sales_summary_sku_id uuid [pk]
+  mushak_sales_summary_report_id uuid [not null]
+  sku_number varchar(150)
+  unit_price numeric(18)
+  sku_subtotal_price_without_vat numeric(18)
+  vat_rate numeric(18)
+  sku_subtotal_price_with_vat numeric(18)
+  supplementary_tax numeric(18)
+  vat_amount numeric(18)
+  product_desription varchar(150)
+  uom varchar(20)
+  product_quantity integer
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table report.mushak_sales_summary_sku_barcodes [note: 'entity MushakSalesSummarySkuBarcode'] {
+  mushak_sales_summary_sku_barcode_id uuid [pk]
+  mushak_sales_summary_sku_id uuid [not null]
+  product_barcode varchar(150)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table report.user_report [note: 'entity UserReport'] {
+  "userId" uuid [pk]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  username varchar(255)
+  email varchar(255)
+  is_active boolean
+  last_login timestamp
+  full_name varchar(255)
+  gender varchar(255)
+  dob date
+  phone varchar(255)
+  password_changed_at timestamp
+  profile_picture_url varchar(255)
+  two_factor_enabled boolean
+  age integer
+  status varchar(20)
+  created_at timestamp
+  updated_at timestamp
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table report.voucher_item_snapshots [note: 'entity VoucherItemSnapshot'] {
+  voucher_item_snapshot_id uuid [pk]
+  voucher_snapshot_id uuid [not null]
+  coa_id bigint
+  particulars varchar(250)
+  debit_amount numeric(18)
+  credit_amount numeric(18)
+  line_order integer
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table report.voucher_snapshots [note: 'entity VoucherSnapshot'] {
+  voucher_snapshot_id uuid [pk]
+  voucher_header_info_id uuid
+  voucher_type varchar(50)
+  voucher_number varchar(50)
+  voucher_date date
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  sales_hub_name varchar(150)
+  sales_hub_address varchar(250)
+  narration varchar(500)
+  prepared_by_name varchar(150)
+  checked_by_name varchar(150)
+  approved_by_name varchar(150)
+  total_debit_amount numeric(18)
+  total_credit_amount numeric(18)
+  amount_in_words varchar(500)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Ref: report.invoice_report_item_snapshots.invoice_report_snapshot_id > report.invoice_report_snapshots.invoice_report_snapshot_id
+Ref: report.mushak_sales_summary_skus.mushak_sales_summary_report_id > report.mushak_sales_summary_reports.mushak_sales_summary_report_id
+Ref: report.mushak_sales_summary_sku_barcodes.mushak_sales_summary_sku_id > report.mushak_sales_summary_skus.mushak_sales_summary_sku_id
+Ref: report.voucher_item_snapshots.voucher_snapshot_id > report.voucher_snapshots.voucher_snapshot_id

@@ -1,0 +1,585 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>UniPOS Architecture Explorer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: control-room board. Level rail on top, diagram canvas left, inspection card right (stacks under on phones). */
+:root{
+  --bg:#EEF2F3; --surface:#FFFFFF; --tint:#E3EAEC; --ink:#14232B; --muted:#56707C; --line:#B9C8CE;
+  --accent:#0B6E78; --ok:#23804F; --bad:#C0392F; --warn:#B26B12; --idle:#8D9CA4;
+  --d-id:#5560B0; --d-md:#2D7D9A; --d-pr:#6F8A1F; --d-sell:#B85E24; --d-fin:#8C4E8E; --d-sup:#6B7580;
+  --f-ui:"Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "Cascadia Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0F171B; --surface:#17232A; --tint:#1D2C33; --ink:#E4EDF0; --muted:#93A9B3; --line:#33474F;
+  --accent:#3FC0C9; --ok:#4CC27F; --bad:#F06B60; --warn:#E5A44A; --idle:#6B7F88;
+  --d-id:#8F97E6; --d-md:#5FB4D3; --d-pr:#A4C255; --d-sell:#E39058; --d-fin:#C687C8; --d-sup:#9AA4AE;
+  color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0F171B; --surface:#17232A; --tint:#1D2C33; --ink:#E4EDF0; --muted:#93A9B3; --line:#33474F;
+  --accent:#3FC0C9; --ok:#4CC27F; --bad:#F06B60; --warn:#E5A44A; --idle:#6B7F88;
+  --d-id:#8F97E6; --d-md:#5FB4D3; --d-pr:#A4C255; --d-sell:#E39058; --d-fin:#C687C8; --d-sup:#9AA4AE;
+  color-scheme:dark }
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.5}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px;max-width:1500px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+header h1{font-size:1.55rem;font-weight:700;letter-spacing:-.01em;margin:0;text-wrap:balance}
+header p{margin:2px 0 0;color:var(--muted);max-width:75ch}
+.mono{font-family:var(--f-mono);font-size:.86em}
+nav.levels{display:flex;flex-wrap:wrap;gap:6px}
+nav.levels button,.subtabs button{font:inherit;font-size:.9rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:6px;cursor:pointer;display:flex;gap:8px;align-items:baseline}
+nav.levels button .n{font-family:var(--f-mono);font-size:.78rem;color:var(--muted)}
+nav.levels button[aria-selected="true"],.subtabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+nav.levels button[aria-selected="true"] .n{color:var(--bg)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.82rem;color:var(--muted);align-items:center}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.legend svg{width:30px;height:14px}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:14px;align-items:start}
+@media (max-width:960px){.main{grid-template-columns:minmax(0,1fr)}}
+.canvas{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.canvas .cap{margin:0;color:var(--muted);font-size:.9rem;max-width:90ch}
+.canvas .cap b{color:var(--ink);font-weight:600}
+.scroller{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.scroller svg{display:block;width:100%;height:auto;min-width:var(--minw,900px)}
+.subtabs{display:flex;flex-wrap:wrap;gap:6px}
+.subtabs button{font-size:.84rem;padding:5px 10px}
+aside.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;position:sticky;top:max(12px,env(safe-area-inset-top,0px));display:flex;flex-direction:column;gap:12px;min-width:0}
+@media (max-width:960px){aside.card{position:static}}
+aside .kind{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
+aside h2{margin:0;font-size:1.25rem;line-height:1.25}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--f-mono);font-size:.74rem;border:1px solid var(--line);border-radius:4px;padding:2px 7px;color:var(--ink)}
+.chip.ok{border-color:var(--ok);color:var(--ok)} .chip.bad{border-color:var(--bad);color:var(--bad)} .chip.idle{color:var(--muted)} .chip.warn{border-color:var(--warn);color:var(--warn)}
+aside h3{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 4px;font-weight:600}
+aside ul{margin:0;padding-left:18px;font-size:.88rem;display:flex;flex-direction:column;gap:3px}
+aside li.bad{color:var(--bad)} aside li.warn{color:var(--warn)}
+aside .rows{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;font-size:.86rem;margin:0}
+aside .rows dt{color:var(--muted)} aside .rows dd{margin:0;overflow-wrap:anywhere}
+aside .link{display:inline-flex;gap:6px;flex-wrap:wrap}
+aside .hint{color:var(--muted);font-size:.85rem;margin:0}
+/* svg */
+svg text{font-family:var(--f-ui)}
+.t1{font-size:13px;font-weight:600;fill:var(--ink)}
+.t2{font-family:var(--f-mono);font-size:10.5px;fill:var(--muted)}
+.t3{font-size:12px;fill:var(--ink)}
+.tag{font-size:10.5px;letter-spacing:.09em;font-weight:600;fill:var(--muted);text-transform:uppercase}
+.lbl{font-family:var(--f-mono);font-size:10.5px;fill:var(--muted)}
+.lbl.warn,.t3.warn{fill:var(--warn)} .lbl.bad,.t3.bad{fill:var(--bad)} .lbl.ev{fill:var(--accent)}
+.node{cursor:pointer}
+.node rect.b{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+.node.jwt rect.b{stroke:var(--ok);stroke-width:2.2}
+.node.idle rect.b{stroke-dasharray:4 3;fill:var(--tint)}
+.node.idle .t1{fill:var(--muted)}
+.node.badn rect.b{stroke:var(--bad);stroke-dasharray:5 3}
+.node.topic rect.b{fill:var(--tint)}
+.node.topic.ok rect.b{stroke:var(--accent)}
+.node.topic.warn rect.b{stroke:var(--warn)}
+.node.topic.dead rect.b,.node.topic.unused rect.b{stroke:var(--idle);stroke-dasharray:3 3}
+.node.topic.dead .t2,.node.topic.unused .t2{fill:var(--idle)}
+.node.topic .t2{fill:var(--ink)}
+.node:hover rect.b{stroke:var(--accent)}
+.node.sel rect.b{stroke:var(--accent);stroke-width:3}
+.node:focus{outline:none}
+.node:focus-visible rect.b{stroke:var(--accent);stroke-width:3.5}
+.dot.d-id{fill:var(--d-id)} .dot.d-md{fill:var(--d-md)} .dot.d-pr{fill:var(--d-pr)} .dot.d-sell{fill:var(--d-sell)} .dot.d-fin{fill:var(--d-fin)} .dot.d-sup{fill:var(--d-sup)} .dot.d-inf{fill:var(--accent)}
+.grp{fill:var(--tint);stroke:none}
+.host{fill:none;stroke:var(--ink);stroke-width:1.2;opacity:.55}
+.net{fill:none;stroke:var(--accent);stroke-width:1.2;stroke-dasharray:6 4}
+.notebox{fill:var(--tint);stroke:none}
+.e{fill:none;stroke:var(--muted);stroke-width:1.3}
+.e.ok{stroke:var(--ok)} .e.ev{stroke:var(--accent);stroke-dasharray:2 3;stroke-width:1.5}
+.e.bad{stroke:var(--bad);stroke-dasharray:6 4;stroke-width:1.6}
+.e.warn{stroke:var(--warn);stroke-dasharray:6 4}
+.e.idle{stroke:var(--idle);stroke-dasharray:2 4}
+.e.ret{stroke-dasharray:5 4}
+.e.bus{stroke:var(--line);stroke-width:2}
+.e.dim{opacity:.13}
+.e.hot-out{stroke:var(--accent);stroke-width:2.2;opacity:1}
+.e.hot-in{stroke:var(--d-sell);stroke-width:2.2;opacity:1}
+.e.bad.hot-out,.e.bad.hot-in{stroke:var(--bad)}
+.life{stroke:var(--line);stroke-dasharray:3 4}
+.mk-ink{fill:var(--muted)} .mk-ok{fill:var(--ok)} .mk-bad{fill:var(--bad)} .mk-ev{fill:var(--accent)} .mk-warn{fill:var(--warn)} .mk-idle{fill:var(--idle)} .mk-out{fill:var(--accent)} .mk-in{fill:var(--d-sell)}
+.stepn{fill:var(--tint);stroke:var(--line)} .stepn-t{font-family:var(--f-mono);font-size:10px;fill:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.e{transition:opacity .15s,stroke-width .15s}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>UniPOS Architecture Explorer</h1>
+    <p>Walton / ODCL UniPOS as it runs on the dev server today. Start at level 0 and step right for more detail. Click any box for its card.</p>
+  </header>
+  <nav class="levels" id="levels" role="tablist" aria-label="Detail level"></nav>
+  <div class="legend" id="legend"></div>
+  <div class="main">
+    <section class="canvas" aria-live="polite">
+      <div class="subtabs" id="subtabs" role="tablist" aria-label="Flow" hidden></div>
+      <p class="cap" id="cap"></p>
+      <div class="scroller" id="scroller"></div>
+    </section>
+    <aside class="card" id="card"></aside>
+  </div>
+</div>
+
+<script>
+/* ===================== DATA (one place to correct facts) ===================== */
+const H196 = "192.168.20.196 (demo DB, profile db-unipos)";
+const H52  = "192.168.200.52 (dev DB, profile db-pos-dev)";
+const DOMAINS = {
+  id:{name:"Identity & tenancy", cls:"d-id"}, md:{name:"Master data", cls:"d-md"},
+  pr:{name:"Procure → stock", cls:"d-pr"}, sell:{name:"Sell", cls:"d-sell"},
+  fin:{name:"Finance", cls:"d-fin"}, sup:{name:"Support", cls:"d-sup"}
+};
+const SERVICES = [
+ {id:"authentication",port:10503,dom:"id",db:"auth",host:H196,app:"authentication-service",jwt:"own",
+  tables:["users","user_business_areas","refresh_tokens / user_tokens","user_failed_logins","employees (HRMS mirror)"],
+  find:["Access token 7 days, refresh 15 days (code comment says 30 s)","Token has userId, merchantId, businessAreaIds; no roles, no isSuperAdmin","HRMS sync schedulers are commented out","getKongSecret calls a dead ngrok URL"],
+  erd:"authentication-service.pdf",notes:"02-identity-tenancy.md"},
+ {id:"authorization",port:10509,dom:"id",db:"authorization_db",host:H196,app:"authorization-service",jwt:true,
+  tables:["menus (tree, en/bn)","permissions","permission_groups","roles","user_roles / user_permissions","merchant_permissions"],
+  find:["Permissions only build the frontend menu; no API checks a permission","No Kafka listener in current code (old authz-group lag of 9)"],
+  erd:"authorization-service.pdf",notes:"02-identity-tenancy.md"},
+ {id:"configuration",port:10507,dom:"id",db:"configuration_db",host:H196,app:"configuration-service",jwt:true,
+  tables:["merchants (7 seeded, ODCL d1c36831…)","merchant_bins","business_area_types","business_areas (tree)","sales_hub_details","system_parameters"],
+  find:["merchantScope returns any requested merchant id: cross-tenant reads possible","Checks isSuperAdmin claim the token never carries","ERD v2 renames sales_hub_* → business_area_*; code not yet","No ODCL business areas seeded"],
+  erd:"configuration-service-v2.pdf",notes:"02-identity-tenancy.md"},
+ {id:"product",port:10501,dom:"md",db:"product_db",host:H196,app:"product-service",
+  tables:["product_types → categories → lines → models → skus → batches","product_prices (+history, grade A–E)","product_declared_prices (Mushak 4.3)","business / stock controllers","consumable items & suppliers"],
+  find:["Settings attach to any level, but lookups are exact (no inheritance)","No recipe/BOM and no unit conversion","EBS ids on SKU and prices (Walton-specific)"],
+  erd:"product-service-v2.pdf",notes:"03-master-data.md"},
+ {id:"customer",port:10504,dom:"md",db:"customer",host:H196,app:"customer-service",
+  tables:["persons (no merchant_id)","business_organizations","party_addresses / phones / emails","customer_accounts, associates","interaction_logs, surveys"],
+  find:["Persons are shared across companies (only initiator_sales_hub_id)","Dealer onboarding goes through approval","sales-service also uses group customer-service-group"],
+  erd:"customer-service-v5.1.pdf",notes:"03-master-data.md"},
+ {id:"purchase",port:10508,dom:"pr",db:"purchase_db",host:H196,app:"purchase-service",jwt:true,
+  tables:["purchase_requests (+items, history)","request_for_quotations, rfq_response","proforma_invoices","purchase_orders (+items)","delivery_orders → do_product_controllers → delivery_order_items (1 per barcode)","supplier group → legal entity → operating unit"],
+  find:["approval.url uses port 10505; approval runs on 10519","Outbox aggregateId is a hard-coded UUID","Receive by start barcode + qty generates sequential barcodes"],
+  erd:"purchase-service -v3.pdf",notes:"04-procure-to-stock.md"},
+ {id:"approval",port:10519,dom:"pr",db:"approval_db",host:H52,app:"approval_service",
+  tables:["approval_workflows","workflow_approval_path_mappings + path_routing_conditions","approval_paths → stages → stage_roles","approval_requests → request_stages → stage_actors","approval_action_history, delegations"],
+  find:["Approvers = users with the stage role, assigned to the requester's area ancestry","Old step-based tables still present; April ERD shows only those","No profile env on dev → falls back to local + db-pos-dev"],
+  erd:"approval-service.pdf",notes:"04-procure-to-stock.md"},
+ {id:"inventory",port:10513,dom:"pr",db:"inventory_db",host:H196,app:"inventory-service",
+  tables:["product_stock_summary (hub, SKU, grade)","product_instances (1 row per unit)","item_ledgers (moving average)","store house → zone → line → rack → grid → floor → container","consumeable_stocks + ledgers","goods_receive_notes"],
+  find:["Selling needs a serial per unit (no quantity selling)","Sale ledger OUT uses MRP, not cost","Outbox poller commented out; consumable issue classes are stubs"],
+  erd:"inventory-service-v1.pdf (stale)",notes:"04-procure-to-stock.md"},
+ {id:"sales",port:10514,dom:"sell",db:"sales_db",host:H196,app:"sales-service",ip:"172.20.0.23",
+  tables:["sales_types (engine per type)","sales_invoices → sales_lines → sales_serial_numbers","retail / EMI / hire extensions","sales_returns","transaction_prefix_configurations","targets, offers, incentives"],
+  find:["Prices, discounts and VAT rate come from the browser","Calls 7 services in a row; no rollback across them","Payment hard-coded: cash, terminal 0, full amount","order.url points to 10508 (purchase); order runs on 10515","Returns only record; no stock-back or refund"],
+  erd:"sales-service-v2.pdf",notes:"05-sell.md"},
+ {id:"policy",port:10511,dom:"sell",db:"policy_db",host:H196,app:"policy-service",
+  tables:["policy_engines","engine_policy_maps","sales_policies → condition groups → conditions","outcomes, actions, targets","sales_policy_history","sales_type_engines"],
+  find:["SpEL rule engine (evaluateForSalesType) is not called by sales or the frontend"],
+  erd:"policy-service-v2.pdf",notes:"05-sell.md"},
+ {id:"promotion",port:10506,dom:"sell",db:"promotion_db",host:H196,app:"promotion-service",
+  tables:["discount_rules","product_offerings","promotional_code_offers","loyalty programs / tiers / points / ledger","rewards","registered_products"],
+  find:["Kafka address typo 172.10.10.108: consumer never joins","Listens on purchase-events with group purchase-service-group","Not called during a sale"],
+  erd:"promotion-service.pdf",notes:"05-sell.md"},
+ {id:"payment",port:10516,dom:"sell",db:"payments_db",host:H196,app:"payment-service",
+  tables:["payments → payment_details (per method) → payment_allocations","refunds","bank_deposits","status / audit logs"],
+  find:["Model supports split payment; sales always sends one cash payment","Cash sessions and gift cards exist only in the ERD","Kafka address typo 172.10.10.108"],
+  erd:"payment-service.pdf",notes:"05-sell.md"},
+ {id:"order",port:10515,dom:"sell",db:"?",host:"not checked",app:"order-service",
+  tables:["orders, ordered_items","order_payments, shipments","order_tax, order_discount","order_status_history, order_types"],
+  find:["Only the compiled .war is in hand; source needed (Q41)","Kong service 'orders' points here","Sales calls it on the wrong port"],
+  erd:"—",notes:"11-infra-sources.md"},
+ {id:"accounts",port:10512,dom:"fin",db:"accounts_db",host:H196,app:"account-service",jwt:true,
+  tables:["chart_of_accounts (no merchant_id)","general_ledger_headers / details","voucher types / headers / details","accounting_periods","customer_accounts, receivables, payables","banks, mobile_wallets, expenses, fixed assets"],
+  find:["Sales GL = Dr Cash / Cr Sales only: no VAT payable, no COGS","Purchase GL is correct (inventory, VAT, AIT vs payable)","Posting picks accounts by COA keyword"],
+  erd:"accounts-service-v3.1.pdf",notes:"06-finance.md"},
+ {id:"vat",port:10517,dom:"fin",db:"vat_db",host:H196,app:"vat-service",ip:"172.20.0.26",
+  tables:["tax_codes, product_vat_settings","sales_invoice_vats (Mushak 6.3)","purchase_invoice_vats","vat_register_books","credit / debit notes, transfers (6.5)","vat_return_submission_form (9.1)"],
+  find:["VAT extracted from VAT-inclusive MRP","Register book assumes bought item = sold item"],
+  erd:"vat-service-v2.2.pdf",notes:"06-finance.md"},
+ {id:"report",port:10518,dom:"fin",db:"reports_db",host:H52,app:"report-service",
+  tables:["invoice_report_snapshots (+items)","mushak_sales_summary_*","item_ledger_entry snapshots","gl_transactions, voucher snapshots, COA snapshot","Jasper: invoice, Mushak 6.3, cash book, ledger, trial balance, income statement"],
+  find:["Read model fed only by Kafka","Runs on the dev DB while sales writes to the demo DB"],
+  erd:"report-service-v1.3.pdf",notes:"06-finance.md"},
+ {id:"compliance",port:10502,dom:"sup",db:"?",host:"not checked",app:"compliance-service",
+  tables:["assessment templates / sections / items","assessments, responses, evidence (MinIO)","assessment approvals","audit trail, system error / event logs"],
+  find:["Branch audit checklists; probably not needed for one branch","Evidence links point to 192.168.20.191:9001"],
+  erd:"—",notes:"09-wrap-up.md"},
+ {id:"notification",port:10510,dom:"sup",db:"?",host:"not checked",app:"notification-service",
+  tables:["notification_templates (email / SMS / in-app)","notification_queue","delivery logs","user preferences"],
+  find:["No Kafka listener: approval's notification-events go nowhere","Mail via Gmail SMTP"],
+  erd:"—",notes:"09-wrap-up.md"}
+];
+const CALLS = {
+  accounts:["configuration","customer","vat"],
+  approval:["authentication","authorization","configuration","customer","purchase"],
+  authentication:["configuration"], authorization:["configuration","product"],
+  configuration:["accounts"],
+  customer:["accounts","approval","authentication","configuration","product"],
+  inventory:["configuration","product","purchase","vat"],
+  payment:["accounts","configuration"], policy:["configuration","sales"],
+  product:["configuration","purchase"], promotion:["product"],
+  purchase:["approval","authentication","configuration","product","vat"],
+  report:["authorization"],
+  sales:["accounts","configuration","customer","inventory","order","payment","product","vat"],
+  vat:["accounts","configuration","customer","product","purchase"]
+};
+const BADCALLS = {"purchase>approval":"configured port 10505, approval runs on 10519","sales>order":"configured port 10508 (purchase), order runs on 10515"};
+const TOPICS = [
+ {id:"approval-request-create-events",p:["purchase","customer"],c:[["approval","approval-service-group"]],st:"ok",note:"Please start an approval workflow for this PR / PO / organisation."},
+ {id:"approval-events",p:["approval"],c:[["purchase","purchase-service-group"],["customer","customer-service-group"]],st:"warn",note:"Links the new approval request id back to the document. sales-service also uses group customer-service-group, so it competes for these messages."},
+ {id:"approvalRequest-events",p:["approval"],c:[["purchase","purchase-service-group"],["customer","customer-service-group"]],st:"ok",note:"Final status: APPROVED / REJECTED / RETURNED."},
+ {id:"purchase-order-events",p:["approval"],c:[["purchase","purchase-service-group"]],st:"ok",note:"PO approval step actions."},
+ {id:"purchase-events",p:["purchase","approval"],c:[["inventory","inventory-service-group"],["purchase","purchase-service-group"],["approval","approval-service-group"],["promotion","purchase-service-group",true]],st:"warn",note:"Delivery order received → inventory stock-in. Promotion listens with the wrong group and a wrong Kafka IP."},
+ {id:"account-events",p:["purchase"],c:[["accounts","account-service-group"]],st:"ok",note:"DO receive → purchase journal (inventory, VAT, AIT vs payable)."},
+ {id:"customer-events",p:["customer"],c:[],st:"unused",note:"Survey customer created. Listeners in approval and customer are commented out."},
+ {id:"chart-of-account",p:["accounts"],c:[["report","report"]],st:"ok",note:"COA snapshot for reports."},
+ {id:"gl-entry",p:["accounts"],c:[["report","report"]],st:"ok",note:"GL lines snapshot."},
+ {id:"voucher-snapshot",p:["accounts"],c:[["report","report"]],st:"ok",note:"Voucher snapshot."},
+ {id:"item-ledger-entry",p:["inventory"],c:[["report","report"]],st:"ok",note:"Stock ledger snapshot for the item ledger report."},
+ {id:"inventory-events",p:["inventory"],c:[],st:"unused",note:"Nobody consumes it."},
+ {id:"invoice-report-snapshot",p:["sales"],c:[["report","report"]],st:"ok",note:"Invoice print data."},
+ {id:"mushak-sales-summary-report",p:["sales"],c:[["report","report"]],st:"ok",note:"VAT Mushak sales summary."},
+ {id:"sales-invoice-created",p:["sales"],c:[["promotion","promotion-service-group",true]],st:"dead",note:"Only the unused old sales path publishes it, and promotion's Kafka IP is wrong."},
+ {id:"account-events-sales",p:["sales"],c:[],st:"dead",note:"Configured in sales, never used."},
+ {id:"bank-deposit-events",p:["payment"],c:[],st:"unused",note:"Nobody consumes it."},
+ {id:"policy-events",p:["policy"],c:[["policy","policy"]],st:"ok",note:"Internal to policy-service."},
+ {id:"user-roles-topic",p:["authentication"],c:[],st:"unused",note:"authorization has no listener in current code (old group shows lag 9)."},
+ {id:"user-areas-topic",p:["authentication"],c:[],st:"unused",note:"As above."},
+ {id:"user-deleted-topic",p:["authentication"],c:[],st:"unused",note:"As above."},
+ {id:"notification-events",p:["approval"],c:[],st:"unused",note:"notification-service has no Kafka listener."}
+];
+const INFRA = {
+ browser:{name:"Users' browsers",kind:"client",rows:[["Who","Back-office staff and cashiers"],["Uses","Next.js pages, plus direct client-side GraphQL calls"]],find:["202 of 204 client fetch files send no Authorization header"]},
+ frontend:{name:"Next.js frontend",kind:"web app",rows:[["Host","192.168.20.192"],["Runtime","Next.js 16, React 19, PM2 app UniPosDev"],["Auth","NextAuth v5 credentials → login mutation; session 4 h"],["Merchant","env TEMP_MERCHANT_ID (not from the user)"],["Pages","237 admin screens"]],find:["Build needs the live gateway (graphql-codegen)","Refresh token is never used","Local copy is on branch sadat; reference is dev"],notes:"07-frontend.md"},
+ kong:{name:"Kong gateway 3.9",kind:"edge proxy",rows:[["Ports",":8000 / :8443, admin :8001, GUI :8002"],["Config DB","kong_db @ 192.168.200.52"],["Routes","/graphql → apollo-server:4000; service orders → :10515"],["Terraform","/mnt/workspace/api-gateway"]],find:["No plugins: no JWT check, no rate limit","/graphql route was created by hand (not in Terraform)","Designed tenant-auth / workspace-guard plugins are 12-line stubs","Admin API :8001 open on the LAN"],notes:"11-infra-sources.md"},
+ gateway:{name:"Apollo Federation gateway",kind:"API gateway",rows:[["Port",":4000 (container apollo-server)"],["Stack","Node 22, Apollo Gateway 2, Apollo Server 5, Express 5"],["Discovery","Consul catalog + health?passing, every 30 s (also k8s / static)"],["Forwards","authorization, merchant-id, user-id, x-tenant-id, x-correlation-id, traceparent"],["Extras","/health, /ready, file upload route, OTel"]],find:["Does not verify the JWT","A subgraph that fails to compose is silently dropped","Restarted after every service deploy"],notes:"11-infra-sources.md"},
+ consul:{name:"Consul",kind:"service registry",rows:[["Port",":8500 with UI"],["Mode","single server, bootstrap-expect=1"],["Terraform","/mnt/workspace/service-registry"]],find:["Services register with TTL heartbeats","Only the gateway uses it for discovery; services call each other by fixed Docker names"]},
+ kafka:{name:"Kafka 7.5 (KRaft)",kind:"message broker",rows:[["IP","172.20.10.108"],["Ports","internal kafka:29092, external 192.168.20.190:9092"],["Extras","kafka-rest, kafka-ui v0.7.1"],["Topics","22 (auto-create on)"],["Terraform","/mnt/workspace/message-broker"]],find:["Single node, no replication","payment and promotion point at 172.10.10.108 (typo)"],notes:"01-infrastructure.md"},
+ minio:{name:"MinIO",kind:"object storage",rows:[["Ports",":9000 API, :9001 console"],["Used by","product images, customer documents, compliance evidence"],["Terraform","/mnt/workspace/object-storage"]],find:["compliance links point to 192.168.20.191:9001"]},
+ redis:{name:"Redis 7",kind:"cache (not running)",idle:true,rows:[["IP","172.20.10.102 :6379"],["Extras","redis-commander"],["Terraform","/mnt/workspace/caching-service"]],find:["Defined but not running on dev"]},
+ pulsehub:{name:"pulsehub (observability)",kind:"monitoring",rows:[["Parts","OTel collector-contrib, Jaeger, Prometheus, Grafana"],["Ports","OTLP :4317 / :4318, metrics :8889"],["Started by","docker-compose in /mnt/workspace/pulsehub"]],find:["Traces and logs go only to the debug exporter: Jaeger stays empty","Prometheus scrapes the collector and sales only","Grafana has nothing provisioned; containers restart=no","No log rotation; no Elasticsearch"],notes:"08-servers.md"},
+ pg196:{name:"PostgreSQL 192.168.20.196",kind:"database server",rows:[["Role","demo DB (profile db-unipos)"],["Used by","13 services on the dev server"],["Layout","one database per service"]],find:["Dev app server writes to the demo DB (Q19)","Schema by ddl-auto=update, no migrations"]},
+ pg52:{name:"PostgreSQL 192.168.200.52",kind:"database server",rows:[["Role","dev DB (profile db-pos-dev)"],["Used by","report-service, approval-service, Kong (kong_db)"]],find:["Reports read a different server than sales writes to"]},
+ demo:{name:"Demo app server 192.168.20.197",kind:"host",rows:[["Layout","Same containers as the dev server (per user)"]],find:["Not inspected separately"]},
+ host190:{name:"Dev app server 192.168.20.190",kind:"host",rows:[["Hostname","sposappmaster1"],["Disks","/ 56 GB, /mnt/workspace 270 GB (Docker data-root)"],["Network","walton-pos-cloud-network 172.20.0.0/16"],["Deploy","deploy-script: mvn package → scp war → terraform destroy + apply → restart apollo-server"]],find:["Images on :latest; no CI","Healthchecks fail with 401/403 (Spring Security), Consul still sees them healthy"],notes:"08-servers.md"},
+ host192:{name:"Frontend host 192.168.20.192",kind:"host",rows:[["Runs","Next.js under PM2 (UniPosDev)"]],find:[]}
+};
+/* Flows: lanes + steps. k: sync | ret | ev | self ; w: warn ; b: bad */
+const FLOWS = {
+ login:{name:"Login",cap:"How a user logs in and how the token travels afterwards. Only 4 services check it.",
+  lanes:[["browser","Browser"],["frontend","Next.js (NextAuth)"],["gateway","Kong → gateway"],["authentication","authentication"],["svc","any service"]],
+  steps:[["browser","frontend","submit email + password"],["frontend","gateway","mutation login(email, password)"],["gateway","authentication","forward"],
+   ["authentication","authentication","lockout check, then BCrypt match","self"],["authentication","authentication","sign RS256: access 7 d, refresh 15 d","self"],
+   ["authentication","frontend","accessToken, refreshToken, user","ret"],["frontend","browser","NextAuth session cookie (4 h)","ret"],
+   ["browser","frontend","open a page"],["frontend","gateway","query + Bearer + merchant-id (TEMP_MERCHANT_ID)"],["gateway","svc","forward headers, no check"],
+   ["svc","svc","verified only in accounts, authorization, configuration, purchase","self","w"]]},
+ sale:{name:"Retail sale",cap:"Scan, then the 9 steps of RetailSaleEngine.execute. All calls are synchronous; a failure late in the chain leaves records behind in other services.",
+  lanes:[["browser","POS screen"],["inventory","inventory"],["product","product"],["vat","vat"],["sales","sales"],["customer","customer"],["accounts","accounts"],["payment","payment"],["kafka","Kafka → report"]],
+  steps:[["browser","inventory","scanProductToCart(barcode)"],["inventory","inventory","reserve unit: AVAILABLE → RESERVED","self"],["inventory","product","RETAIL price for SKU + grade"],["inventory","vat","output VAT %"],
+   ["inventory","browser","price = MRP, cost, VAT %, serial","ret"],["browser","browser","cashier types discount (computed in browser)","self","w"],
+   ["browser","sales","addSales: barcodes + prices from the browser","sync","w"],["sales","customer","1 · find person by phone / NID, else create"],["sales","accounts","2 · open a customer account (every sale)"],
+   ["sales","sales","3 · build invoice, save","self"],["sales","accounts","4 · receivable"],["sales","payment","5 · payment: cash, full amount","sync","w"],
+   ["sales","accounts","6 · GL: Dr Cash / Cr Sales (no VAT, no COGS)","sync","w"],["sales","inventory","7 · commitInvoiceStock → SOLD, ledger OUT"],
+   ["sales","vat","8 · Mushak 6.3 + register book"],["sales","kafka","9 · invoice + Mushak snapshots","ev"],["sales","browser","invoice","ret"]]},
+ procure:{name:"Procure → stock",cap:"Purchase request to goods on the shelf. Approval and stock-in travel over Kafka; VAT is a direct call.",
+  lanes:[["browser","Hub user"],["purchase","purchase"],["kafka","Kafka"],["approval","approval"],["inventory","inventory"],["accounts","accounts"],["vat","vat"]],
+  steps:[["browser","purchase","create Purchase Request"],["purchase","kafka","approval-request-create-events","ev"],["kafka","approval","start workflow","ev"],
+   ["approval","kafka","approval-events (approvalId)","ev"],["kafka","purchase","store approvalId","ev"],["approval","approval","approvers act stage by stage","self"],
+   ["approval","kafka","approvalRequest-events: APPROVED","ev"],["kafka","purchase","PR approved → PO (same approval loop)","ev"],
+   ["browser","purchase","DO arrives: scan barcodes (doReceive)"],["purchase","kafka","purchase-events (received items)","ev"],["kafka","inventory","units AVAILABLE + ledger IN","ev"],
+   ["purchase","kafka","account-events","ev"],["kafka","accounts","Dr Inventory · VAT · AIT / Cr Payable","ev"],["purchase","vat","createPurchaseInvoiceVat (direct call)"]]},
+ approval:{name:"Approval round trip",cap:"How approval-service picks a path and finds the approvers by walking the business-area tree.",
+  lanes:[["purchase","requester (purchase / customer)"],["kafka","Kafka"],["approval","approval"],["configuration","configuration"],["authorization","authorization"],["authentication","authentication"]],
+  steps:[["purchase","kafka","approval-request-create-events {type, id, amount}","ev"],["kafka","approval","create approval request","ev"],
+   ["approval","approval","choose path by routing conditions (amount > X …)","self"],["approval","configuration","walk the business-area tree upward"],
+   ["approval","authorization","users holding the stage roles"],["approval","authentication","users assigned to those areas"],
+   ["approval","approval","actors = role ∩ area · ANY / ALL / MAJORITY","self"],["approval","kafka","approval-events: approvalId","ev"],["kafka","purchase","save approvalId","ev"],
+   ["approval","kafka","approvalRequest-events: final status","ev"],["kafka","purchase","update document status","ev"],
+   ["purchase","approval","direct GraphQL call fails: port 10505","sync","b"]]}
+};
+const LEVELS = [
+ {n:0,name:"At a glance",cap:"<b>Front door → gateway → 18 services → shared infrastructure.</b> Kong and the Apollo gateway pass everything through; each service owns its PostgreSQL database and talks to the others over GraphQL and Kafka."},
+ {n:1,name:"Hosts & network",cap:"<b>Where each container runs.</b> One dev app server holds everything on a single Docker network; the frontend and both database servers are separate machines. Note the 13 services writing to the demo DB."},
+ {n:2,name:"Request path & security",cap:"<b>One GraphQL call, hop by hop.</b> Nothing before the service checks the token, and only 4 of 18 services check it at all."},
+ {n:3,name:"Service calls",cap:"<b>Direct GraphQL calls between services (WebClient, fixed Docker names).</b> Click a service to light up what it calls (teal) and what calls it (orange). Red dashed = wrong port in config."},
+ {n:4,name:"Kafka events",cap:"<b>Who publishes and who listens.</b> 22 topics. Dotted grey topics have no working consumer; red dashed links never deliver."},
+ {n:5,name:"Key flows",cap:""}
+];
+
+/* ===================== helpers ===================== */
+const S = Object.fromEntries(SERVICES.map(s=>[s.id,s]));
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const state = {level:0, flow:"sale", sel:"gateway"};
+try{ const v = JSON.parse(localStorage.getItem("unipos-arch")||"{}"); if(v.level!=null) state.level=v.level; if(v.flow) state.flow=v.flow; }catch(e){}
+const save = ()=>{ try{ localStorage.setItem("unipos-arch",JSON.stringify({level:state.level,flow:state.flow})); }catch(e){} };
+
+const MK = ["ink","ok","bad","ev","warn","idle","out","in"];
+const defs = () => `<defs>${MK.map(m=>`<marker id="m-${m}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-${m}"/></marker>`).join("")}</defs>`;
+const mkFor = cls => cls.includes("bad")?"bad":cls.includes("ev")?"ev":cls.includes("warn")?"warn":cls.includes("idle")?"idle":cls.includes("ok")?"ok":"ink";
+
+function nodeClass(id){
+  const s=S[id]; const i=INFRA[id]; let c="node";
+  if(s && s.jwt===true) c+=" jwt";
+  if(i && i.idle) c+=" idle";
+  return c;
+}
+function domDot(id){ const s=S[id]; return s? DOMAINS[s.dom].cls : "d-inf"; }
+function node(id,x,y,w,h,t1,t2,extra=""){
+  const lines = [];
+  const cy = t2? y+h/2-3 : y+h/2+4;
+  lines.push(`<circle class="dot ${domDot(id)}" cx="${x+12}" cy="${cy-4}" r="4"/>`);
+  lines.push(`<text class="t1" x="${x+22}" y="${cy}">${esc(t1)}</text>`);
+  if(t2) lines.push(`<text class="t2" x="${x+22}" y="${cy+15}">${esc(t2)}</text>`);
+  return `<g class="${nodeClass(id)} ${extra}" data-id="${id}" tabindex="0" role="button" aria-label="${esc(t1)}"><rect class="b" x="${x}" y="${y}" width="${w}" height="${h}" rx="5"/>${lines.join("")}</g>`;
+}
+function line(x1,y1,x2,y2,cls="",label="",lx,ly,lcls=""){
+  const m=mkFor(cls);
+  let s=`<path class="e ${cls}" d="M${x1},${y1} L${x2},${y2}" marker-end="url(#m-${m})"/>`;
+  if(label) s+=`<text class="lbl ${lcls}" x="${lx??(x1+x2)/2}" y="${ly??(y1+y2)/2-6}" text-anchor="middle">${esc(label)}</text>`;
+  return s;
+}
+const pathA = (d,cls="",arrow=true)=>`<path class="e ${cls}" d="${d}" ${arrow?`marker-end="url(#m-${mkFor(cls)})"`:""}/>`;
+const svg = (w,h,body,label,minw)=>`<figure style="margin:0;--minw:${minw||900}px"><svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(label)}">${defs()}${body}</svg></figure>`;
+
+/* ===================== Level 0 ===================== */
+function L0(){
+  let b="";
+  const row=[["browser",30,130,"Users' browsers","back-office + POS"],["frontend",245,180,"Next.js frontend",".192 · PM2"],["kong",510,150,"Kong 3.9",":8000 · no plugins"],["gateway",745,180,"Apollo gateway",":4000 · federation"],["consul",1010,140,"Consul",":8500 · registry"]];
+  b+=`<text class="tag" x="30" y="18">Front door</text>`;
+  row.forEach(r=>b+=node(r[0],r[1],28,r[2],62,r[3],r[4]));
+  b+=line(160,59,243,59,"","pages",201,52);
+  b+=line(425,59,508,59,"","POST /graphql",466,52);
+  b+=line(660,59,743,59,"",":4000",701,52);
+  b+=line(925,59,1008,59,"","every 30 s",966,52);
+  b+=pathA("M95,90 C95,136 585,136 585,93","warn");
+  b+=`<text class="lbl warn" x="300" y="128" text-anchor="middle">client fetch · mostly no token</text>`;
+  const groups=[["id",["authentication","authorization","configuration"]],["md",["product","customer"]],["pr",["purchase","approval","inventory"]],["sell",["sales","policy","promotion","payment","order"]],["fin",["accounts","vat","report"]],["sup",["compliance","notification"]]];
+  b+=`<text class="tag" x="30" y="166">Services (GraphQL subgraphs, Spring Boot)</text>`;
+  groups.forEach((g,i)=>{
+    const x=30+i*189, y=175;
+    b+=line(835,92,x+86,y-2,"");
+    b+=`<rect class="grp" x="${x}" y="${y}" width="172" height="222" rx="6"/><circle class="dot ${DOMAINS[g[0]].cls}" cx="${x+12}" cy="${y+18}" r="4"/><text class="tag" x="${x+22}" y="${y+22}">${esc(DOMAINS[g[0]].name)}</text>`;
+    g[1].forEach((id,k)=>b+=node(id,x+8,y+36+k*36,156,30,id,":"+S[id].port));
+  });
+  b+=`<path class="e bus" d="M116,430 H1065"/>`;
+  [0,1,2,3,4,5].forEach(i=>b+=`<path class="e bus" d="M${116+i*189},397 V430"/>`);
+  const inf=[["kafka","Kafka 7.5","22 topics · 1 node"],["pg196","PostgreSQL .196","demo DB · 13 svcs"],["pg52","PostgreSQL .200.52","dev DB · report, approval"],["minio","MinIO",":9000 files"],["redis","Redis 7","not running"],["pulsehub","pulsehub","OTel · Jaeger · Grafana"]];
+  inf.forEach((r,i)=>{ const x=30+i*190; b+=line(x+85,430,x+85,468,""); b+=node(r[0],x,470,170,62,r[1],r[2]); });
+  b+=`<text class="lbl" x="1172" y="452" text-anchor="end">own DB · Kafka events · OTel traces</text>`;
+  return svg(1180,548,b,"UniPOS at a glance: browser, frontend, Kong, Apollo gateway, 18 services in 6 domains, shared infrastructure",920);
+}
+
+/* ===================== Level 1 ===================== */
+function L1(){
+  let b="";
+  b+=node("browser",20,40,170,56,"Users' browsers","https");
+  b+=`<g class="node" data-id="host192" tabindex="0" role="button" aria-label="Frontend host"><rect class="host" x="20" y="140" width="170" height="120" rx="6"/><text class="t1" x="32" y="162">192.168.20.192</text></g>`;
+  b+=node("frontend",32,180,146,62,"Next.js","PM2 UniPosDev");
+  b+=line(105,96,105,178,"","",0,0);
+  b+=`<g class="node" data-id="host190" tabindex="0" role="button" aria-label="Dev app server"><rect class="host" x="230" y="20" width="700" height="720" rx="8"/><text class="t1" x="246" y="42">192.168.20.190 · dev app server (sposappmaster1)</text></g>`;
+  b+=`<rect class="net" x="246" y="56" width="668" height="670" rx="6"/><text class="lbl ev" x="262" y="76">docker network walton-pos-cloud-network · 172.20.0.0/16</text>`;
+  b+=node("kong",262,90,200,56,"kong-gateway 3.9",":8000 · admin :8001");
+  b+=node("gateway",478,90,200,56,"apollo-server",":4000 · Node 22");
+  b+=node("consul",694,90,200,56,"consul",":8500 · 1 server");
+  b+=line(462,118,476,118,"");
+  b+=line(678,118,692,118,"");
+  b+=node("kafka",262,166,200,56,"kafka 7.5 + rest + ui","172.20.10.108 · 29092");
+  b+=node("minio",478,166,200,56,"minio",":9000 · console :9001");
+  b+=node("redis",694,166,200,56,"redis 7 (stopped)","172.20.10.102 · 6379");
+  b+=node("pulsehub",262,242,632,56,"pulsehub: otel-collector · jaeger · prometheus · grafana","OTLP :4317/:4318 → debug only · metrics :8889");
+  const order=["authentication","product","sales","authorization","customer","inventory","configuration","purchase","approval","accounts","policy","report","vat","promotion","payment","compliance","notification","order"];
+  b+=`<text class="tag" x="262" y="318">18 service containers (war on Tomcat)</text>`;
+  const pos={};
+  order.forEach((id,i)=>{ const col=i%3,r=Math.floor(i/3); const x=262+col*216,y=328+r*60; pos[id]=[x,y];
+    const s=S[id]; b+=node(id,x,y,200,48,id,":"+s.port+(s.ip?" · "+s.ip:"")); });
+  b+=`<text class="lbl" x="262" y="712">each: /mnt/workspace/&lt;svc&gt;-service/IaC · deploy = terraform destroy + apply</text>`;
+  b+=node("pg196",980,40,240,90,"PostgreSQL .196","demo DB · db-unipos");
+  b+=`<text class="t3" x="1002" y="112">used by 13 services on dev</text>`;
+  b+=node("pg52",980,170,240,90,"PostgreSQL .200.52","dev DB · db-pos-dev");
+  b+=`<text class="t3" x="1002" y="242">report · approval · kong_db</text>`;
+  b+=node("demo",980,320,240,70,"192.168.20.197","demo server · same layout");
+  // frontend -> kong
+  b+=pathA("M178,211 C220,211 220,118 260,118","");
+  b+=`<text class="lbl" x="198" y="280" text-anchor="middle">:8000/graphql</text>`;
+  // 13 services -> pg196 via channel x=940
+  b+=pathA("M894,352 H940 V85 H978","");
+  // approval & report -> pg52 via channel x=958
+  [pos.approval,pos.report].forEach(p=>b+=pathA(`M${p[0]+200},${p[1]+24} H958 V215 H978`,"warn"));
+  // kong -> kong_db
+  b+=pathA("M362,90 V50 H958 V215","warn",false);
+  b+=`<text class="lbl warn" x="700" y="47" text-anchor="middle">kong_db</text>`;
+  return svg(1240,750,b,"Hosts and network: dev app server with all containers on one Docker network, frontend host, two PostgreSQL servers, demo server",980);
+}
+
+/* ===================== Level 2 ===================== */
+function L2(){
+  let b="";
+  const hops=[["browser","Browser","cookie session"],["frontend","Next.js server","proxy.ts"],["kong","Kong",":8000"],["gateway","Apollo gateway",":4000"],["svc","Service","/graphql/"]];
+  const notes={
+    browser:["NextAuth cookie, 4 h","holds accessToken","refresh token unused"],
+    frontend:["redirects if not logged in","server fetch adds Bearer","merchant = TEMP_MERCHANT_ID","client fetch: 202/204 no token"],
+    kong:["route /graphql (manual)","plugins: none","no JWT, no rate limit","config in kong_db"],
+    gateway:["forwards authorization,","merchant-id, user-id,","x-correlation-id, traceparent","no token check"],
+    svc:["4 verify RS256 signature","14 accept anonymous calls","merchantScope trusts the","requested merchant id"]};
+  const warnLine={frontend:3,kong:1,gateway:3,svc:1};
+  hops.forEach((h,i)=>{ const x=20+i*240;
+    if(h[0]==="svc") b+=`<g><rect class="b" x="${x}" y="40" width="190" height="64" rx="5" style="fill:var(--surface);stroke:var(--line)"/><text class="t1" x="${x+16}" y="68">${h[1]}</text><text class="t2" x="${x+16}" y="84">${h[2]}</text></g>`;
+    else b+=node(h[0],x,40,190,64,h[1],h[2]);
+    b+=`<rect class="notebox" x="${x}" y="124" width="190" height="${18+notes[h[0]].length*20}" rx="5"/>`;
+    notes[h[0]].forEach((t,k)=>b+=`<text class="t3 ${warnLine[h[0]]===k?"warn":""}" x="${x+12}" y="${146+k*20}">${esc(t)}</text>`);
+    if(i<4) b+=line(x+190,72,x+238,72,"",["request","/graphql",":4000","subgraph"][i],x+214,64);
+  });
+  b+=`<text class="tag" x="20" y="262">Where the token comes from</text>`;
+  b+=`<g class="node" data-id="authentication" tabindex="0" role="button" aria-label="authentication"><rect class="b" x="20" y="274" width="330" height="128" rx="5"/><circle class="dot d-id" cx="32" cy="292" r="4"/><text class="t1" x="42" y="296">authentication-service</text>
+   <text class="t3" x="42" y="320">signs JWT RS256 with private_key.pem</text><text class="t3" x="42" y="340">access 7 days · refresh 15 days</text>
+   <text class="t3" x="42" y="360">claims: sub, userId, merchantId,</text><text class="t3" x="42" y="380">businessAreaIds (no roles, no admin)</text></g>`;
+  b+=`<text class="tag" x="400" y="262">Checks the token with public_key.pem</text>`;
+  ["accounts","authorization","configuration","purchase"].forEach((id,i)=>b+=node(id,400+i*200,274,184,40,id,":"+S[id].port));
+  b+=`<text class="tag" x="400" y="346">Accept calls without checking</text>`;
+  const rest=SERVICES.filter(s=>s.jwt!==true).map(s=>s.id);
+  rest.forEach((id,i)=>{ const c=i%7,r=Math.floor(i/7); b+=node(id,400+c*114,356+r*46,108,38,id,""); });
+  b+=pathA("M350,330 H396","ok");
+  b+=`<text class="lbl ok" x="373" y="322" text-anchor="middle">key</text>`;
+  return svg(1220,460,b,"Request path: browser, Next.js, Kong, gateway, service; only 4 services verify the JWT",960);
+}
+
+/* ===================== Level 3 ===================== */
+const RING=["authentication","authorization","configuration","product","customer","purchase","approval","inventory","sales","policy","promotion","payment","order","accounts","vat","report","compliance","notification"];
+function edgeTrim(cx,cy,ux,uy,w,h){ const ax=Math.abs(ux)<1e-6?1e9:(w/2)/Math.abs(ux), ay=Math.abs(uy)<1e-6?1e9:(h/2)/Math.abs(uy); const d=Math.min(ax,ay)+4; return [cx+ux*d, cy+uy*d]; }
+function L3(){
+  let b=""; const W=1000,H=800,CX=500,CY=400,R=320,NW=136,NH=42; const P={};
+  RING.forEach((id,i)=>{ const a=-Math.PI/2+i*2*Math.PI/RING.length; P[id]=[CX+R*Math.cos(a),CY+R*Math.sin(a)]; });
+  Object.entries(CALLS).forEach(([from,tos])=>tos.forEach(to=>{
+    const [x1,y1]=P[from],[x2,y2]=P[to]; const mx=(x1+x2)/2,my=(y1+y2)/2; const c=[mx+(CX-mx)*.5,my+(CY-my)*.5];
+    let u=[c[0]-x1,c[1]-y1]; let L=Math.hypot(...u); const s=edgeTrim(x1,y1,u[0]/L,u[1]/L,NW,NH);
+    let v=[c[0]-x2,c[1]-y2]; L=Math.hypot(...v); const e=edgeTrim(x2,y2,v[0]/L,v[1]/L,NW,NH);
+    const bad=BADCALLS[from+">"+to]; let cls=bad?"bad":"";
+    if(state.sel && S[state.sel]){ if(from===state.sel) cls+=" hot-out"; else if(to===state.sel) cls+=" hot-in"; else cls+=" dim"; }
+    const m = cls.includes("hot-out")&&!bad?"out":cls.includes("hot-in")&&!bad?"in":mkFor(cls);
+    b+=`<path class="e ${cls}" d="M${s[0].toFixed(1)},${s[1].toFixed(1)} Q${c[0].toFixed(1)},${c[1].toFixed(1)} ${e[0].toFixed(1)},${e[1].toFixed(1)}" marker-end="url(#m-${m})"><title>${from} → ${to}${bad?" ("+bad+")":""}</title></path>`;
+  }));
+  RING.forEach(id=>{ const [x,y]=P[id]; b+=node(id,x-NW/2,y-NH/2,NW,NH,id,":"+S[id].port); });
+  b+=`<text class="lbl" x="${CX}" y="${CY-6}" text-anchor="middle">47 direct calls</text><text class="lbl" x="${CX}" y="${CY+10}" text-anchor="middle">http://&lt;svc&gt;-service:&lt;port&gt;/graphql/</text>`;
+  return svg(W,H,b,"Service call map: 18 services in a ring, arrows for direct GraphQL calls",820);
+}
+
+/* ===================== Level 4 ===================== */
+function spread(items,minGap,top,bottom){
+  items.sort((a,b)=>a.y-b.y);
+  for(let i=1;i<items.length;i++) if(items[i].y-items[i-1].y<minGap) items[i].y=items[i-1].y+minGap;
+  const over=items.length? items[items.length-1].y-bottom:0; if(over>0) items.forEach(it=>it.y-=over);
+  for(let i=0;i<items.length;i++) if(items[i].y<top) items[i].y=top+(i?0:0);
+  for(let i=1;i<items.length;i++) if(items[i].y-items[i-1].y<minGap) items[i].y=items[i-1].y+minGap;
+  return items;
+}
+function L4(){
+  let b=""; const TX=460,TW=280,TH=24,top=72,step=32; const ty={};
+  TOPICS.forEach((t,i)=>ty[t.id]=top+i*step);
+  const bottom=top+(TOPICS.length-1)*step;
+  const prods={},cons={};
+  TOPICS.forEach(t=>{ t.p.forEach(p=>(prods[p]=prods[p]||[]).push(ty[t.id])); (t.c.length?t.c:[["none"]]).forEach(c=>(cons[c[0]]=cons[c[0]]||[]).push(ty[t.id])); });
+  const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
+  const PL=spread(Object.keys(prods).map(id=>({id,y:avg(prods[id])})),46,top,bottom);
+  const CL=spread(Object.keys(cons).map(id=>({id,y:avg(cons[id])})),46,top,bottom);
+  const py=Object.fromEntries(PL.map(p=>[p.id,p.y])), cy=Object.fromEntries(CL.map(c=>[c.id,c.y]));
+  b+=`<text class="tag" x="40" y="40">Producer</text><text class="tag" x="${TX}" y="40">Topic</text><text class="tag" x="990" y="40">Consumer</text>`;
+  TOPICS.forEach(t=>{ const y=ty[t.id];
+    t.p.forEach(p=>{ const c=t.st==="ok"||t.st==="warn"?"ev":"idle"; b+=pathA(`M210,${py[p]} C335,${py[p]} 335,${y} ${TX-2},${y}`,c); });
+    if(t.c.length) t.c.forEach(c=>{ const cls=c[2]?"bad":(t.st==="dead"?"idle":"ev"); b+=pathA(`M${TX+TW},${y} C865,${y} 865,${cy[c[0]]} 988,${cy[c[0]]}`,cls); });
+    else b+=pathA(`M${TX+TW},${y} C865,${y} 865,${cy.none} 988,${cy.none}`,"idle");
+  });
+  TOPICS.forEach(t=>{ const y=ty[t.id];
+    b+=`<g class="node topic ${t.st}" data-id="topic:${t.id}" tabindex="0" role="button" aria-label="${t.id}"><rect class="b" x="${TX}" y="${y-TH/2}" width="${TW}" height="${TH}" rx="4"/><text class="t2" x="${TX+10}" y="${y+4}">${t.id}</text></g>`; });
+  PL.forEach(p=>b+=node(p.id,40,p.y-17,170,34,p.id,""));
+  CL.forEach(c=>{ if(c.id==="none") b+=`<g class="node idle" data-id="none" tabindex="0" role="button" aria-label="no consumer"><rect class="b" x="990" y="${c.y-17}" width="170" height="34" rx="5"/><text class="t1" x="1004" y="${c.y+5}">no consumer</text></g>`; else b+=node(c.id,990,c.y-17,170,34,c.id,""); });
+  return svg(1200,bottom+40,b,"Kafka event map: producers, 22 topics, consumers",960);
+}
+
+/* ===================== Level 5 ===================== */
+function L5(){
+  const f=FLOWS[state.flow]; const LW=170, LM=60; const lanes=f.lanes; const W=LM+lanes.length*LW+40, H=110+f.steps.length*40;
+  const X={}; lanes.forEach((l,i)=>X[l[0]]=LM+LW/2+i*LW);
+  let b="";
+  lanes.forEach(l=>{ const x=X[l[0]];
+    b+=`<path class="life" d="M${x},66 V${H-10}"/>`;
+    const id=S[l[0]]||INFRA[l[0]]?l[0]:null;
+    if(id) b+=node(id,x-LW/2+8,20,LW-16,42,l[1],"");
+    else b+=`<g><rect class="b" x="${x-LW/2+8}" y="20" width="${LW-16}" height="42" rx="5" style="fill:var(--tint);stroke:var(--line)"/><text class="t1" x="${x-LW/2+20}" y="46">${esc(l[1])}</text></g>`;
+  });
+  f.steps.forEach((s,k)=>{ const y=100+k*40; const [a,c,label,kind="sync",flag]=s; const xa=X[a],xc=X[c];
+    let cls=kind==="ev"?"ev":kind==="ret"?"ret":""; if(flag==="w") cls+=" warn"; if(flag==="b") cls+=" bad";
+    const lc=flag==="w"?"warn":flag==="b"?"bad":kind==="ev"?"ev":"";
+    b+=`<circle class="stepn" cx="24" cy="${y}" r="10"/><text class="stepn-t" x="24" y="${y+3.5}" text-anchor="middle">${k+1}</text>`;
+    if(a===c){ b+=pathA(`M${xa},${y-7} h28 v14 h-26`,cls); b+=`<text class="lbl ${lc}" x="${xa+34}" y="${y+4}">${esc(label)}</text>`; }
+    else { const dir=xc>xa?1:-1; b+=pathA(`M${xa},${y} L${xc-dir*3},${y}`,cls);
+      const span=Math.abs(xc-xa), tw=label.length*6.4; const lx=Math.min(xa,xc)+8;
+      b+= tw<span-16? `<text class="lbl ${lc}" x="${(xa+xc)/2}" y="${y-6}" text-anchor="middle">${esc(label)}</text>` : `<text class="lbl ${lc}" x="${lx}" y="${y-6}">${esc(label)}</text>`; }
+  });
+  return svg(W,H,b,f.name+" sequence",Math.max(820,W*0.8));
+}
+
+/* ===================== card ===================== */
+function li(arr,cls=""){ return `<ul>${arr.map(x=>`<li class="${cls}">${esc(x)}</li>`).join("")}</ul>`; }
+function card(id){
+  const el=document.getElementById("card");
+  if(!id){ el.innerHTML=`<p class="hint">Click any box in the diagram to see its details.</p>`; return; }
+  if(id.startsWith("topic:")){ const t=TOPICS.find(x=>"topic:"+x.id===id);
+    const st={ok:["working","ok"],warn:["working, with a problem","warn"],unused:["no consumer","idle"],dead:["dead","bad"]}[t.st];
+    el.innerHTML=`<p class="kind">Kafka topic</p><h2 class="mono">${esc(t.id)}</h2><div class="chips"><span class="chip ${st[1]}">${st[0]}</span></div>
+     <p style="margin:0;font-size:.9rem">${esc(t.note)}</p>
+     <div><h3>Published by</h3>${li(t.p)}</div>
+     <div><h3>Consumed by (group)</h3>${t.c.length?`<ul>${t.c.map(c=>`<li class="${c[2]?"bad":""}">${esc(c[0])} <span class="mono">(${esc(c[1])})</span>${c[2]?" · never delivered":""}</li>`).join("")}</ul>`:"<p class='hint'>Nobody.</p>"}</div>`; return; }
+  if(id==="none"){ el.innerHTML=`<p class="kind">Kafka</p><h2>No consumer</h2><p class="hint">Topics that are published but read by nobody: ${TOPICS.filter(t=>!t.c.length).map(t=>t.id).join(", ")}.</p>`; return; }
+  const s=S[id];
+  if(s){
+    const out=CALLS[id]||[]; const inn=Object.keys(CALLS).filter(k=>CALLS[k].includes(id));
+    const prod=TOPICS.filter(t=>t.p.includes(id)).map(t=>t.id); const cons=TOPICS.filter(t=>t.c.some(c=>c[0]===id)).map(t=>t.id+(t.c.find(c=>c[0]===id)[2]?" (broken)":""));
+    const jwt=s.jwt===true?`<span class="chip ok">verifies JWT</span>`:s.jwt==="own"?`<span class="chip">issues JWT</span>`:`<span class="chip idle">no JWT check</span>`;
+    el.innerHTML=`<p class="kind">${esc(DOMAINS[s.dom].name)} · microservice</p><h2>${esc(id)}-service</h2>
+     <div class="chips"><span class="chip">:${s.port}</span>${jwt}${s.ip?`<span class="chip">${s.ip}</span>`:""}</div>
+     <dl class="rows"><dt>App name</dt><dd class="mono">${esc(s.app)}</dd><dt>Database</dt><dd><span class="mono">${esc(s.db)}</span> @ ${esc(s.host)}</dd><dt>Stack</dt><dd>Spring Boot 3.5, Java 17, DGS GraphQL, war on Tomcat</dd></dl>
+     <div><h3>Main tables</h3>${li(s.tables)}</div>
+     <div><h3>Calls (GraphQL)</h3><dl class="rows"><dt>out</dt><dd>${out.map(o=>BADCALLS[id+">"+o]?`<span style="color:var(--bad)">${o} ✕</span>`:o).join(", ")||"—"}</dd><dt>in</dt><dd>${inn.join(", ")||"—"}</dd></dl></div>
+     <div><h3>Kafka</h3><dl class="rows"><dt>publishes</dt><dd class="mono">${prod.join(", ")||"—"}</dd><dt>consumes</dt><dd class="mono">${cons.join(", ")||"—"}</dd></dl></div>
+     <div><h3>Findings</h3>${li(s.find,"warn")}</div>
+     <div><h3>Read more</h3><p class="hint"><span class="mono">_unipos-study/${esc(s.notes)}</span> · ERD <span class="mono">${esc(s.erd)}</span></p></div>`;
+    return;
+  }
+  const i=INFRA[id];
+  if(i){
+    el.innerHTML=`<p class="kind">${esc(i.kind)}</p><h2>${esc(i.name)}</h2>
+     <dl class="rows">${i.rows.map(r=>`<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join("")}</dl>
+     ${i.find.length?`<div><h3>Findings</h3>${li(i.find,"warn")}</div>`:""}
+     ${i.notes?`<div><h3>Read more</h3><p class="hint"><span class="mono">_unipos-study/${esc(i.notes)}</span></p></div>`:""}`;
+    return;
+  }
+  el.innerHTML=`<p class="hint">No details for this box.</p>`;
+}
+
+/* ===================== render ===================== */
+const RENDER=[L0,L1,L2,L3,L4,L5];
+function legend(){
+  const sw=(d,cls)=>`<svg viewBox="0 0 30 14" aria-hidden="true">${defs()}<path class="e ${cls}" d="${d}"/></svg>`;
+  const box=(cls)=>`<svg viewBox="0 0 30 14" aria-hidden="true"><g class="node ${cls}"><rect class="b" x="2" y="2" width="26" height="10" rx="2"/></g></svg>`;
+  document.getElementById("legend").innerHTML=
+   `<span>${box("jwt")}verifies JWT</span><span>${box("idle")}not running / no consumer</span><span>${sw("M1,7 H29","")}sync GraphQL call</span><span>${sw("M1,7 H29","ev")}Kafka event</span><span>${sw("M1,7 H29","bad")}broken / wrong config</span><span>${sw("M1,7 H29","warn")}works, with a problem</span>`
+   +`<span>${["id","md","pr","sell","fin","sup"].map(d=>`<svg viewBox="0 0 10 14" style="width:10px" aria-hidden="true"><circle class="dot ${DOMAINS[d].cls}" cx="5" cy="7" r="4"/></svg>${DOMAINS[d].name}`).join(" ")}</span>`;
+}
+function render(){
+  document.querySelectorAll("#levels button").forEach(b=>b.setAttribute("aria-selected",String(+b.dataset.l===state.level)));
+  const st=document.getElementById("subtabs"); st.hidden=state.level!==5;
+  st.querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.f===state.flow)));
+  document.getElementById("cap").innerHTML= state.level===5? `<b>${esc(FLOWS[state.flow].name)}.</b> ${esc(FLOWS[state.flow].cap)}` : LEVELS[state.level].cap;
+  document.getElementById("scroller").innerHTML=RENDER[state.level]();
+  document.querySelectorAll("#scroller .node").forEach(n=>n.classList.toggle("sel",n.dataset.id===state.sel));
+  card(state.sel);
+}
+function select(id){ state.sel=id; if(state.level===3) render(); else { document.querySelectorAll("#scroller .node").forEach(n=>n.classList.toggle("sel",n.dataset.id===id)); card(id); } }
+document.getElementById("levels").innerHTML=LEVELS.map(l=>`<button role="tab" data-l="${l.n}"><span class="n">${l.n}</span>${esc(l.name)}</button>`).join("");
+document.getElementById("subtabs").innerHTML=Object.entries(FLOWS).map(([k,f])=>`<button role="tab" data-f="${k}">${esc(f.name)}</button>`).join("");
+document.getElementById("levels").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; state.level=+b.dataset.l; if(state.level===3 && !S[state.sel]) state.sel="sales"; save(); render(); });
+document.getElementById("subtabs").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; state.flow=b.dataset.f; save(); render(); });
+const sc=document.getElementById("scroller");
+sc.addEventListener("click",e=>{ const n=e.target.closest(".node"); if(n&&n.dataset.id) select(n.dataset.id); });
+sc.addEventListener("keydown",e=>{ if(e.key!=="Enter"&&e.key!==" ") return; const n=e.target.closest(".node"); if(n&&n.dataset.id){ e.preventDefault(); select(n.dataset.id); } });
+legend(); render();
+</script>
+
+</body></html>

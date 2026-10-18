@@ -1,0 +1,736 @@
+// UniPOS · accounts-service · generated from @Entity code (origin/dev 35d7000)
+
+Table accounts.accounting_periods [note: 'entity AccountingPeriod'] {
+  accounting_period_id integer [pk]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  period_code varchar(50)
+  period_title varchar(150)
+  start_date date
+  end_date date
+  description varchar(500)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.accounting_period_status [note: 'entity AccountingPeriodStatus'] {
+  accounting_period_status_id integer [pk]
+  accounting_period_id integer [not null]
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  is_closed boolean [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.accounting_period_status_logs [note: 'entity AccountingPeriodStatusLog'] {
+  acc_period_status_log_id uuid [pk]
+  accounting_period_status_id integer [not null]
+  previous_status varchar(10) [not null]
+  changed_status varchar(10) [not null]
+  status_changed_by varchar(255) [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.accounting_processes [note: 'entity AccountingProcess'] {
+  accounting_process_id integer [pk]
+  process_name varchar(150) [not null]
+  process_code varchar(150) [not null]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  status varchar(50)
+  description varchar(250)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.asset_categories [note: 'entity AssetCategory'] {
+  asset_category_id uuid [pk]
+  asset_type_id uuid [not null]
+  account_id integer [not null]
+  category_name varchar(255) [not null]
+  attribute_name varchar(255) [not null]
+  short_code varchar(255)
+  depreciation_rate numeric(10)
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.asset_category_depreciation_history [note: 'entity AssetCategoryDepreciationHistory'] {
+  asset_depreciation_id uuid [pk]
+  asset_master_id uuid [not null]
+  period_id uuid [not null]
+  dep_adjusted_amount numeric(19) [not null]
+  cost_adjusted_amount numeric(19) [not null]
+  depreciated_amount numeric(19) [not null]
+  note varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.asset_items [note: 'entity AssetItem'] {
+  asset_item_id uuid [pk]
+  model_id uuid [not null]
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  current_holder varchar(255)
+  selling_date date
+  asset_title varchar(255) [not null]
+  tag_number varchar(255)
+  acquisition_cost numeric(19) [not null]
+  acquisition_date date [not null]
+  maturity_date date
+  recognition_date date
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.asset_item_cost_components [note: 'entity AssetItemCostComponent'] {
+  cost_component_id uuid [pk]
+  asset_item_id uuid [not null]
+  cost_type varchar(50) [not null]
+  amount numeric(19) [not null]
+  currency varchar(50) [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.asset_item_movement_history [note: 'entity AssetItemMovementHistory'] {
+  asset_item_movement_history_id uuid [pk]
+  asset_item_id uuid [not null, note: 'reference inferred from the column name']
+  transaction_type varchar(50) [not null]
+  movement_price numeric(19) [not null]
+  transaction_date date [not null]
+  from_sales_hub_id integer
+  to_sales_hub_id integer
+  note varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.asset_master [note: 'entity AssetMaster'] {
+  asset_master_id uuid [pk]
+  category_id uuid [not null]
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  quantity integer [not null]
+  acquisition_value numeric(19) [not null]
+  current_value numeric(19) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.asset_models [note: 'entity AssetModel'] {
+  asset_model_id uuid [pk]
+  asset_category_id uuid [not null]
+  model_name varchar(255) [not null]
+  description varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.asset_types [note: 'entity AssetType'] {
+  asset_type_id uuid [pk]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  asset_type_name varchar(255) [not null]
+  business_code varchar(255)
+  capitalization_rule varchar(255)
+  default_capitalization_threshold integer
+  depreciable boolean
+  amortizable boolean
+  default_depreciation_method varchar(255)
+  default_useful_life_months integer
+  tax_treatment varchar(255)
+  allows_physical_assets boolean
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.current_assets [note: 'entity CurrentAsset'] {
+  current_asset_id uuid [pk]
+  asset_type varchar(50) [not null]
+  description varchar(255) [not null]
+  amount numeric [not null]
+  acquisition_date date [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.deferred_tax_assets [note: 'entity DeferredTaxAsset'] {
+  deferred_asset_id uuid [pk]
+  description varchar(255) [not null]
+  amount numeric [not null]
+  recognition_date date [not null]
+  expiry_date date [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.financial_assets [note: 'entity FinancialAsset'] {
+  financial_asset_id uuid [pk]
+  asset_type varchar(50) [not null]
+  description varchar(255) [not null]
+  purchase_cost numeric [not null]
+  market_value numeric [not null]
+  acquisition_date date [not null]
+  maturity_date date [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.fixed_assets [note: 'entity FixedAsset'] {
+  fixed_asset_id uuid [pk]
+  asset_type varchar(50) [not null]
+  attribute_name varchar(255) [not null]
+  description varchar(255) [not null]
+  acquisition_cost numeric [not null]
+  acquisition_date date [not null]
+  depreciation_rate numeric [not null]
+  accumulated_depreciation numeric [not null]
+  net_book_value numeric [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.intangible_assets [note: 'entity IntangibleAsset'] {
+  intangible_asset_id uuid [pk]
+  asset_type varchar(50) [not null]
+  description varchar(255) [not null]
+  acquisition_cost numeric [not null]
+  acquisition_date date [not null]
+  amortization_rate numeric [not null]
+  accumulated_amortization numeric [not null]
+  net_book_value numeric [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.miscellaneous_assets [note: 'entity MiscellaneousAsset'] {
+  miscellaneous_asset_id uuid [pk]
+  description varchar(255) [not null]
+  amount numeric [not null]
+  acquisition_date date [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.banks [note: 'entity Bank'] {
+  bank_id bigint [pk]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  bank_name varchar(255) [not null]
+  bank_code varchar(255)
+  short_name varchar(255)
+  country_code varchar(255)
+  notes varchar(255)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.bank_accounts [note: 'entity BankAccount'] {
+  bank_account_id bigint [pk]
+  bank_branch_id bigint [not null, note: 'reference inferred from the column name']
+  bank_id bigint [not null]
+  account_number varchar(255) [not null]
+  account_name varchar(255)
+  account_type varchar(50)
+  currency_code varchar(255)
+  opening_balance numeric(19)
+  current_balance numeric(19)
+  account_status varchar(50)
+  bank_branch_id bigint [note: 'reference inferred from the column name']
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.bank_branches [note: 'entity BankBranch'] {
+  bank_branch_id bigint [pk]
+  bank_id bigint [not null]
+  branch_code varchar(255) [not null]
+  branch_name varchar(255)
+  routing_number varchar(255)
+  address varchar(255)
+  city varchar(255)
+  postal_code varchar(255)
+  bank_id bigint
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.bank_types [note: 'entity BankType'] {
+  bank_type_id bigint [pk]
+  bank_id bigint
+  bank_type varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.chart_of_accounts [note: 'entity ChartOfAccount'] {
+  account_id integer [pk]
+  account_code varchar(255) [not null]
+  account_name varchar(255) [not null]
+  account_type varchar(50) [not null]
+  keyword varchar(255) [not null]
+  approval_status varchar(50) [not null]
+  parent_account_id bigint
+  description varchar(255) [not null]
+  is_direct_post_allowed boolean
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.customer_accounts [note: 'entity CustomerAccount'] {
+  customer_account_id uuid [pk]
+  customer_account_number varchar(50)
+  party_category_id integer
+  party_related_id uuid [note: 'polymorphic → customer.persons | customer.business_organizations']
+  product_hierarchy_level_id integer
+  product_related_code varchar(255)
+  sales_type_code varchar(20)
+  account_status varchar(255)
+  creation_date date
+  used_credit numeric
+  outstanding_balance numeric
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.customer_due_collections [note: 'entity CustomerDueCollection'] {
+  customer_due_collection_id uuid [pk]
+  customer_account_id uuid [not null]
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  payment_mode varchar(50) [not null]
+  received_amount numeric [not null]
+  received_date date [not null]
+  is_lpr boolean
+  receipt_number varchar(50) [not null]
+  receipt_type varchar(50) [not null]
+  invoice_number varchar(50)
+  collected_by varchar(50)
+  is_reversed boolean [not null]
+  reversed_number uuid
+  remarks varchar(250)
+  operation_name varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.emi_allowed_months [note: 'entity EmiAllowedMonth'] {
+  emi_allowed_month_id bigint [pk]
+  allowed_month integer [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.emi_bank_cards [note: 'entity EmiBankCard'] {
+  emi_bank_card_id bigint [pk]
+  card_name varchar(150) [not null]
+  card_type varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.emi_bank_commission_rates [note: 'entity EmiBankCommissionRate'] {
+  emi_bank_commission_rate_id bigint [pk]
+  commission_rate numeric(7) [not null]
+  bank_id bigint [not null]
+  emi_bank_card_id bigint [not null, note: 'reference inferred from the column name']
+  emi_allowed_month_id bigint [not null, note: 'reference inferred from the column name']
+  bank_id bigint
+  emi_bank_card_id bigint [note: 'reference inferred from the column name']
+  emi_allowed_month_id bigint [note: 'reference inferred from the column name']
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.emi_machine_charges [note: 'entity EmiMachineCharge'] {
+  emi_machine_charge_id bigint [pk]
+  emi_bank_id bigint [not null]
+  emi_bank_card_id bigint [not null]
+  emi_machine_bank bigint [not null]
+  machine_charge_rate "double precision"
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.expenses [note: 'entity Expense'] {
+  expense_id uuid [pk]
+  account_id integer [not null]
+  expense_date date [not null]
+  amount numeric [not null]
+  description varchar(255) [not null]
+  paid_by varchar(255) [not null]
+  approved_by varchar(255) [not null]
+  status varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.general_ledger_details [note: 'entity GeneralLedgerDetail'] {
+  general_ledger_detail_id uuid [pk]
+  general_ledger_header_id uuid [not null]
+  coa_id integer [not null]
+  reference_coa_id integer
+  debit_amount numeric [not null]
+  credit_amount numeric [not null]
+  hierarchy_level_id bigint
+  related_id uuid [note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  currency varchar(255) [not null]
+  description varchar(255) [not null]
+  operating_unit_id integer
+  bank_id uuid
+  bank_account_id uuid
+  customer_id uuid [note: '→ customer.persons.person_id (other service, no FK)']
+  particular varchar(250)
+}
+
+Table accounts.general_ledger_headers [note: 'entity GeneralLedgerHeader'] {
+  general_ledger_header_id uuid [pk]
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  store_id uuid
+  transaction_type varchar(50) [not null]
+  transaction_no varchar(255)
+  reference_source varchar(255) [not null]
+  reference_no varchar(255) [not null]
+  description varchar(255) [not null]
+  total_amount numeric [not null]
+  gl_date date [not null]
+  acc_period_id uuid
+  posted_date date [not null]
+  transaction_status varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.transaction_prefix_configurations [note: 'entity TransactionPrefixConfiguration'] {
+  transaction_prefix_config_id bigint [pk]
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  operation_type varchar(50) [not null]
+  prefix varchar(50) [not null]
+  code_length integer [not null]
+  next_sequence_number bigint [not null]
+  description varchar(250)
+  bin_short_code varchar(50)
+}
+
+Table accounts.hire_installment_schedules [note: 'entity HireInstallmentSchedule'] {
+  installment_schedule_id uuid [pk]
+  customer_account_id uuid [not null]
+  invoice_number varchar(50) [not null]
+  installment_no integer [not null]
+  due_date date [not null]
+  installed_amount numeric [not null]
+  received_amount numeric [not null]
+  status varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.mobile_wallets [note: 'entity MobileWallet'] {
+  mobile_wallet_id bigint [pk]
+  code varchar(30)
+  name varchar(150)
+  short_code varchar(20)
+  provider_type varchar(30) [not null]
+  currency_code varchar(20)
+  display_order integer
+  charge_rate numeric
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.outbox [note: 'entity Outbox'] {
+  id uuid [pk]
+  aggregate_id uuid [not null]
+  aggregate_type varchar(50) [not null]
+  event_type varchar(50) [not null]
+  payload varchar(255) [not null]
+  processed boolean [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table accounts.accounts_payables [note: 'entity AccountPayable'] {
+  payable_id uuid [pk]
+  target_audience_type varchar(50) [not null]
+  audience_id integer [not null]
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  transaction_type varchar(50) [not null]
+  debit_amount numeric [not null]
+  credit_amount numeric [not null]
+  paid_amount numeric [not null]
+  balance numeric [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.payables [note: 'entity Payable'] {
+  payable_id uuid [pk]
+  supplier_id integer [not null]
+  invoice_id bigint [not null, note: '→ sales.sales_invoices.sales_invoice_id (other service, no FK)']
+  amount_due numeric [not null]
+  due_date date [not null]
+  status varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.receivables [note: 'entity Receivable'] {
+  receivable_id uuid [pk]
+  customer_id uuid [not null, note: '→ customer.persons.person_id (other service, no FK)']
+  invoice_id uuid [not null, note: '→ sales.sales_invoices.sales_invoice_id (other service, no FK)']
+  amount_due numeric [not null]
+  due_date date [not null]
+  status varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.vehicles [note: 'entity Vehicle'] {
+  vehicle_id bigint [pk]
+  business_area_type integer [not null]
+  business_area_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  owner_id varchar(20) [not null]
+  driver_id varchar(20) [not null]
+  associated_coa_id integer [not null]
+  advance_amount numeric [not null]
+  car_ownership_type varchar(50) [not null]
+  refund_amount numeric
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.vehicle_transactions [note: 'entity VehicleTransaction'] {
+  vehicle_transaction_id uuid [pk]
+  vehicle_id bigint [not null]
+  debit_amount numeric
+  credit_amount numeric
+  transaction_no varchar(50)
+  transaction_date date
+  transaction_type varchar(50)
+  approval_id uuid [note: '→ approval.approval_requests.approval_request_id (other service, no FK)']
+  approval_status varchar(50)
+  is_account_processed boolean
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.voucher_details [note: 'entity VoucherDetails'] {
+  voucher_detail_id uuid [pk]
+  voucher_header_info_id uuid [not null]
+  coa_id integer [not null]
+  acc_depreciation_coa_id integer
+  bank_id bigint
+  bank_account_id bigint
+  debit_amount "double precision"
+  credit_amount "double precision"
+  customer_id uuid [note: '→ customer.persons.person_id (other service, no FK)']
+  employee_id uuid
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  operating_unit_id integer
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.voucher_header_info [note: 'entity VoucherHeaderInfo'] {
+  voucher_header_info_id uuid [pk]
+  voucher_number varchar(255) [not null, unique]
+  sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  voucher_type_id bigint [not null]
+  voucher_date date [not null]
+  description varchar(250)
+  prepared_by varchar(255)
+  approved_by varchar(255)
+  is_hrm_processed boolean [not null]
+  total_debit_amount "double precision"
+  total_credit_amount "double precision"
+  voucher_status varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table accounts.voucher_types [note: 'entity VoucherType'] {
+  voucher_type_id bigint [pk]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  code varchar(255) [not null]
+  name varchar(255) [not null]
+  description varchar(255) [not null]
+  debit_account_required boolean [not null]
+  credit_account_required boolean [not null]
+  allow_multiple_entries boolean [not null]
+  default_debit_account numeric [not null]
+  "default_Credit_Account" numeric [not null]
+  approval_required boolean [not null]
+  posting_allowed boolean [not null]
+  max_amount_limit numeric [not null]
+  tax_applicable boolean [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Ref: accounts.accounting_period_status.accounting_period_id > accounts.accounting_periods.accounting_period_id
+Ref: accounts.accounting_period_status_logs.accounting_period_status_id > accounts.accounting_period_status.accounting_period_status_id
+Ref: accounts.asset_categories.asset_type_id > accounts.asset_types.asset_type_id
+Ref: accounts.asset_categories.account_id > accounts.chart_of_accounts.account_id
+Ref: accounts.asset_category_depreciation_history.asset_master_id > accounts.asset_master.asset_master_id
+Ref: accounts.asset_items.model_id > accounts.asset_models.asset_model_id
+Ref: accounts.asset_item_cost_components.asset_item_id > accounts.asset_items.asset_item_id
+Ref: accounts.asset_item_movement_history.asset_item_id > accounts.asset_items.asset_item_id // id only, no FK
+Ref: accounts.asset_master.category_id > accounts.asset_categories.asset_category_id
+Ref: accounts.asset_models.asset_category_id > accounts.asset_categories.asset_category_id
+Ref: accounts.bank_accounts.bank_branch_id > accounts.bank_branches.bank_branch_id // id only, no FK
+Ref: accounts.bank_accounts.bank_id > accounts.banks.bank_id // id only, no FK
+Ref: accounts.bank_accounts.bank_branch_id > accounts.bank_branches.bank_branch_id
+Ref: accounts.bank_branches.bank_id > accounts.banks.bank_id // id only, no FK
+Ref: accounts.bank_branches.bank_id > accounts.banks.bank_id
+Ref: accounts.bank_types.bank_id > accounts.banks.bank_id
+Ref: accounts.customer_due_collections.customer_account_id > accounts.customer_accounts.customer_account_id // id only, no FK
+Ref: accounts.emi_bank_commission_rates.bank_id > accounts.banks.bank_id // id only, no FK
+Ref: accounts.emi_bank_commission_rates.emi_bank_card_id > accounts.emi_bank_cards.emi_bank_card_id // id only, no FK
+Ref: accounts.emi_bank_commission_rates.emi_allowed_month_id > accounts.emi_allowed_months.emi_allowed_month_id // id only, no FK
+Ref: accounts.emi_bank_commission_rates.bank_id > accounts.banks.bank_id
+Ref: accounts.emi_bank_commission_rates.emi_bank_card_id > accounts.emi_bank_cards.emi_bank_card_id
+Ref: accounts.emi_bank_commission_rates.emi_allowed_month_id > accounts.emi_allowed_months.emi_allowed_month_id
+Ref: accounts.emi_machine_charges.emi_bank_id > accounts.banks.bank_id
+Ref: accounts.emi_machine_charges.emi_bank_card_id > accounts.emi_bank_cards.emi_bank_card_id
+Ref: accounts.emi_machine_charges.emi_machine_bank > accounts.banks.bank_id
+Ref: accounts.expenses.account_id > accounts.chart_of_accounts.account_id
+Ref: accounts.general_ledger_details.general_ledger_header_id > accounts.general_ledger_headers.general_ledger_header_id
+Ref: accounts.general_ledger_details.coa_id > accounts.chart_of_accounts.account_id
+Ref: accounts.general_ledger_details.reference_coa_id > accounts.chart_of_accounts.account_id
+Ref: accounts.general_ledger_details.bank_id > accounts.banks.bank_id // id only, no FK
+Ref: accounts.general_ledger_details.bank_account_id > accounts.bank_accounts.bank_account_id // id only, no FK
+Ref: accounts.hire_installment_schedules.customer_account_id > accounts.customer_accounts.customer_account_id // id only, no FK
+Ref: accounts.vehicles.associated_coa_id > accounts.chart_of_accounts.account_id
+Ref: accounts.vehicle_transactions.vehicle_id > accounts.vehicles.vehicle_id
+Ref: accounts.voucher_details.voucher_header_info_id > accounts.voucher_header_info.voucher_header_info_id
+Ref: accounts.voucher_details.coa_id > accounts.chart_of_accounts.account_id
+Ref: accounts.voucher_details.acc_depreciation_coa_id > accounts.chart_of_accounts.account_id
+Ref: accounts.voucher_details.bank_id > accounts.banks.bank_id
+Ref: accounts.voucher_details.bank_account_id > accounts.bank_accounts.bank_account_id
+Ref: accounts.voucher_header_info.voucher_type_id > accounts.voucher_types.voucher_type_id
