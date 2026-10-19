@@ -15,6 +15,15 @@ code = open(os.path.join(HERE, "data.json"), encoding="utf-8").read().replace("<
 js = open(os.path.join(HERE, "v2.js"), encoding="utf-8").read()
 
 EXTRA_CSS = r"""
+[hidden]{display:none!important}
+svg.main .node.dimn{opacity:.22}
+svg.main .node.hotn rect.b{stroke-width:2.2}
+.e.flow{stroke-dasharray:7 5}
+@media (prefers-reduced-motion:no-preference){.e.flow{animation:kflow .8s linear infinite}}
+@keyframes kflow{to{stroke-dashoffset:-12}}
+.key{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:4px}
+.key.in{background:var(--d-sell)} .key.out{background:var(--accent)}
+
 /* v2: lens tokens */
 :root{ --v-keep:#DCEFE3; --v-change:#F6E7C8; --v-build:#D6E6F7; --v-decide:#E7DFF2; --v-remove:#F5D9D6; }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --v-keep:#1E3B2C; --v-change:#3E3219; --v-build:#1C3049; --v-decide:#33284A; --v-remove:#4A2522; }}
@@ -144,7 +153,8 @@ BODY = """
 </div>
 """
 
-head = """<title>UniPOS System Atlas</title>
+head = """<meta charset="utf-8">
+<title>UniPOS System Atlas</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -100,7 +100,7 @@ Answer inline (write under each question) whenever convenient. ✅ = answered.
   - ✅ **A (partial):** Target DB will be **PostgreSQL** (not Oracle) → Oracle → Postgres migration. Still to confirm: PaiPai keeps running until cut-over?
 - **Q30 (partial answer from code):** PaiPai supports VAT policy SDF-6.1/6.2 and TRADING/MANUFACTURING nature, with Mushak 4.3 using BOM. Expotech's actual setting is stored in the Oracle data.
 - **Q40.** Migration scope: only masters + opening stock/balances at cut-over, with old history kept read-only in PaiPai? Or full history (invoices, Mushak registers) converted? (needs ODCL management + VAT consultant)
-- Note 2026-10-18: manager on leave for 1 week → repos (gateway, Kong, order-service, Terraform) delayed; user has server access. Agreed approach: only *locate* them read-only on the server (paths, git remotes, sizes), copy nothing until the manager/authorised person approves.
+- Note 2026-10-18: manager on leave for 1 week. User has full server access and copying is allowed (no extra approval): gateway, Kong scaffolding, Terraform and order-0.0.1.war were copied to `_unipos-study/walton-infra-copy/`. Still missing: order-service **source** (only the WAR) and the Kong/Apollo env from the manager.
 
 ## Infra sources (from 11)
 - ✅ Q10/Q14 mostly solved: gateway, Kong and Terraform folders collected from the server (2026-10-18) → `walton-infra-copy/`. None of them were git repos.

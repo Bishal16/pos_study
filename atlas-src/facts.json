@@ -1603,12 +1603,12 @@
   {
    "n": 3,
    "name": "Service calls",
-   "cap": "<b>Direct GraphQL calls between services (WebClient, fixed Docker names).</b> Click a service to light up what it calls (teal) and what calls it (orange). Red dashed = wrong port in config."
+   "cap": "<b>Direct GraphQL calls between services (WebClient, fixed Docker names).</b> Click a service to light up what it calls (<span style=\"color:var(--accent)\">teal</span>) and what calls it (<span style=\"color:var(--d-sell)\">orange</span>); click it again to clear. Red dashed = wrong port in config."
   },
   {
    "n": 4,
    "name": "Kafka events",
-   "cap": "<b>Who publishes and who listens.</b> 22 topics. Dotted grey topics have no working consumer; red dashed links never deliver."
+   "cap": "<b>Who publishes and who listens.</b> 22 topics. Click a producer, topic or consumer to light up its path: <span style=\"color:var(--d-sell)\">orange</span> = data flowing in, <span style=\"color:var(--accent)\">teal</span> = data flowing out. Click it again to clear. Dotted grey topics have no working consumer; red dashed links never deliver."
   },
   {
    "n": 5,

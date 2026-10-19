@@ -21,7 +21,7 @@ LEVELS[5].cap = "";
 LEVELS.push({n:6,name:"Inside a service",cap:""});
 LEVELS.push({n:7,name:"Sync",cap:""});
 LEVELS[2].cap = "<b>One GraphQL call, hop by hop.</b> Nothing before the service checks the token, and only "+SERVICES.filter(s=>s.jwt===true).length+" of "+SERVICES.length+" services check it at all (from code).";
-LEVELS[3].cap = "<b>Direct GraphQL calls between services.</b> Click a service: its outgoing calls light up teal with the <b>operation names</b> they use, incoming calls orange. Hover any arrow for its full list. Red dashed = wrong port in config.";
+LEVELS[3].cap = "<b>Direct GraphQL calls between services.</b> Click a service: its outgoing calls light up teal with the <b>operation names</b> they use, incoming calls orange. Unrelated services fade; click the service again to clear. Hover any arrow for its full list. Red dashed = wrong port in config.";
 /* operation names per flow step (6th element) */
 const STEPOPS = {
  login:{1:"login",4:"login (JwtUtil.generateToken)"},
@@ -182,21 +182,24 @@ function L2(){
 const RING=["authentication","authorization","configuration","product","customer","purchase","approval","inventory","sales","policy","promotion","payment","order","accounts","vat","report","compliance","notification"];
 function edgeTrim(cx,cy,ux,uy,w,h){ const ax=Math.abs(ux)<1e-6?1e9:(w/2)/Math.abs(ux), ay=Math.abs(uy)<1e-6?1e9:(h/2)/Math.abs(uy); const d=Math.min(ax,ay)+4; return [cx+ux*d, cy+uy*d]; }
 function L3(){
-  let b="",labels=""; const W=1000,H=800,CX=500,CY=400,R=320,NW=136,NH=42,P={};
+  let b="",hotE="",labels=""; const W=1000,H=800,CX=500,CY=400,R=320,NW=136,NH=42,P={};
+  const selS=S[state.sel]?state.sel:null, lit=new Set(selS?[selS]:[]);
+  if(selS) EDGES.forEach(([f,t])=>{ if(f===selS) lit.add(t); if(t===selS) lit.add(f); });
   RING.forEach((id,i)=>{ const a=-Math.PI/2+i*2*Math.PI/RING.length; P[id]=[CX+R*Math.cos(a),CY+R*Math.sin(a)]; });
   EDGES.forEach(([from,to])=>{
     const [x1,y1]=P[from],[x2,y2]=P[to]; const mx=(x1+x2)/2,my=(y1+y2)/2; const c=[mx+(CX-mx)*.5,my+(CY-my)*.5];
     let u=[c[0]-x1,c[1]-y1],L=Math.hypot(...u); const s=edgeTrim(x1,y1,u[0]/L,u[1]/L,NW,NH);
     let v=[c[0]-x2,c[1]-y2]; L=Math.hypot(...v); const e=edgeTrim(x2,y2,v[0]/L,v[1]/L,NW,NH);
     const bad=BADCALLS[from+">"+to]; const ops=CALLOPS[from][to]; let cls=bad?"bad":"";
-    const selS=S[state.sel]?state.sel:null;
-    if(selS){ if(from===selS) cls+=" hot-out"; else if(to===selS) cls+=" hot-in"; else cls+=" dim"; }
+    if(selS){ if(from===selS) cls+=" hot-out flow"; else if(to===selS) cls+=" hot-in flow"; else cls+=" dim"; }
     const m = cls.includes("hot-out")&&!bad?"out":cls.includes("hot-in")&&!bad?"in":mkFor(cls);
-    b+=`<path class="e ${cls}" d="M${s[0].toFixed(1)},${s[1].toFixed(1)} Q${c[0].toFixed(1)},${c[1].toFixed(1)} ${e[0].toFixed(1)},${e[1].toFixed(1)}" marker-end="url(#m-${m})"><title>${from} → ${to}: ${esc(ops.length?ops.join(", "):"URL configured, no client class found")}${bad?" · "+bad:""}</title></path>`;
+    const pth=`<path class="e ${cls}" d="M${s[0].toFixed(1)},${s[1].toFixed(1)} Q${c[0].toFixed(1)},${c[1].toFixed(1)} ${e[0].toFixed(1)},${e[1].toFixed(1)}" marker-end="url(#m-${m})"><title>${from} → ${to}: ${esc(ops.length?ops.join(", "):"URL configured, no client class found")}${bad?" · "+bad:""}</title></path>`;
+    if(cls.includes("flow")) hotE+=pth; else b+=pth;  /* lit calls drawn on top */
     if(selS && from===selS){ const qx=.25*s[0]+.5*c[0]+.25*e[0], qy=.25*s[1]+.5*c[1]+.25*e[1];
       labels+=`<text class="oplbl ${bad?"bad":""}" x="${qx.toFixed(1)}" y="${qy.toFixed(1)}" text-anchor="middle">${esc(shorten(ops))}</text>`; }
   });
-  RING.forEach(id=>{ const [x,y]=P[id]; b+=node(id,x-NW/2,y-NH/2,NW,NH,id,":"+S[id].port); });
+  b+=hotE;
+  RING.forEach(id=>{ const [x,y]=P[id]; b+=node(id,x-NW/2,y-NH/2,NW,NH,id,":"+S[id].port,!selS?"":lit.has(id)?"hotn":"dimn"); });
   b+=labels;
   b+=`<text class="lbl" x="${CX}" y="${CY-6}" text-anchor="middle">${EDGES.length} direct calls</text><text class="lbl" x="${CX}" y="${CY+10}" text-anchor="middle">http://&lt;svc&gt;-service:&lt;port&gt;/graphql/</text>`;
   return svgWrap(W,H,b,"Service call map");
@@ -210,6 +213,18 @@ function spread(items,minGap,top,bottom){
   for(let i=1;i<items.length;i++) if(items[i].y-items[i-1].y<minGap) items[i].y=items[i-1].y+minGap;
   return items;
 }
+/* the selected producer, topic or consumer lights up its whole path: hot-in = data flowing towards it, hot-out = data flowing away */
+function kafkaHot(sel){
+  if(!sel) return null;
+  const up=new Set(), down=new Set(), nodes=new Set([sel]), prodLit=new Set([sel]), consLit=new Set([sel]);
+  const add=(set,a,b)=>{ set.add(a+">"+b); nodes.add(a); nodes.add(b); if(!a.startsWith("topic:")) prodLit.add(a); if(!b.startsWith("topic:")) consLit.add(b); };
+  TOPICS.forEach(t=>{ const tid="topic:"+t.id, cs=t.c.length?t.c.map(c=>c[0]):["none"];
+    if(sel===tid){ t.p.forEach(p=>add(up,p,tid)); cs.forEach(c=>add(down,tid,c)); return; }
+    if(t.p.includes(sel)){ add(down,sel,tid); cs.forEach(c=>add(down,tid,c)); }
+    if(cs.includes(sel)){ add(up,tid,sel); t.p.forEach(p=>add(up,p,tid)); }
+  });
+  return nodes.size>1 ? {up,down,nodes,prodLit,consLit} : null;
+}
 function L4(){
   let b=""; const TX=460,TW=280,TH=24,top=72,step=32,ty={};
   TOPICS.forEach((t,i)=>ty[t.id]=top+i*step);
@@ -218,15 +233,23 @@ function L4(){
   const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
   const PL=spread(Object.keys(prods).map(id=>({id,y:avg(prods[id])})),46,top,bottom), CL=spread(Object.keys(cons).map(id=>({id,y:avg(cons[id])})),46,top,bottom);
   const py=Object.fromEntries(PL.map(p=>[p.id,p.y])), cy=Object.fromEntries(CL.map(c=>[c.id,c.y]));
+  const hot=kafkaHot(state.sel), nd=(id,lit)=>!hot?"":(lit||hot.nodes).has(id)?"hotn":"dimn";  /* a service in both columns is lit only where its path is */
+  const edge=(d,cls,a,z)=>{ const k=a+">"+z;
+    if(hot){ if(hot.down.has(k)) cls+=" hot-out flow"; else if(hot.up.has(k)) cls+=" hot-in flow"; else cls+=" dim"; }
+    const m=cls.includes("bad")?"bad":cls.includes("hot-out")?"out":cls.includes("hot-in")?"in":mkFor(cls);
+    return `<path class="e ${cls}" d="${d}" marker-end="url(#m-${m})"><title>${esc(a.replace("topic:",""))} → ${esc(z.replace("topic:",""))}</title></path>`; };
+  let hotE="";
   b+=`<text class="tag" x="40" y="40">Producer</text><text class="tag" x="${TX}" y="40">Topic</text><text class="tag" x="990" y="40">Consumer</text>`;
-  TOPICS.forEach(t=>{ const y=ty[t.id];
-    t.p.forEach(p=>b+=pathA(`M210,${py[p]} C335,${py[p]} 335,${y} ${TX-2},${y}`,t.st==="ok"||t.st==="warn"?"ev":"idle"));
-    if(t.c.length) t.c.forEach(c=>b+=pathA(`M${TX+TW},${y} C865,${y} 865,${cy[c[0]]} 988,${cy[c[0]]}`,c[2]?"bad":(t.st==="dead"?"idle":"ev")));
-    else b+=pathA(`M${TX+TW},${y} C865,${y} 865,${cy.none} 988,${cy.none}`,"idle");
+  TOPICS.forEach(t=>{ const y=ty[t.id], tid="topic:"+t.id;
+    const put=(s,k)=>{ if(hot&&(hot.up.has(k)||hot.down.has(k))) hotE+=s; else b+=s; };
+    t.p.forEach(p=>put(edge(`M210,${py[p]} C335,${py[p]} 335,${y} ${TX-2},${y}`,t.st==="ok"||t.st==="warn"?"ev":"idle",p,tid),p+">"+tid));
+    if(t.c.length) t.c.forEach(c=>put(edge(`M${TX+TW},${y} C865,${y} 865,${cy[c[0]]} 988,${cy[c[0]]}`,c[2]?"bad":(t.st==="dead"?"idle":"ev"),tid,c[0]),tid+">"+c[0]));
+    else put(edge(`M${TX+TW},${y} C865,${y} 865,${cy.none} 988,${cy.none}`,"idle",tid,"none"),tid+">none");
   });
-  TOPICS.forEach(t=>{ const y=ty[t.id]; b+=`<g class="node topic ${t.st}" data-id="topic:${t.id}" tabindex="0" role="button" aria-label="${t.id}"><rect class="b" x="${TX}" y="${y-TH/2}" width="${TW}" height="${TH}" rx="4"/><text class="t2" x="${TX+10}" y="${y+4}">${t.id}</text></g>`; });
-  PL.forEach(p=>b+=node(p.id,40,p.y-17,170,34,p.id,""));
-  CL.forEach(c=>{ b+= c.id==="none" ? `<g class="node idle sev1" data-id="none" tabindex="0" role="button" aria-label="no consumer"><rect class="b" x="990" y="${c.y-17}" width="170" height="34" rx="5"/><text class="t1" x="1004" y="${c.y+5}">no consumer</text></g>` : node(c.id,990,c.y-17,170,34,c.id,""); });
+  b+=hotE;  /* highlighted paths drawn last so they sit on top */
+  TOPICS.forEach(t=>{ const y=ty[t.id]; b+=`<g class="node topic ${t.st} ${nd("topic:"+t.id)}" data-id="topic:${t.id}" tabindex="0" role="button" aria-label="${t.id}"><rect class="b" x="${TX}" y="${y-TH/2}" width="${TW}" height="${TH}" rx="4"/><text class="t2" x="${TX+10}" y="${y+4}">${t.id}</text></g>`; });
+  PL.forEach(p=>b+=node(p.id,40,p.y-17,170,34,p.id,"",nd(p.id,hot&&hot.prodLit)));
+  CL.forEach(c=>{ b+= c.id==="none" ? `<g class="node idle sev1 ${nd("none",hot&&hot.consLit)}" data-id="none" tabindex="0" role="button" aria-label="no consumer"><rect class="b" x="990" y="${c.y-17}" width="170" height="34" rx="5"/><text class="t1" x="1004" y="${c.y+5}">no consumer</text></g>` : node(c.id,990,c.y-17,170,34,c.id,"",nd(c.id,hot&&hot.consLit)); });
   return svgWrap(1200,bottom+40,b,"Kafka event map");
 }
 
@@ -376,6 +399,28 @@ function openInside(svc){ stopPlay(); state.level=6; state.inside=svc; state.tab
 function li(arr,cls=""){ return `<ul>${arr.map(x=>`<li class="${cls}">${esc(x)}</li>`).join("")}</ul>`; }
 const verdictChip = id => VERDICT[id]&&VERDICT[id][1] ? `<span class="chip v v-${VERDICT[id][0]}">ODCL: ${VNAME[VERDICT[id][0]]}</span>` : "";
 function callsIn(id){ return EDGES.filter(e=>e[1]===id).map(e=>[e[0],CALLOPS[e[0]][id]]); }
+function callsSvcCard(id){
+  const sv=x=>`<button class="lnk" data-open="${x}">${esc(x)}</button>`, ops=o=>o&&o.length?`<span class="mono muted">${esc(o.join(", "))}</span>`:`<span class="muted">URL configured, no client class found</span>`;
+  const row=(f,t,who)=>{ const bad=BADCALLS[f+">"+t]; return `<li class="${bad?"bad":""}">${sv(who)} ${ops(CALLOPS[f][t])}${bad?` · ${esc(bad)}`:""}</li>`; };
+  const out=EDGES.filter(e=>e[0]===id), inn=EDGES.filter(e=>e[1]===id);
+  return `<p class="kind">Service calls</p><h2>${esc(id)}-service</h2><div class="chips"><span class="chip mono">:${esc(String(S[id].port))}</span>${S[id].jwt===true?'<span class="chip ok">verifies JWT</span>':""}</div>
+   <p class="hint"><span class="key out"></span>teal: ${esc(id)} calls it · <span class="key in"></span>orange: it calls ${esc(id)}. Click the box again to clear.</p>
+   <div><h3>Calls ${out.length} service${out.length===1?"":"s"}</h3>${out.length?`<ul>${out.map(e=>row(e[0],e[1],e[1])).join("")}</ul>`:"<p class='hint'>Calls no other service.</p>"}</div>
+   <div><h3>Called by ${inn.length} service${inn.length===1?"":"s"}</h3>${inn.length?`<ul>${inn.map(e=>row(e[0],e[1],e[0])).join("")}</ul>`:"<p class='hint'>No service calls it.</p>"}</div>
+   <p><button class="lnk" data-open="${id}">Open ${esc(id)}-service tables and operations →</button></p>`;
+}
+function kafkaSvcCard(id){
+  const tl=t=>`<button class="lnk mono" data-topic="${esc(t.id)}">${esc(t.id)}</button>`, sv=x=>S[x]?`<button class="lnk" data-open="${x}">${esc(x)}</button>`:esc(x);
+  const inn=TOPICS.filter(t=>t.c.some(c=>c[0]===id)), out=TOPICS.filter(t=>t.p.includes(id));
+  const rIn=inn.map(t=>{ const br=t.c.find(c=>c[0]===id)[2]; return `<li class="${br?"bad":""}">${tl(t)} <span class="muted">from</span> ${t.p.map(sv).join(", ")||"—"}${br?" · never delivered":""}</li>`; }).join("");
+  const rOut=out.map(t=>`<li>${tl(t)} <span class="muted">to</span> ${t.c.length?t.c.map(c=>sv(c[0])).join(", "):"<span class='muted'>nobody</span>"}</li>`).join("");
+  const src=[...new Set(inn.flatMap(t=>t.p))];
+  return `<p class="kind">Kafka · service</p><h2>${esc(id)}-service</h2>
+   <p class="hint"><span class="key in"></span>orange: data flowing into ${esc(id)} · <span class="key out"></span>teal: data flowing out. Click the box again to clear.</p>
+   <div><h3>Receives ${inn.length} topic${inn.length===1?"":"s"}${src.length?` from ${src.length} service${src.length===1?"":"s"}`:""}</h3>${rIn?`<ul>${rIn}</ul>`:"<p class='hint'>Consumes nothing.</p>"}</div>
+   <div><h3>Publishes ${out.length} topic${out.length===1?"":"s"}</h3>${rOut?`<ul>${rOut}</ul>`:"<p class='hint'>Publishes nothing.</p>"}</div>
+   <p><button class="lnk" data-open="${id}">Open ${esc(id)}-service tables and operations →</button></p>`;
+}
 function svcCard(id){
   const s=S[id], out=Object.entries(CALLOPS[id]||{}), inn=callsIn(id);
   const prod=TOPICS.filter(t=>t.p.includes(id)).map(t=>t.id), cons=TOPICS.filter(t=>t.c.some(c=>c[0]===id)).map(t=>t.id+(t.c.find(c=>c[0]===id)[2]?" (broken)":""));
@@ -443,6 +488,8 @@ function card(){
      <div><h3>Published by</h3><ul>${t.p.map(p=>`<li><button class="lnk" data-open="${p}">${p}</button></li>`).join("")}</ul></div>
      <div><h3>Consumed by (group)</h3>${t.c.length?`<ul>${t.c.map(c=>`<li class="${c[2]?"bad":""}"><button class="lnk" data-open="${c[0]}">${esc(c[0])}</button> <span class="mono">(${esc(c[1])})</span>${c[2]?" · never delivered":""}</li>`).join("")}</ul>`:"<p class='hint'>Nobody.</p>"}</div>`; return; }
   if(id==="none"){ el.innerHTML=`<p class="kind">Kafka</p><h2>No consumer</h2><p class="hint">Published but read by nobody: ${TOPICS.filter(t=>!t.c.length).map(t=>t.id).join(", ")}.</p>`; return; }
+  if(S[id]&&state.level===4){ el.innerHTML=kafkaSvcCard(id); return; }
+  if(S[id]&&state.level===3){ el.innerHTML=callsSvcCard(id); return; }
   if(S[id]){ el.innerHTML=svcCard(id); return; }
   const i=INFRA[id];
   if(i){ el.innerHTML=`<p class="kind">${esc(i.kind)}</p><h2>${esc(i.name)}</h2><div class="chips">${verdictChip(id)}</div><dl class="rows">${i.rows.map(r=>`<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join("")}</dl>${i.find.length?`<div><h3>Findings</h3>${li(i.find,"warn")}</div>`:""}${VERDICT[id]&&VERDICT[id][1]?`<div><h3>ODCL plan</h3><p class="hint">${esc(VERDICT[id][1])}</p></div>`:""}${i.notes?`<div><h3>Read more</h3><p class="hint"><span class="mono">_unipos-study/${esc(i.notes)}</span></p></div>`:""}`; return; }
@@ -529,7 +576,7 @@ function render(){
   if(state.level===5){ wirePlayer(); const act=document.querySelector("#scroller .row.act"); }
   if(state.level===6){ document.getElementById("svcsel").onchange=e=>openInside(e.target.value); }
 }
-function select(id){ state.sel=id; if(state.level===3) render(); else { document.querySelectorAll("#scroller svg.main .node").forEach(n=>n.classList.toggle("sel",n.dataset.id===id)); crumbs(); card(); } }
+function select(id){ if((state.level===3||state.level===4)&&id===state.sel) id=null; state.sel=id; if(state.level===3||state.level===4){ save(); render(); } else { document.querySelectorAll("#scroller svg.main .node").forEach(n=>n.classList.toggle("sel",n.dataset.id===id)); crumbs(); card(); } }
 
 /* ===================== player ===================== */
 function stopPlay(){ if(state.playing){ clearInterval(state.playing); state.playing=null; } }
