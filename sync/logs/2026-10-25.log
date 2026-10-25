@@ -52,3 +52,31 @@ exit 0
 === 2026-10-25 17:00:01 refresh --auto
 UniPOS refresh: already fetched today at 10:03 (skipping timer run)
 exit 0
+=== 2026-10-25 17:01:36 refresh 
+UniPOS refresh: 15 new commits since last publish · 1 schema · 51 ops · 11 to review
+report: /home/mahathir/Downloads/projects/_unipos-study/sync/reports/2026-10-25.md
+exit 0
+=== 2026-10-25 17:02:28 refresh --no-fetch
+UniPOS refresh: 15 new commits since last publish · 1 schema · 51 ops · 11 to review · NOT FETCHED (--no-fetch)
+report: /home/mahathir/Downloads/projects/_unipos-study/sync/reports/2026-10-25.md
+exit 0
+=== 2026-10-25 17:30:01 refresh --auto
+UniPOS refresh: 17 new commits since last publish · 2 schema · 54 ops · 13 to review
+report: /home/mahathir/Downloads/projects/_unipos-study/sync/reports/2026-10-25.md
+exit 0
+=== 2026-10-25 17:44:40 refresh --no-fetch
+UniPOS refresh: 17 new commits since last publish · 2 schema · 54 ops · 13 to review · NOT FETCHED (--no-fetch)
+report: /home/mahathir/Downloads/projects/_unipos-study/sync/reports/2026-10-25.md
+exit 0
+=== 2026-10-25 17:47:03 refresh 
+UniPOS refresh: 18 new commits since last publish · 2 schema · 56 ops · 13 to review
+report: /home/mahathir/Downloads/projects/_unipos-study/sync/reports/2026-10-25.md
+exit 0
+=== 2026-10-25 17:59:54 refresh --no-fetch
+UniPOS refresh: 18 new commits since last publish · 2 schema · 56 ops · 13 to review · NOT FETCHED (--no-fetch)
+report: /home/mahathir/Downloads/projects/_unipos-study/sync/reports/2026-10-25.md
+exit 0
+=== 2026-10-25 18:00:12 refresh --no-fetch
+UniPOS refresh: 18 new commits since last publish · 2 schema · 56 ops · 13 to review · NOT FETCHED (--no-fetch)
+report: /home/mahathir/Downloads/projects/_unipos-study/sync/reports/2026-10-25.md
+exit 0

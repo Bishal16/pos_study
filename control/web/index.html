@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UniPOS Control</title>
+<link rel="stylesheet" href="/app.css"><script src="/app.js"></script>
+</head><body>
+<main>
+  <h1>Overview</h1>
+  <p class="sub">Every local repo under <code>projects/</code>. "Behind" uses the remote refs from the last pull or study refresh; nothing is fetched by opening this page.</p>
+  <div class="tiles" id="tiles"></div>
+  <div class="row" style="margin-bottom:14px">
+    <a class="btn" href="/pull.html?run=1">⬇ Pull all</a>
+    <a class="btn" href="/status.html?run=1">Check status</a>
+    <a class="btn" href="/study.html?run=1">Refresh study</a>
+    <a class="btn" href="/atlas" target="_blank">Open Atlas ↗</a>
+    <a class="btn" href="/erd" target="_blank">Open ERD ↗</a>
+    <span class="muted" id="upd" style="margin-left:auto"></span>
+  </div>
+  <div class="row" style="margin-bottom:10px">
+    <label class="muted">Show</label>
+    <select id="filter">
+      <option value="all">all repos</option>
+      <option value="attn">needs attention</option>
+      <option value="behind">behind origin</option>
+      <option value="dirty">uncommitted files</option>
+    </select>
+  </div>
+  <div class="grid" id="repos"><span class="muted">Loading…</span></div>
+</main>
+<script>
+let data;
+function last(hist, test) { for (let i = hist.length - 1; i >= 0; i--) if (test(hist[i])) return hist[i]; return null; }
+function tile(k, h, extra = '') {
+  return `<div class="tile"><div class="k">${k}</div><div class="v">${h ? esc(ago(h.end || h.start)) : 'never'}</div>
+    <div class="s">${h ? (h.exit === 0 ? '' : '<span class="badge b-bad">failed</span> ') + esc(h.summary || '') : ''}${extra}</div></div>`;
+}
+async function load() {
+  const [r, s] = await Promise.all([api('/api/repos'), api('/api/study').catch(() => ({}))]);
+  data = r;
+  const h = r.history.filter(x => !x.dryRun);
+  const dep = env => last(h, x => x.action === 'deploy' && x.args?.env === env);
+  const c = s.counts || {};
+  const inSync = c.commits === 0 && c.drift === 0;
+  $('#tiles').innerHTML =
+    tile('Last pull', last(h, x => x.action === 'pull')) +
+    tile('Last status check', last(h, x => x.action === 'status')) +
+    `<div class="tile"><div class="k">Study pages</div><div class="v">${inSync ? '<span class="badge b-ok">in sync</span>' : `<span class="badge b-warn">${c.commits ?? '?'} new commits</span>`}</div>
+      <div class="s">refreshed ${esc(ago(s.generatedAt))}${c.drift ? ` · ${c.drift} to review` : ''}</div></div>` +
+    ['dev', 'demo'].map(e => { const d = dep(e); return `<div class="tile"><div class="k">Last deploy · ${e}</div><div class="v">${d ? esc(d.args.service) : '—'}</div>
+      <div class="s">${d ? esc(ago(d.end)) + (d.exit === 0 ? '' : ' · <span class="badge b-bad">failed</span>') : 'none from this site'}</div></div>`; }).join('');
+  draw();
+  $('#upd').textContent = 'updated ' + new Date().toLocaleTimeString([], { timeStyle: 'short' });
+}
+function draw() {
+  const f = $('#filter').value;
+  const list = data.repos.filter(x =>
+    f === 'all' ? true : f === 'behind' ? x.behind > 0 : f === 'dirty' ? x.dirty > 0 :
+    (x.behind > 0 || x.dirty > 0 || x.ahead > 0 || !['dev', 'main'].includes(x.branch)));
+  $('#repos').innerHTML = list.map(x => {
+    const b = [];
+    b.push(`<span class="badge ${['dev', 'main'].includes(x.branch) ? '' : 'b-warn'}" title="checked-out branch">${esc(x.branch)}</span>`);
+    if (!x.upstream) b.push('<span class="badge b-warn">no upstream</span>');
+    else if (x.behind) b.push(`<span class="badge b-info">↓ ${x.behind} behind</span>`);
+    if (x.ahead) b.push(`<span class="badge b-warn">↑ ${x.ahead} not pushed</span>`);
+    if (x.dirty) b.push(`<span class="badge b-warn">${x.dirty} uncommitted</span>`);
+    if (x.upstream && !x.behind && !x.ahead && !x.dirty) b.push('<span class="badge b-ok">up to date</span>');
+    return `<div class="card"><div class="name"><span>${esc(x.name)}</span><code class="muted">${esc(x.commit || '')}</code></div>
+      <div class="meta" title="${esc(x.subject)}">${esc(x.date || '')} · ${esc(x.author || '')} · ${esc(x.subject || '')}</div>
+      <div class="meta">last fetch: ${esc(x.fetchedAt ? ago(x.fetchedAt) : 'never')}</div>
+      <div class="badges">${b.join('')}</div></div>`;
+  }).join('') || '<span class="muted">Nothing here.</span>';
+}
+$('#filter').onchange = draw;
+load().catch(e => alertNote(e.message));
+setInterval(() => { if (!document.hidden) load().catch(() => { }); }, 60000);
+</script>
+</body></html>

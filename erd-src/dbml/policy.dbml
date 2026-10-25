@@ -1,4 +1,4 @@
-// UniPOS · policy-service · generated from @Entity code (origin/dev b16ae57)
+// UniPOS · policy-service · generated from @Entity code (origin/dev 94c91cc)
 
 Table policy.condition_type_meta [note: 'entity ConditionTypeMeta'] {
   condition_type_meta_id uuid [pk]

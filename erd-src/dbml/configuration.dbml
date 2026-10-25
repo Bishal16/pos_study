@@ -1,4 +1,4 @@
-// UniPOS · configuration-service · generated from @Entity code (origin/dev caf2626)
+// UniPOS · configuration-service · generated from @Entity code (origin/dev 8a54837)
 
 Table configuration.business_areas [note: 'entity BusinessArea'] {
   business_area_id integer [pk]

@@ -1,4 +1,4 @@
-// UniPOS · authentication-service · generated from @Entity code (origin/dev 6db4775)
+// UniPOS · authentication-service · generated from @Entity code (origin/dev a34c6df)
 
 Table authentication.password_reset_token [note: 'entity PasswordResetToken'] {
   id bigint [pk]
@@ -123,7 +123,7 @@ Table authentication.user_business_areas [note: 'entity UserBusinessArea'] {
 
 Table authentication.user_documents [note: 'entity UserDocument'] {
   id uuid [pk]
-  user_id uuid [not null]
+  user_id uuid [not null, unique]
   document_type varchar(50) [not null]
   object_key varchar(255) [not null]
   original_filename varchar(255) [not null]
@@ -138,7 +138,7 @@ Table authentication.user_documents [note: 'entity UserDocument'] {
 
 Table authentication.user_employee_references [note: 'entity UserEmployeeReference'] {
   user_employee_ref_id uuid [pk]
-  user_id uuid [not null]
+  user_id uuid [not null, unique]
   employee_id varchar(255) [not null, note: 'reference inferred from the column name']
   source_system varchar(255) [not null]
   created_by varchar(255) [note: 'inherited from BaseEntity']
@@ -161,7 +161,7 @@ Table authentication.user_failed_logins [note: 'entity UserFailedLogins'] {
 Table authentication.user_working_location_history [note: 'entity UserWorkingLocationHistory'] {
   user_working_location_history_id uuid [pk]
   user_id uuid [not null]
-  business_area_id uuid [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  business_area_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
   start_date date [not null]
   end_date date [not null]
   created_by varchar(255) [note: 'inherited from BaseEntity']
@@ -174,8 +174,8 @@ Ref: authentication.password_reset_token.user_id > authentication.users.user_id
 Ref: authentication.refresh_tokens.user_id > authentication.users.user_id
 Ref: authentication.user_tokens.user_id > authentication.users.user_id
 Ref: authentication.user_business_areas.user_id > authentication.users.user_id
-Ref: authentication.user_documents.user_id > authentication.users.user_id
-Ref: authentication.user_employee_references.user_id > authentication.users.user_id
+Ref: authentication.user_documents.user_id - authentication.users.user_id
+Ref: authentication.user_employee_references.user_id - authentication.users.user_id
 Ref: authentication.user_employee_references.employee_id > authentication.employees.id // id only, no FK
 Ref: authentication.user_failed_logins.user_id > authentication.users.user_id
 Ref: authentication.user_working_location_history.user_id > authentication.users.user_id

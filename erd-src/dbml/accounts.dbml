@@ -1,4 +1,4 @@
-// UniPOS · accounts-service · generated from @Entity code (origin/dev 35d7000)
+// UniPOS · accounts-service · generated from @Entity code (origin/dev 174703c)
 
 Table accounts.accounting_periods [note: 'entity AccountingPeriod'] {
   accounting_period_id integer [pk]
@@ -393,6 +393,7 @@ Table accounts.customer_due_collections [note: 'entity CustomerDueCollection'] {
 
 Table accounts.emi_allowed_months [note: 'entity EmiAllowedMonth'] {
   emi_allowed_month_id bigint [pk]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
   allowed_month integer [not null]
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [not null, note: 'inherited from BaseEntity']

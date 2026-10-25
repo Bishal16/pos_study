@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>History · UniPOS Control</title>
+<link rel="stylesheet" href="/app.css"><script src="/app.js"></script>
+</head><body>
+<main>
+  <h1>Run history</h1>
+  <p class="sub">Every run started from this site (last 200). Logs are kept in <code>_unipos-study/control/runs/</code>; secrets are masked.</p>
+  <div class="row" style="margin-bottom:10px">
+    <select id="f"><option value="">all actions</option><option>pull</option><option>status</option><option>refresh</option><option>build</option><option>deploy</option></select>
+    <label><input type="checkbox" id="failed"> failed only</label>
+  </div>
+  <div class="panel scroll"><table id="t"></table></div>
+  <div id="logbox" hidden><h2 id="logtitle"></h2><pre class="log" id="log"></pre></div>
+</main>
+<script>
+let hist = [];
+function draw() {
+  const f = $('#f').value, failed = $('#failed').checked;
+  const rows = [...hist].reverse().filter(h => (!f || h.action.startsWith(f)) && (!failed || h.exit !== 0));
+  $('#t').innerHTML = '<tr><th>When</th><th>Action</th><th>Details</th><th>Result</th><th>Time</th><th></th></tr>' +
+    rows.map(h => `<tr><td>${esc(when(h.start))}</td><td>${esc(label(h.action))}${h.dryRun ? ' <span class="badge">dry run</span>' : ''}</td>
+      <td>${esc(Object.values(h.args || {}).join(' · '))}</td>
+      <td>${h.exit === 0 ? '<span class="badge b-ok">ok</span>' : `<span class="badge b-bad">exit ${h.exit}</span>`} ${esc(h.summary || '')}</td>
+      <td>${esc(dur(h))}</td><td><a href="#" data-id="${esc(h.id)}">log</a></td></tr>`).join('') +
+    (rows.length ? '' : '<tr><td colspan="6" class="muted">No runs yet.</td></tr>');
+}
+$('#t').onclick = e => {
+  const id = e.target.dataset?.id;
+  if (!id) return;
+  e.preventDefault();
+  $('#logbox').hidden = false;
+  $('#logtitle').textContent = id;
+  attachJob(id, $('#log')).then(() => $('#logbox').scrollIntoView({ behavior: 'smooth' })).catch(err => alertNote(err.message));
+};
+$('#f').onchange = $('#failed').onchange = draw;
+api('/api/history').then(h => { hist = h.history; draw(); }).catch(e => alertNote(e.message));
+</script>
+</body></html>

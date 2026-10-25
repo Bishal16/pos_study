@@ -123,7 +123,7 @@ Table authentication.user_business_areas [note: 'entity UserBusinessArea'] {
 
 Table authentication.user_documents [note: 'entity UserDocument'] {
   id uuid [pk]
-  user_id uuid [not null]
+  user_id uuid [not null, unique]
   document_type varchar(50) [not null]
   object_key varchar(255) [not null]
   original_filename varchar(255) [not null]
@@ -138,7 +138,7 @@ Table authentication.user_documents [note: 'entity UserDocument'] {
 
 Table authentication.user_employee_references [note: 'entity UserEmployeeReference'] {
   user_employee_ref_id uuid [pk]
-  user_id uuid [not null]
+  user_id uuid [not null, unique]
   employee_id varchar(255) [not null, note: 'reference inferred from the column name']
   source_system varchar(255) [not null]
   created_by varchar(255) [note: 'inherited from BaseEntity']
@@ -161,7 +161,7 @@ Table authentication.user_failed_logins [note: 'entity UserFailedLogins'] {
 Table authentication.user_working_location_history [note: 'entity UserWorkingLocationHistory'] {
   user_working_location_history_id uuid [pk]
   user_id uuid [not null]
-  business_area_id uuid [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  business_area_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
   start_date date [not null]
   end_date date [not null]
   created_by varchar(255) [note: 'inherited from BaseEntity']
@@ -178,8 +178,8 @@ Ref: authentication.employees.role_id > authorization.roles.role_id // cross-ser
 Ref: authentication.users.merchant_id > configuration.merchants.merchant_id // cross-service id, no FK
 Ref: authentication.user_business_areas.user_id > authentication.users.user_id
 Ref: authentication.user_business_areas.business_area_id > configuration.business_areas.business_area_id // cross-service id, no FK
-Ref: authentication.user_documents.user_id > authentication.users.user_id
-Ref: authentication.user_employee_references.user_id > authentication.users.user_id
+Ref: authentication.user_documents.user_id - authentication.users.user_id
+Ref: authentication.user_employee_references.user_id - authentication.users.user_id
 Ref: authentication.user_employee_references.employee_id > authentication.employees.id // id only, no FK
 Ref: authentication.user_failed_logins.user_id > authentication.users.user_id
 Ref: authentication.user_working_location_history.user_id > authentication.users.user_id
@@ -4195,6 +4195,7 @@ Table accounts.customer_due_collections [note: 'entity CustomerDueCollection'] {
 
 Table accounts.emi_allowed_months [note: 'entity EmiAllowedMonth'] {
   emi_allowed_month_id bigint [pk]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
   allowed_month integer [not null]
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [not null, note: 'inherited from BaseEntity']
@@ -4521,6 +4522,7 @@ Ref: accounts.bank_types.bank_id > accounts.banks.bank_id
 Ref: accounts.customer_accounts.sales_hub_id > configuration.business_areas.business_area_id // cross-service id, no FK
 Ref: accounts.customer_due_collections.customer_account_id > accounts.customer_accounts.customer_account_id // id only, no FK
 Ref: accounts.customer_due_collections.sales_hub_id > configuration.business_areas.business_area_id // cross-service id, no FK
+Ref: accounts.emi_allowed_months.merchant_id > configuration.merchants.merchant_id // cross-service id, no FK
 Ref: accounts.emi_bank_commission_rates.bank_id > accounts.banks.bank_id // id only, no FK
 Ref: accounts.emi_bank_commission_rates.emi_bank_card_id > accounts.emi_bank_cards.emi_bank_card_id // id only, no FK
 Ref: accounts.emi_bank_commission_rates.emi_allowed_month_id > accounts.emi_allowed_months.emi_allowed_month_id // id only, no FK

@@ -1,4 +1,4 @@
-// UniPOS · compliance-service · generated from @Entity code (origin/dev 07609ab)
+// UniPOS · compliance-service · generated from @Entity code (origin/dev bdc7b8c)
 
 Table compliance.assessments [note: 'entity Assessment'] {
   assessment_id uuid [pk]

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deploy · UniPOS Control</title>
+<link rel="stylesheet" href="/app.css"><script src="/app.js"></script>
+</head><body>
+<main>
+  <h1>Deploy a service</h1>
+  <p class="sub">Runs <code>projects/deploy-script/deploy &lt;env&gt; &lt;service&gt;</code>. It builds from your <b>local folder</b> (uncommitted files included), uploads the WAR, then on the server runs <b>terraform destroy → apply</b> and restarts Apollo.</p>
+  <div id="dry"></div>
+  <div class="panel">
+    <div class="row">
+      <label>Environment <select id="env"><option value="dev">dev</option><option value="demo">demo</option></select></label>
+      <label>Service <select id="svc"></select></label>
+      <button id="check" class="primary">Pre-check</button>
+      <button id="build" title="mvn clean package -DskipTests in the service folder; nothing is uploaded">Build only</button>
+    </div>
+  </div>
+  <div id="pre"></div>
+  <div id="runbox" hidden>
+    <h2 id="runtitle"></h2>
+    <div class="steps" id="steps"></div>
+    <div class="row" style="margin-bottom:8px"><span id="state" class="muted"></span><button id="cancel" hidden>Cancel build</button></div>
+    <pre class="log" id="log"></pre>
+  </div>
+</main>
+<script>
+const PHASES = [['build', '🔨 build', /Building|BUILD/], ['upload', '📤 upload', /Uploading WAR/], ['destroy', '🗑 terraform destroy', /Terraform destroy/],
+  ['apply', '🚀 terraform apply', /Terraform (init|plan|apply)/], ['apollo', '🔄 restart Apollo', /Restarting Apollo/], ['done', '✅ done', /Deployment completed successfully/]];
+let pre = null;
+
+function steps(text, finished, ok) {
+  let reached = -1;
+  PHASES.forEach((p, i) => { if (p[2].test(text)) reached = i; });
+  $('#steps').innerHTML = PHASES.map((p, i) => {
+    const cls = i < reached || (i === reached && finished && ok) ? 'done' : i === reached ? 'on' : '';
+    return `<span class="${cls} ${p[0] === 'destroy' ? 'danger' : ''}">${p[1]}</span>`;
+  }).join('');
+}
+
+async function init() {
+  const s = await api('/api/services');
+  $('#svc').innerHTML = s.services.map(x => `<option>${esc(x)}</option>`).join('');
+  if (s.dryRun) $('#dry').innerHTML = '<div class="note info">DRY RUN mode (CONTROL_DRY_RUN=1): Deploy only prints what it would run. Nothing is built or uploaded.</div>';
+  const h = await api('/api/history');
+  if (h.runningId && /-(deploy|build)$/.test(h.runningId)) attach(h.runningId);
+}
+
+async function check() {
+  const env = $('#env').value, svc = $('#svc').value;
+  $('#pre').innerHTML = '<div class="panel"><span class="spin"></span> checking…</div>';
+  pre = await api(`/api/precheck?env=${env}&service=${encodeURIComponent(svc)}`);
+  const warn = [];
+  if (env === 'demo') warn.push(['bad', 'This is the DEMO server. People may be using it right now.']);
+  if (pre.files.length) warn.push(['bad', `${pre.files.length} uncommitted file(s) WILL be deployed (the build uses your local folder as it is).`]);
+  if (pre.behind) warn.push(['warn', `Your local copy is ${pre.behind} commit(s) behind ${pre.upstream}: the latest team changes will NOT be deployed. Pull first if you want them.`]);
+  if (pre.ahead) warn.push(['warn', `${pre.ahead} local commit(s) not pushed will be deployed.`]);
+  if (!['dev', 'main'].includes(pre.branch)) warn.push(['warn', `Checked-out branch is "${pre.branch}", not dev.`]);
+  if (!pre.tools.mvn || !pre.tools.sshpass) warn.push(['bad', 'Missing tool: ' + Object.entries(pre.tools).filter(([, v]) => !v).map(([k]) => k).join(', ')]);
+  if (!pre.deployScript || !pre.envFile) warn.push(['bad', `deploy script or pos-${env}.env not found in deploy-script/`]);
+  const ld = pre.lastDeploy;
+  $('#pre').innerHTML = `<div class="panel">
+    <h2 style="margin-top:0">${esc(svc)}-service → ${esc(env)}</h2>
+    <table>
+      <tr><th>Branch</th><td>${esc(pre.branch)} ${pre.upstream ? `<span class="muted">tracking ${esc(pre.upstream)}</span>` : ''}</td></tr>
+      <tr><th>Commit</th><td><code>${esc(pre.commit)}</code> ${esc(pre.date)} · ${esc(pre.author)} · ${esc(pre.subject)}</td></tr>
+      <tr><th>vs origin</th><td>${pre.upstream ? `${pre.behind ? `<span class="badge b-info">↓ ${pre.behind} behind</span>` : '<span class="badge b-ok">not behind</span>'} ${pre.ahead ? `<span class="badge b-warn">↑ ${pre.ahead} ahead</span>` : ''} <span class="muted">as of last fetch ${esc(ago(pre.fetchedAt))}</span>` : 'no upstream'}</td></tr>
+      <tr><th>Uncommitted</th><td>${pre.files.length ? `<details><summary>${pre.files.length} file(s)</summary><pre class="log">${esc(pre.files.join('\n'))}</pre></details>` : '<span class="badge b-ok">none</span>'}</td></tr>
+      <tr><th>Last deploy here</th><td>${ld ? `${esc(when(ld.end))} · commit <code>${esc(ld.args.commit)}</code> · ${ld.exit === 0 ? '<span class="badge b-ok">ok</span>' : '<span class="badge b-bad">failed</span>'}${ld.dryRun ? ' <span class="badge">dry run</span>' : ''}` : '<span class="muted">none from this site</span>'}</td></tr>
+    </table>
+    ${warn.map(([k, m]) => `<div class="note ${k}">${esc(m)}</div>`).join('')}
+    <div class="steps">${PHASES.map(p => `<span class="${p[0] === 'destroy' ? 'danger' : ''}">${p[1]}</span>`).join('')}</div>
+    <p class="muted">Once started, a deploy cannot be cancelled from here: stopping halfway through terraform could leave the server torn down.</p>
+    <div class="row"><label>Type <b>${esc(svc)}</b> to confirm <input type="text" id="confirm" autocomplete="off" spellcheck="false"></label>
+      <button class="danger" id="deploy" disabled>Deploy ${esc(svc)} to ${esc(env)}</button></div>
+  </div>`;
+  $('#confirm').oninput = e => { $('#deploy').disabled = e.target.value !== svc; };
+  $('#deploy').onclick = () => start('deploy', { env, service: svc, commit: pre.full, confirm: $('#confirm').value });
+}
+
+async function start(action, body) {
+  try {
+    const { id } = await api('/api/run/' + action, body);
+    $('#pre').innerHTML = '';
+    attach(id);
+  } catch (e) { alertNote(e.message); }
+}
+
+function attach(id) {
+  const action = id.endsWith('-build') ? 'build' : 'deploy';
+  $('#runbox').hidden = false;
+  $('#runtitle').textContent = action === 'build' ? 'Build' : 'Deploy';
+  $('#steps').hidden = action === 'build';
+  $('#state').innerHTML = '<span class="spin"></span> running…';
+  $('#check').disabled = $('#build').disabled = true;
+  attachJob(id, $('#log'), {
+    cancelBtn: $('#cancel'),
+    onText: t => action === 'deploy' && steps(t, false),
+    onDone: (s, t) => {
+      const ok = s.job.exit === 0;
+      if (action === 'deploy') steps(t, true, ok);
+      $('#runtitle').textContent = `${action === 'build' ? 'Build' : 'Deploy'} ${s.job.args?.service || ''}${s.job.args?.env ? ' → ' + s.job.args.env : ''}`;
+      $('#state').innerHTML = `${ok ? '<span class="badge b-ok">success</span>' : `<span class="badge b-bad">failed (exit ${s.job.exit})</span>`} ${esc(s.job.summary || '')} · ${esc(dur(s.job))}`;
+      $('#check').disabled = $('#build').disabled = false;
+    }
+  }).catch(e => alertNote(e.message));
+}
+
+$('#check').onclick = () => check().catch(e => alertNote(e.message));
+$('#build').onclick = () => start('build', { service: $('#svc').value });
+$('#env').onchange = $('#svc').onchange = () => { $('#pre').innerHTML = ''; };
+init().catch(e => alertNote(e.message));
+</script>
+</body></html>

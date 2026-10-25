@@ -1,126 +1,178 @@
 {
- "generatedAt": "2026-10-25T10:03",
+ "generatedAt": "2026-10-25T18:00",
  "ref": "origin/dev",
- "fetchOk": true,
- "fetchSkipped": false,
+ "fetchOk": false,
+ "fetchSkipped": true,
  "fetch": {
   "authentication": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "authorization": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "configuration": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "product": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "customer": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "purchase": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "approval": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "inventory": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "sales": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "policy": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "promotion": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "payment": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "accounts": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "vat": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "report": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "compliance": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "notification": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   },
   "frontend": {
-   "ok": true,
-   "msg": ""
+   "ok": null,
+   "msg": "skipped (--no-fetch)"
   }
  },
  "repos": {
   "authentication": {
    "branch": "origin/dev",
-   "commit": "6db4775",
-   "date": "2026-10-14",
-   "author": "Sonjoy Tripura",
-   "subject": "updated business area id",
-   "full": "6db47751db9e5c118ce2932c0d4ad1dc68b53761",
-   "fetchedAt": "2026-10-25T10:03",
-   "new": 0,
-   "commits": []
+   "commit": "a34c6df",
+   "date": "2026-10-25",
+   "author": "imranpranto00",
+   "subject": "converted userReference and documents array to a single object in user",
+   "full": "a34c6df5f32ab856eb9acc44fe36aa0b897ae490",
+   "fetchedAt": "2026-10-25T17:52",
+   "new": 1,
+   "commits": [
+    {
+     "c": "a34c6df",
+     "d": "2026-10-25",
+     "a": "imranpranto00",
+     "s": "converted userReference and documents array to a single object in user"
+    }
+   ]
   },
   "authorization": {
    "branch": "origin/dev",
-   "commit": "0c91e2b",
-   "date": "2026-10-24",
+   "commit": "5535a26",
+   "date": "2026-10-25",
    "author": "Sonjoy Tripura",
-   "subject": "Merchant permission resolver updated",
-   "full": "0c91e2b6f44f9f32ab30f7f079c51a765f8f9c7f",
-   "fetchedAt": "2026-10-25T10:03",
-   "new": 0,
-   "commits": []
+   "subject": "All active role summary and permission group too",
+   "full": "5535a262ca1cdc1d8dce231fc36a4d8c15896f2d",
+   "fetchedAt": "2026-10-25T17:52",
+   "new": 3,
+   "commits": [
+    {
+     "c": "5535a26",
+     "d": "2026-10-25",
+     "a": "Sonjoy Tripura",
+     "s": "All active role summary and permission group too"
+    },
+    {
+     "c": "0cea208",
+     "d": "2026-10-25",
+     "a": "Sonjoy Tripura",
+     "s": "Updated Role and User permission Group assign"
+    },
+    {
+     "c": "05cbef9",
+     "d": "2026-10-25",
+     "a": "Sonjoy Tripura",
+     "s": "Role operation, user operation updated"
+    }
+   ]
   },
   "configuration": {
    "branch": "origin/dev",
-   "commit": "caf2626",
-   "date": "2026-10-14",
+   "commit": "8a54837",
+   "date": "2026-10-25",
    "author": "imranpranto00",
-   "subject": "Implemented @authenticated and new pagination in other APIs as well",
-   "full": "caf2626756b105474347d7ea677a4539b07c68d4",
-   "fetchedAt": "2026-10-25T10:03",
-   "new": 0,
-   "commits": []
+   "subject": "Implemented two getAllActiveBusinessAreaTypeSummary and getAllActiveBusinessAreaSummary APIS",
+   "full": "8a54837c85bb17510452933c0553f66e56442c87",
+   "fetchedAt": "2026-10-25T17:52",
+   "new": 2,
+   "commits": [
+    {
+     "c": "8a54837",
+     "d": "2026-10-25",
+     "a": "imranpranto00",
+     "s": "Implemented two getAllActiveBusinessAreaTypeSummary and getAllActiveBusinessAreaSummary APIS"
+    },
+    {
+     "c": "5444bc1",
+     "d": "2026-10-25",
+     "a": "imranpranto00",
+     "s": "fixed response of businessArea for other services"
+    }
+   ]
   },
   "product": {
    "branch": "origin/dev",
-   "commit": "962dcdf",
-   "date": "2026-10-13",
-   "author": "alihossain_t239",
-   "subject": "fixed operatingUnitId issue",
-   "full": "962dcdf8b322d6f4c5a103899574cc4c305ecfc0",
-   "fetchedAt": "2026-10-25T10:03",
-   "new": 0,
-   "commits": []
+   "commit": "045a941",
+   "date": "2026-10-25",
+   "author": "imranpranto00",
+   "subject": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/product-service into dev",
+   "full": "045a941767b05da0e07486084273db3ad74efc66",
+   "fetchedAt": "2026-10-25T17:52",
+   "new": 2,
+   "commits": [
+    {
+     "c": "045a941",
+     "d": "2026-10-25",
+     "a": "imranpranto00",
+     "s": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/product-service into dev"
+    },
+    {
+     "c": "b293366",
+     "d": "2026-10-25",
+     "a": "imranpranto00",
+     "s": "fixed the saleshub response"
+    }
+   ]
   },
   "customer": {
    "branch": "origin/dev",
@@ -129,7 +181,7 @@
    "author": "imranpranto00",
    "subject": "#20621-Implemented codes restructure, @authenticated and new pagination in this response",
    "full": "97bf5385f2a0e49b2fbf3471ae9cd0757c1ce35e",
-   "fetchedAt": "2026-10-25T10:03",
+   "fetchedAt": "2026-10-25T17:52",
    "new": 0,
    "commits": []
   },
@@ -140,7 +192,7 @@
    "author": "imranpranto00",
    "subject": "fixed merchant wise data",
    "full": "44ed78ef91f5aa9a461a2c2c94669a729f339610",
-   "fetchedAt": "2026-10-25T10:03",
+   "fetchedAt": "2026-10-25T17:52",
    "new": 0,
    "commits": []
   },
@@ -151,42 +203,69 @@
    "author": "imranpranto00",
    "subject": "for approval process",
    "full": "1555a24dbd9c3bcc33d87032aa97c87bd8153fbb",
-   "fetchedAt": "2026-10-25T10:03",
+   "fetchedAt": "2026-10-25T17:52",
    "new": 0,
    "commits": []
   },
   "inventory": {
    "branch": "origin/dev",
-   "commit": "f662e05",
-   "date": "2026-10-07",
-   "author": "alihossain_t239",
-   "subject": "Merge branch 'inventory-merchant' into dev",
-   "full": "f662e050b95fe809589d21dc5fd4f4efaeacd1c7",
-   "fetchedAt": "2026-10-25T10:03",
-   "new": 0,
-   "commits": []
+   "commit": "569517b",
+   "date": "2026-10-25",
+   "author": "bishal16",
+   "subject": "added security",
+   "full": "569517b524e3535a199503b568a8949a306b19fb",
+   "fetchedAt": "2026-10-25T17:52",
+   "new": 1,
+   "commits": [
+    {
+     "c": "569517b",
+     "d": "2026-10-25",
+     "a": "bishal16",
+     "s": "added security"
+    }
+   ]
   },
   "sales": {
    "branch": "origin/dev",
-   "commit": "28196cf",
-   "date": "2026-10-24",
-   "author": "bishal16",
-   "subject": "security added step1(client not sending token for inter service call)",
-   "full": "28196cfa66b93abea32e4d0f1cc492f5f80aa705",
-   "fetchedAt": "2026-10-25T10:03",
-   "new": 0,
-   "commits": []
+   "commit": "647ed20",
+   "date": "2026-10-25",
+   "author": "Kumaresh Chandra Baruri",
+   "subject": "Improved Autenticated approach.",
+   "full": "647ed20c24853073a09d4dd15198d579cb448efd",
+   "fetchedAt": "2026-10-25T17:52",
+   "new": 2,
+   "commits": [
+    {
+     "c": "647ed20",
+     "d": "2026-10-25",
+     "a": "Kumaresh Chandra Baruri",
+     "s": "Improved Autenticated approach."
+    },
+    {
+     "c": "9e71b9d",
+     "d": "2026-10-25",
+     "a": "Kumaresh Chandra Baruri",
+     "s": "Rearranged file location."
+    }
+   ]
   },
   "policy": {
    "branch": "origin/dev",
-   "commit": "b16ae57",
-   "date": "2026-09-23",
-   "author": "Kumaresh Chandra Baruri",
-   "subject": "Modified terraform scripts",
-   "full": "b16ae576f768c4118b3a9be634ddf909e6410b31",
-   "fetchedAt": "2026-10-25T10:03",
-   "new": 0,
-   "commits": []
+   "commit": "94c91cc",
+   "date": "2026-10-25",
+   "author": "bishal16",
+   "subject": "modified client",
+   "full": "94c91cca2cd2534839271363078e7a050f6dfa35",
+   "fetchedAt": "2026-10-25T17:52",
+   "new": 1,
+   "commits": [
+    {
+     "c": "94c91cc",
+     "d": "2026-10-25",
+     "a": "bishal16",
+     "s": "modified client"
+    }
+   ]
   },
   "promotion": {
    "branch": "origin/dev",
@@ -195,31 +274,51 @@
    "author": "alihossain_t239",
    "subject": "added filter by merchantId",
    "full": "7e0d7f605e21695528859486ca152b935a62970b",
-   "fetchedAt": "2026-10-25T10:03",
+   "fetchedAt": "2026-10-25T17:52",
    "new": 0,
    "commits": []
   },
   "payment": {
    "branch": "origin/dev",
-   "commit": "639ee59",
-   "date": "2026-10-12",
-   "author": "alihossain_t239",
-   "subject": "implemented bankDeposit",
-   "full": "639ee596b6fa0f8831ed2668eb30f455178ab82e",
-   "fetchedAt": "2026-10-25T10:03",
-   "new": 0,
-   "commits": []
+   "commit": "f10b8f0",
+   "date": "2026-10-25",
+   "author": "imranpranto00",
+   "subject": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/payment-service into dev",
+   "full": "f10b8f0aea83b4f60729170980ea32a458bd6d4f",
+   "fetchedAt": "2026-10-25T17:52",
+   "new": 2,
+   "commits": [
+    {
+     "c": "f10b8f0",
+     "d": "2026-10-25",
+     "a": "imranpranto00",
+     "s": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/payment-service into dev"
+    },
+    {
+     "c": "755089a",
+     "d": "2026-10-25",
+     "a": "imranpranto00",
+     "s": "fixed response of saleshub"
+    }
+   ]
   },
   "accounts": {
    "branch": "origin/dev",
-   "commit": "35d7000",
-   "date": "2026-10-14",
-   "author": "imranpranto00",
-   "subject": "Implemented @authenticated in em, bank card, commisionRate and new pagination in this response and changed types uuid to integer",
-   "full": "35d7000318eaba767f871ce40f9671fd19eb7519",
-   "fetchedAt": "2026-10-25T10:03",
-   "new": 0,
-   "commits": []
+   "commit": "174703c",
+   "date": "2026-10-25",
+   "author": "alihossain_t239",
+   "subject": "merchantId field added to entity and did relevant tasks to schema, service, resolver",
+   "full": "174703c9a9a951333fa84546dfd26dce597f5d1b",
+   "fetchedAt": "2026-10-25T17:52",
+   "new": 1,
+   "commits": [
+    {
+     "c": "174703c",
+     "d": "2026-10-25",
+     "a": "alihossain_t239",
+     "s": "merchantId field added to entity and did relevant tasks to schema, service, resolver"
+    }
+   ]
   },
   "vat": {
    "branch": "origin/dev",
@@ -228,7 +327,7 @@
    "author": "imranpranto00",
    "subject": "#22542-Implemented @authenticated and new pagination in this response",
    "full": "e0c8c3bad3c388fbd36231e39b992c7c3be81911",
-   "fetchedAt": "2026-10-25T10:03",
+   "fetchedAt": "2026-10-25T17:52",
    "new": 0,
    "commits": []
   },
@@ -239,31 +338,51 @@
    "author": "bishal16",
    "subject": "added security in report service and tested",
    "full": "3de790f05529535002aeca99a46f77919a59ae23",
-   "fetchedAt": "2026-10-25T10:03",
+   "fetchedAt": "2026-10-25T17:52",
    "new": 0,
    "commits": []
   },
   "compliance": {
    "branch": "origin/dev",
-   "commit": "07609ab",
-   "date": "2026-10-15",
+   "commit": "bdc7b8c",
+   "date": "2026-10-25",
    "author": "alihossain_t239",
-   "subject": "secured apis and added pagination",
-   "full": "07609ab59f0f308ae409181e4e97a76a5d344261",
-   "fetchedAt": "2026-10-25T10:03",
-   "new": 0,
-   "commits": []
+   "subject": "Stop tracking IntelliJ workspace.xml",
+   "full": "bdc7b8ca5222aa1c16b6fda0f96dd7825268c287",
+   "fetchedAt": "2026-10-25T17:52",
+   "new": 1,
+   "commits": [
+    {
+     "c": "bdc7b8c",
+     "d": "2026-10-25",
+     "a": "alihossain_t239",
+     "s": "Stop tracking IntelliJ workspace.xml"
+    }
+   ]
   },
   "notification": {
    "branch": "origin/dev",
-   "commit": "46a12a0",
-   "date": "2026-09-30",
-   "author": "Kumaresh Chandra Baruri",
-   "subject": "Cleaned up codes.",
-   "full": "46a12a06fe48b20423d2ad7b9f0a3e3690055424",
-   "fetchedAt": "2026-10-25T10:03",
-   "new": 0,
-   "commits": []
+   "commit": "18e859c",
+   "date": "2026-10-19",
+   "author": "alihossain_t239",
+   "subject": "filter by keyword was missing, added now",
+   "full": "18e859c3c857ccca881dc6bd5fa5b44a84932956",
+   "fetchedAt": "2026-10-25T17:52",
+   "new": 2,
+   "commits": [
+    {
+     "c": "18e859c",
+     "d": "2026-10-19",
+     "a": "alihossain_t239",
+     "s": "filter by keyword was missing, added now"
+    },
+    {
+     "c": "d009fbd",
+     "d": "2026-10-18",
+     "a": "alihossain_t239",
+     "s": "secured APIs with token, added pagination, search and filtering"
+    }
+   ]
   },
   "frontend": {
    "branch": "origin/dev",
@@ -272,7 +391,7 @@
    "author": "Md. Mohiminur Rahman",
    "subject": "Merge branch 'stock-lookup' into 'dev'",
    "full": "f935110e065157454e8bf2621f46942c195f1789",
-   "fetchedAt": "2026-10-25T10:03",
+   "fetchedAt": "2026-10-25T17:52",
    "new": 0,
    "commits": []
   }
@@ -280,22 +399,466 @@
  "changes": {
   "baseline": false,
   "since": "last publish 2026-10-25 10:03",
-  "schema": [],
-  "ops": [],
+  "schema": [
+   [
+    "accounts",
+    "emi_allowed_months",
+    "merchant_id",
+    "column added"
+   ],
+   [
+    "authentication",
+    "user_working_location_history",
+    "business_area_id",
+    "type UUID → Integer"
+   ]
+  ],
+  "ops": [
+   [
+    "accounts",
+    "addEmiAllowedMonth",
+    "operation removed"
+   ],
+   [
+    "accounts",
+    "deleteAllEmiAllowedMonths",
+    "operation removed"
+   ],
+   [
+    "accounts",
+    "deleteEmiAllowedMonth",
+    "operation removed"
+   ],
+   [
+    "authentication",
+    "getDocumentByUser",
+    "operation added"
+   ],
+   [
+    "authentication",
+    "getDocumentsByUser",
+    "operation removed"
+   ],
+   [
+    "authentication",
+    "getDocumentsByUserAndType",
+    "operation removed"
+   ],
+   [
+    "authentication",
+    "uploadProfilePicture",
+    "operation removed"
+   ],
+   [
+    "authorization",
+    "getAllActivePermissionGroupSummary",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "getAllActiveRoleSummary",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "getAllActiveBusinessAreaSummary",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "getAllActiveBusinessAreaTypeSummary",
+    "operation added"
+   ],
+   [
+    "notification",
+    "searchEmailTemplateContents",
+    "operation added"
+   ],
+   [
+    "notification",
+    "searchInAppTemplateContents",
+    "operation added"
+   ],
+   [
+    "notification",
+    "searchNotificationChannels",
+    "operation added"
+   ],
+   [
+    "notification",
+    "searchNotificationDeliveryLogs",
+    "operation added"
+   ],
+   [
+    "notification",
+    "searchNotificationEvents",
+    "operation added"
+   ],
+   [
+    "notification",
+    "searchNotificationQueues",
+    "operation added"
+   ],
+   [
+    "notification",
+    "searchNotificationTemplates",
+    "operation added"
+   ],
+   [
+    "notification",
+    "searchNotificationUserPreferences",
+    "operation added"
+   ],
+   [
+    "notification",
+    "searchSmsTemplateContents",
+    "operation added"
+   ],
+   [
+    "notification",
+    "emailTemplateContentWithPagination",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "emailTemplateContentWithPaginationAndSorting",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "emailTemplateContentWithPaginationAndSortingAndOrder",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "filteringEmailTemplateContentByCriteria",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "filteringInAppTemplateContentByCriteria",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "filteringNotificationChannelByCriteria",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "filteringNotificationDeliveryLogByCriteria",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "filteringNotificationEventByCriteria",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "filteringNotificationQueueByCriteria",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "filteringNotificationTemplateByCriteria",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "filteringNotificationUserPreferenceByCriteria",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "filteringSmsTemplateContentByCriteria",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "inAppTemplateContentWithPagination",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "inAppTemplateContentWithPaginationAndSorting",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "inAppTemplateContentWithPaginationAndSortingAndOrder",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationChannelWithPagination",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationChannelWithPaginationAndSorting",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationChannelWithPaginationAndSortingAndOrder",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationDeliveryLogWithPagination",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationDeliveryLogWithPaginationAndSorting",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationDeliveryLogWithPaginationAndSortingAndOrder",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationEventWithPagination",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationEventWithPaginationAndSorting",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationEventWithPaginationAndSortingAndOrder",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationQueueWithPagination",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationQueueWithPaginationAndSorting",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationQueueWithPaginationAndSortingAndOrder",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationTemplateWithPagination",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationTemplateWithPaginationAndSorting",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationTemplateWithPaginationAndSortingAndOrder",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationUserPreferenceWithPagination",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationUserPreferenceWithPaginationAndSorting",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "notificationUserPreferenceWithPaginationAndSortingAndOrder",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "smsTemplateContentWithPagination",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "smsTemplateContentWithPaginationAndSorting",
+    "operation removed"
+   ],
+   [
+    "notification",
+    "smsTemplateContentWithPaginationAndSortingAndOrder",
+    "operation removed"
+   ]
+  ],
   "calls": [],
   "kafka": []
  },
  "counts": {
-  "commits": 0,
-  "repos": 0,
-  "schema": 0,
-  "ops": 0,
+  "commits": 18,
+  "repos": 11,
+  "schema": 2,
+  "ops": 56,
   "calls": 0,
   "kafka": 0,
-  "drift": 0
+  "drift": 13
  },
- "drift": [],
+ "drift": [
+  {
+   "kind": "jwt",
+   "svc": "inventory",
+   "msg": "verifies the JWT in code; the Atlas says the opposite"
+  },
+  {
+   "kind": "jwt",
+   "svc": "notification",
+   "msg": "verifies the JWT in code; the Atlas says the opposite"
+  },
+  {
+   "kind": "review",
+   "svc": "accounts",
+   "msg": "1 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "authentication",
+   "msg": "1 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "authorization",
+   "msg": "3 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "compliance",
+   "msg": "1 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "configuration",
+   "msg": "2 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "inventory",
+   "msg": "1 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "notification",
+   "msg": "2 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "payment",
+   "msg": "2 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "policy",
+   "msg": "1 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "product",
+   "msg": "2 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "sales",
+   "msg": "2 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  }
+ ],
  "history": [
+  {
+   "at": "2026-10-25T18:00",
+   "fetchOk": false,
+   "fetchSkipped": true,
+   "commits": 18,
+   "repos": 11,
+   "schema": 2,
+   "ops": 56,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 13
+  },
+  {
+   "at": "2026-10-25T17:59",
+   "fetchOk": false,
+   "fetchSkipped": true,
+   "commits": 18,
+   "repos": 11,
+   "schema": 2,
+   "ops": 56,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 13
+  },
+  {
+   "at": "2026-10-25T17:47",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 18,
+   "repos": 11,
+   "schema": 2,
+   "ops": 56,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 13
+  },
+  {
+   "at": "2026-10-25T17:44",
+   "fetchOk": false,
+   "fetchSkipped": true,
+   "commits": 17,
+   "repos": 11,
+   "schema": 2,
+   "ops": 54,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 13
+  },
+  {
+   "at": "2026-10-25T17:30",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 17,
+   "repos": 11,
+   "schema": 2,
+   "ops": 54,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 13
+  },
+  {
+   "at": "2026-10-25T17:02",
+   "fetchOk": false,
+   "fetchSkipped": true,
+   "commits": 15,
+   "repos": 9,
+   "schema": 1,
+   "ops": 51,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 11
+  },
+  {
+   "at": "2026-10-25T17:01",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 15,
+   "repos": 9,
+   "schema": 1,
+   "ops": 51,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 11
+  },
   {
    "at": "2026-10-25T10:03",
    "fetchOk": true,
@@ -516,7 +1079,7 @@
  "published": {
   "at": "2026-10-25T10:03",
   "generatedAt": "2026-10-25T10:03",
-  "atlas": "https://claude.ai/artifact/J1ojWaAaKu9scBELETi8XT (v6)",
-  "erd": "https://claude.ai/artifact/FQvTjhc7gQTpodBGgL6YnG (v4)"
+  "atlas": "https://claude.ai/artifact/J1ojWaAaKu9scBELETi8XT (v8)",
+  "erd": "https://claude.ai/artifact/FQvTjhc7gQTpodBGgL6YnG (v6)"
  }
 }

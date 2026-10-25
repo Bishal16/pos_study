@@ -1,4 +1,4 @@
-// UniPOS · notification-service · generated from @Entity code (origin/dev 46a12a0)
+// UniPOS · notification-service · generated from @Entity code (origin/dev 18e859c)
 
 Table notification.email_template_contents [note: 'entity EmailTemplateContent'] {
   email_template_content_id uuid [pk]

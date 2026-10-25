@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Study · UniPOS Control</title>
+<link rel="stylesheet" href="/app.css"><script src="/app.js"></script>
+</head><body>
+<main>
+  <h1>Study pages: Atlas + Living ERD</h1>
+  <p class="sub">Runs <code>_unipos-study/sync/refresh.sh</code>: fetches <code>origin/dev</code> (working copies untouched), rebuilds the local Atlas and ERD, and writes the report below. The online pages change only when you tell Claude <b>"publish the refresh"</b>.</p>
+  <div class="tiles" id="tiles"></div>
+  <div class="row" style="margin-bottom:14px">
+    <button class="primary" id="go">Refresh (fetch)</button>
+    <button id="gonf" title="Rebuild from what was fetched last time; use when off the VPN">Refresh without fetch</button>
+    <button id="cancel" hidden>Cancel</button>
+    <a class="btn" href="/atlas" target="_blank">Open Atlas ↗</a>
+    <a class="btn" href="/erd" target="_blank">Open ERD ↗</a>
+    <span class="muted" id="state"></span>
+  </div>
+  <div id="online" class="muted" style="margin-bottom:14px"></div>
+  <details id="raw" hidden><summary>Run log</summary><pre class="log" id="log"></pre></details>
+  <div class="panel md" id="report"><span class="muted">Loading…</span></div>
+</main>
+<script>
+async function load() {
+  const s = await api('/api/study');
+  const c = s.counts || {};
+  const inSync = c.commits === 0 && c.drift === 0;
+  $('#tiles').innerHTML = `
+    <div class="tile"><div class="k">Status</div><div class="v">${inSync ? '<span class="badge b-ok">in sync with published</span>' : '<span class="badge b-warn">not published yet</span>'}</div><div class="s">${esc(s.since || '')}</div></div>
+    <div class="tile"><div class="k">Last refresh</div><div class="v">${esc(ago(s.generatedAt))}</div><div class="s">${s.fetchSkipped ? 'without fetch' : s.fetchOk ? 'fetch OK' : '<span class="badge b-bad">fetch failed</span>'}</div></div>
+    <div class="tile"><div class="k">New commits</div><div class="v">${c.commits ?? '—'}</div><div class="s">in ${c.repos ?? 0} repos</div></div>
+    <div class="tile"><div class="k">Changes</div><div class="v">${c.schema ?? 0} schema · ${c.ops ?? 0} ops</div><div class="s">${c.calls ?? 0} calls · ${c.kafka ?? 0} Kafka</div></div>
+    <div class="tile"><div class="k">To review</div><div class="v">${c.drift ? `<span class="badge b-warn">${c.drift}</span>` : '<span class="badge b-ok">0</span>'}</div><div class="s">${(s.drift || []).filter(d => d.kind !== 'review').length} Atlas mismatch(es)</div></div>`;
+  const p = s.published;
+  const link = v => { const m = (v || '').match(/(https:\S+)\s*(.*)/); return m ? `<a href="${esc(m[1])}" target="_blank">${esc(m[2] || 'link')}</a>` : ''; };
+  $('#online').innerHTML = p ? `Online: Atlas ${link(p.atlas)} · ERD ${link(p.erd)} · last published ${esc(p.at)}` : '';
+  $('#report').innerHTML = s.report ? md(s.report) : '<span class="muted">No report yet.</span>';
+}
+async function go(action, attachId) {
+  $('#go').disabled = $('#gonf').disabled = true; $('#raw').hidden = false; $('#raw').open = true;
+  $('#state').innerHTML = '<span class="spin"></span> running…';
+  try {
+    const opts = {
+      cancelBtn: $('#cancel'), onDone: s => {
+        $('#state').innerHTML = `${s.job.exit === 0 ? '<span class="badge b-ok">done</span>' : `<span class="badge b-bad">exit ${s.job.exit}</span>`} ${esc(s.job.summary || '')}`;
+        $('#go').disabled = $('#gonf').disabled = false; $('#raw').open = false;
+        load();
+      }
+    };
+    attachId ? await attachJob(attachId, $('#log'), opts) : await runJob(action, {}, $('#log'), opts);
+  } catch (e) { alertNote(e.message); $('#go').disabled = $('#gonf').disabled = false; $('#state').textContent = ''; }
+}
+$('#go').onclick = () => go('refresh');
+$('#gonf').onclick = () => go('refresh-nofetch');
+(async () => {
+  await load();
+  const h = await api('/api/history');
+  if (h.runningId && /-refresh(-nofetch)?$/.test(h.runningId)) return go(null, h.runningId);
+  if (new URLSearchParams(location.search).get('run') && !h.runningId) { history.replaceState(null, '', location.pathname); go('refresh'); }
+})().catch(e => alertNote(e.message));
+</script>
+</body></html>

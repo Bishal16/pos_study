@@ -1,4 +1,4 @@
-// UniPOS · sales-service · generated from @Entity code (origin/dev 28196cf)
+// UniPOS · sales-service · generated from @Entity code (origin/dev 647ed20)
 
 Table sales.processing_fee_ranges [note: 'entity ProcessingFeeRange'] {
   processing_fee_range_id integer [pk]

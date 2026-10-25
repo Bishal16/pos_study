@@ -1,4 +1,4 @@
-// UniPOS · product-service · generated from @Entity code (origin/dev 962dcdf)
+// UniPOS · product-service · generated from @Entity code (origin/dev 045a941)
 
 Table product.brands [note: 'entity Brand'] {
   brand_id integer [pk]

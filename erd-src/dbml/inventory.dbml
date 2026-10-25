@@ -1,4 +1,4 @@
-// UniPOS · inventory-service · generated from @Entity code (origin/dev f662e05)
+// UniPOS · inventory-service · generated from @Entity code (origin/dev 569517b)
 
 Table inventory.consumeable_item_ledgers [note: 'entity ConsumeableItemLedger'] {
   consumeable_ledger_id uuid [pk]
