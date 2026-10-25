@@ -1,13 +1,15 @@
 """Read files straight from a git ref (default origin/dev) without touching the working copy.
 One `git cat-file --batch` process per repo, so thousands of files read quickly."""
-import subprocess
+import json, os, subprocess
 
 REF = "origin/dev"
+# optional {repo path: commit} override, used by refresh.py to rebuild the last-published baseline
+_PIN = json.loads(os.environ.get("UNIPOS_REFS") or "{}")
 
 
 class GitSrc:
     def __init__(self, path, ref=REF):
-        self.path, self.ref = path, ref
+        self.path, self.ref = path, _PIN.get(os.path.abspath(path), ref)
         self._files = None
 
     def ok(self):

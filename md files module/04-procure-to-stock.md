@@ -53,7 +53,7 @@ Items point at products with the usual **level + related_id** pattern (SKU in pr
 - Kafka out: `purchase-events`, `account-events`, `approval-request-create-events`.
 - Kafka in (group `purchase-service-group`): `approval-events`, `approvalRequest-events`, `purchase-events`, `purchase-order-events`.
 - ⚠ **Bug:** `approval.url` in purchase's prod/local config points to **port 10505**, but approval-service runs on **10519**. The direct GraphQL calls from purchase to approval fail; only the Kafka path works.
-- One of the 4 services that verify the JWT (session 2).
+- One of the services that verify the JWT (4 in session 2; 9 as of 2026-10-25).
 
 ---
 

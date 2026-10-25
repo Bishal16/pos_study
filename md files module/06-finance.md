@@ -87,7 +87,7 @@ flowchart TB
 
 - **Listens** to: `invoice-report-snapshot`, `mushak-sales-summary-report` (from sales), `item-ledger-entry` (inventory), `gl-entry`, `voucher-snapshot`, `chart-of-account` (accounts).
 - Stores **snapshot tables** (invoice + items, Mushak sales summary per SKU/barcode, item-ledger entries, GL transactions, vouchers, COA) so reports don't query other services' databases.
-- **Jasper templates** (`.jrxml`): invoice (v1, v2), **Mushak 6.3**, voucher, cash book, account ledger, trial balance, income statement, item ledger, user report, role report.
+- **Jasper templates** (`.jrxml`): invoice (v1, v2), **Mushak 6.3**, voucher, cash book, account ledger, trial balance, income statement, **balance sheet** (added 2026-10-19, `generateBalanceSheetReport`), item ledger, user report, role report.
 - ⚠ On the dev server it runs against the **dev DB (.200.52)** while sales writes to the demo DB (.196) (session 8, Q19). That's fine for report-service's own tables, which are filled by Kafka.
 - Calls authorization for the role report.
 

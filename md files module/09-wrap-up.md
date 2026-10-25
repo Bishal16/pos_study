@@ -86,7 +86,7 @@ Synchronous GraphQL calls do most of the real work in a sale (session 5): sales 
 
 | # | Finding | Session | Severity |
 |---|---|---|---|
-| 1 | Only 4 of 18 services check the JWT. Kong/gateway don't. 202/204 frontend fetch files send no token. | 2, 7 | 🔴 security |
+| 1 | Only 9 of 18 services check the JWT (was 4; compliance, customer, vat, report, sales added by 2026-10-25); inventory, product, payment still don't. sales doesn't forward the token on its own outgoing calls yet. Kong/gateway don't. 202/204 frontend fetch files send no token. | 2, 7 | 🔴 security |
 | 2 | Sales trusts **price, discount, VAT from the browser** | 5 | 🔴 integrity |
 | 3 | Any user can read another merchant's data (`merchantScope` takes the requested id) | 2 | 🔴 for multi-company |
 | 4 | **Sales journal: Dr Cash / Cr Sales only** — no VAT payable, no COGS, all methods = cash | 6 | 🔴 accounting (ODCL uses only this system) |

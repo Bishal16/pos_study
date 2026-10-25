@@ -1,4 +1,18 @@
-// UniPOS · customer-service · generated from @Entity code (origin/dev 966b0ec)
+// UniPOS · customer-service · generated from @Entity code (origin/dev 97bf538)
+
+Table customer.business_document_types [note: 'entity BusinessDocumentType'] {
+  document_type_id integer [pk]
+  document_type_name varchar(50) [not null]
+  code varchar(100)
+  description varchar(255)
+  max_file_size_mb integer
+  is_mandatory boolean [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
 
 Table customer.bank_cheques [note: 'entity BankCheque'] {
   business_cheque_id uuid [pk]
@@ -8,20 +22,6 @@ Table customer.bank_cheques [note: 'entity BankCheque'] {
   cheque_title varchar(150)
   issue_date date
   amount "double precision"
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [note: 'inherited from BaseEntity']
-}
-
-Table customer.business_document_types [note: 'entity BusinessDocumentType'] {
-  document_type_id integer [pk]
-  document_type_name varchar(50) [not null]
-  code varchar(100)
-  description varchar(255)
-  max_file_size_mb integer
-  is_mandatory boolean [not null]
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [note: 'inherited from BaseEntity']
   is_active boolean [not null, note: 'inherited from BaseEntity']
@@ -86,6 +86,22 @@ Table customer.business_organization_provided_documents [note: 'entity BusinessO
   content_type varchar(255)
   size_bytes bigint
   status varchar(50)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table customer.customer_prefix_configurations [note: 'entity CustomerPrefixConfiguration'] {
+  customer_prefix_config_id bigint [pk]
+  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  operation_type varchar(50) [not null]
+  prefix varchar(50) [not null]
+  code_length integer [not null]
+  next_sequence_number bigint [not null]
+  description varchar(250)
+  bin_short_code varchar(50)
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [note: 'inherited from BaseEntity']
   is_active boolean [not null, note: 'inherited from BaseEntity']
@@ -159,52 +175,6 @@ Table customer.customers_opinion_settings [note: 'entity CustomerOpinionSetting'
   updated_by varchar(255) [note: 'inherited from BaseEntity']
 }
 
-Table customer.customer_prefix_configurations [note: 'entity CustomerPrefixConfiguration'] {
-  customer_prefix_config_id bigint [pk]
-  sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
-  operation_type varchar(50) [not null]
-  prefix varchar(50) [not null]
-  code_length integer [not null]
-  next_sequence_number bigint [not null]
-  description varchar(250)
-  bin_short_code varchar(50)
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [note: 'inherited from BaseEntity']
-}
-
-Table customer.customer_survey_evaluation_reports [note: 'entity CustomerSurveyEvaluationReport'] {
-  customer_survey_remark_id uuid [pk]
-  party_category_id integer [not null]
-  party_related_id uuid [not null, note: 'polymorphic → customer.persons | customer.business_organizations']
-  remark_type varchar(50) [not null]
-  " character_evaluated_point" numeric [not null]
-  capital_evaluated_point numeric [not null]
-  capacity_evaluated_point numeric [not null]
-  remark_text varchar(255) [not null]
-}
-
-Table customer.customer_survey_product [note: 'entity CustomerSurveyProduct'] {
-  interest_id uuid [pk]
-  party_category_id integer [not null]
-  party_related_id uuid [not null, note: 'polymorphic → customer.persons | customer.business_organizations']
-  product_scope_id integer [not null]
-  related_id uuid[] [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
-  relation_type varchar(50) [not null]
-  interest_level varchar(50)
-  purchase_possible_month varchar(255)
-  purchase_possible_year varchar(255)
-}
-
-Table customer.customer_survey_product_remarks [note: 'entity CustomerSurveyProductRemark'] {
-  customer_survey_product_remark_id uuid [pk]
-  party_category_id integer [not null]
-  party_related_id uuid [not null, note: 'polymorphic → customer.persons | customer.business_organizations']
-  " remark_text" varchar(255) [not null]
-}
-
 Table customer.interaction_logs [note: 'entity InteractionLog'] {
   interaction_id uuid [pk]
   party_category_id integer [not null]
@@ -243,19 +213,6 @@ Table customer.party_addresses [note: 'entity PartyAddress'] {
   is_default_address boolean [not null]
 }
 
-Table customer.party_categories [note: 'entity PartyCategory'] {
-  party_category_id integer [pk]
-  parent_party_category_id integer
-  name varchar(150)
-  code varchar(50)
-  description varchar(250) [not null]
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [note: 'inherited from BaseEntity']
-}
-
 Table customer.party_emails [note: 'entity PartyEmail'] {
   party_email_id uuid [pk]
   party_category_id integer [not null]
@@ -263,33 +220,6 @@ Table customer.party_emails [note: 'entity PartyEmail'] {
   email varchar(255) [not null, unique]
   is_primary boolean [not null]
   note varchar(255) [not null]
-}
-
-Table customer.party_owner_groups [note: 'entity PartyOwnerGroup'] {
-  party_owner_group_id uuid [pk]
-  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
-  code varchar(50) [not null]
-  owner_group_name varchar(150) [not null]
-  description varchar(250)
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [note: 'inherited from BaseEntity']
-}
-
-Table customer.party_owner_group_teams [note: 'entity PartyOwnerGroupTeam'] {
-  owner_group_team_id uuid [pk]
-  party_owner_group_id uuid [not null]
-  team_name varchar(255) [not null]
-  team_code varchar(255) [not null]
-  team_org_type varchar(50)
-  description varchar(255)
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [note: 'inherited from BaseEntity']
 }
 
 Table customer.party_phones [note: 'entity PartyPhone'] {
@@ -312,26 +242,39 @@ Table customer.party_progressive_roles [note: 'entity PartyProgressiveRole'] {
   valid_to date
 }
 
-Table customer.persons [note: 'entity Person'] {
-  person_id uuid [pk]
-  first_name varchar(255) [not null]
-  initiator_sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
-  middle_initial varchar(255)
-  last_name varchar(255)
-  father_name varchar(255)
-  mother_name varchar(255)
-  dob date
-  gender varchar(255)
-  national_identity_number varchar(255) [not null]
-  number_of_family_members integer
-  marital_status varchar(50)
-  income_range varchar(255)
-  profession_name varchar(255)
-  organization_name varchar(255)
-  primary_contact varchar(255) [not null]
-  secondary_contact varchar(255)
-  purchase_bin_number varchar(50)
-  person_initial_source_id uuid [not null]
+Table customer.party_categories [note: 'entity PartyCategory'] {
+  party_category_id integer [pk]
+  parent_party_category_id integer
+  name varchar(150)
+  code varchar(50)
+  description varchar(250) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table customer.party_owner_groups [note: 'entity PartyOwnerGroup'] {
+  party_owner_group_id uuid [pk]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  code varchar(50) [not null]
+  owner_group_name varchar(150) [not null]
+  description varchar(250)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
+Table customer.party_owner_group_teams [note: 'entity PartyOwnerGroupTeam'] {
+  owner_group_team_id uuid [pk]
+  party_owner_group_id uuid [not null]
+  team_name varchar(255) [not null]
+  team_code varchar(255) [not null]
+  team_org_type varchar(50)
+  description varchar(255)
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [note: 'inherited from BaseEntity']
   is_active boolean [not null, note: 'inherited from BaseEntity']
@@ -411,6 +354,63 @@ Table customer.relationships [note: 'entity Relationship'] {
   updated_by varchar(255) [note: 'inherited from BaseEntity']
 }
 
+Table customer.customer_survey_evaluation_reports [note: 'entity CustomerSurveyEvaluationReport'] {
+  customer_survey_remark_id uuid [pk]
+  party_category_id integer [not null]
+  party_related_id uuid [not null, note: 'polymorphic → customer.persons | customer.business_organizations']
+  remark_type varchar(50) [not null]
+  " character_evaluated_point" numeric [not null]
+  capital_evaluated_point numeric [not null]
+  capacity_evaluated_point numeric [not null]
+  remark_text varchar(255) [not null]
+}
+
+Table customer.customer_survey_product [note: 'entity CustomerSurveyProduct'] {
+  interest_id uuid [pk]
+  party_category_id integer [not null]
+  party_related_id uuid [not null, note: 'polymorphic → customer.persons | customer.business_organizations']
+  product_scope_id integer [not null]
+  related_id uuid[] [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  relation_type varchar(50) [not null]
+  interest_level varchar(50)
+  purchase_possible_month varchar(255)
+  purchase_possible_year varchar(255)
+}
+
+Table customer.customer_survey_product_remarks [note: 'entity CustomerSurveyProductRemark'] {
+  customer_survey_product_remark_id uuid [pk]
+  party_category_id integer [not null]
+  party_related_id uuid [not null, note: 'polymorphic → customer.persons | customer.business_organizations']
+  " remark_text" varchar(255) [not null]
+}
+
+Table customer.persons [note: 'entity Person'] {
+  person_id uuid [pk]
+  first_name varchar(255) [not null]
+  initiator_sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  middle_initial varchar(255)
+  last_name varchar(255)
+  father_name varchar(255)
+  mother_name varchar(255)
+  dob date
+  gender varchar(255)
+  national_identity_number varchar(255) [not null]
+  number_of_family_members integer
+  marital_status varchar(50)
+  income_range varchar(255)
+  profession_name varchar(255)
+  organization_name varchar(255)
+  primary_contact varchar(255) [not null]
+  secondary_contact varchar(255)
+  purchase_bin_number varchar(50)
+  person_initial_source_id uuid [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [note: 'inherited from BaseEntity']
+}
+
 Ref: customer.bank_cheques.business_organization_id > customer.business_organizations.business_organization_id // id only, no FK
 Ref: customer.business_organizations.party_category_id > customer.party_categories.party_category_id
 Ref: customer.business_organizations.current_contact_person_id > customer.persons.person_id
@@ -426,18 +426,18 @@ Ref: customer.customer_assigned_opinions."opinionId" > customer.customers_opinio
 Ref: customer.customer_associates.customer_id > customer.customer_accounts.customer_id
 Ref: customer.customer_associates.associated_relation_id > customer.customer_associated_relations.associated_relationship_id
 Ref: customer.customer_associates.person_role_id > customer.person_roles.person_role_id
-Ref: customer.customer_survey_evaluation_reports.party_category_id > customer.party_categories.party_category_id
-Ref: customer.customer_survey_product.party_category_id > customer.party_categories.party_category_id
-Ref: customer.customer_survey_product_remarks.party_category_id > customer.party_categories.party_category_id
 Ref: customer.interaction_logs.party_category_id > customer.party_categories.party_category_id
 Ref: customer.party_addresses.party_category_id > customer.party_categories.party_category_id
 Ref: customer.party_emails.party_category_id > customer.party_categories.party_category_id
-Ref: customer.party_owner_group_teams.party_owner_group_id > customer.party_owner_groups.party_owner_group_id
 Ref: customer.party_phones.party_category_id > customer.party_categories.party_category_id
 Ref: customer.party_progressive_roles.party_category_id > customer.party_categories.party_category_id
-Ref: customer.persons.person_initial_source_id > customer.person_initial_sources.person_source_id
+Ref: customer.party_owner_group_teams.party_owner_group_id > customer.party_owner_groups.party_owner_group_id
 Ref: customer.person_assigned_roles.person_id > customer.persons.person_id
 Ref: customer.person_assigned_roles.person_role_id > customer.person_roles.person_role_id
 Ref: customer.person_relationships.person_id > customer.persons.person_id
 Ref: customer.person_relationships.related_person_id > customer.persons.person_id
 Ref: customer.person_relationships.relationship_id > customer.relationships.relationship_id
+Ref: customer.customer_survey_evaluation_reports.party_category_id > customer.party_categories.party_category_id
+Ref: customer.customer_survey_product.party_category_id > customer.party_categories.party_category_id
+Ref: customer.customer_survey_product_remarks.party_category_id > customer.party_categories.party_category_id
+Ref: customer.persons.person_initial_source_id > customer.person_initial_sources.person_source_id

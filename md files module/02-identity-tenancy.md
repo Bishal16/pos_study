@@ -87,11 +87,18 @@ sequenceDiagram
 ### Which services actually check the token
 | Service | Verifies JWT? | How |
 |---|---|---|
-| accounts, authorization, configuration, purchase | **Yes** | `JwtDecoderConfig` (public key from `jwt.public-key`) + `oauth2ResourceServer` + `@Authenticated` (= `isAuthenticated()`) on resolvers (accounts 90, configuration 62, authorization 48, purchase 127 uses) |
+| accounts, authorization, configuration, purchase, compliance | **Yes** | `JwtDecoderConfig` (public key from `jwt.public-key`) + `oauth2ResourceServer` + `@Authenticated` (= `isAuthenticated()`) on resolvers (accounts 90, configuration 62, authorization 48, purchase 127 uses) |
 | authentication | partly | own `JwtUtil`; `@Authenticated` on 7 resolvers |
-| sales, inventory, product, customer, payment, vat, policy, promotion, report, approval | **No** | `@EnableMethodSecurity` but no resource-server config → anyone who reaches them is anonymous-but-allowed |
+| customer, vat, report, sales *(since 18–24 Oct 2026)* | **Yes** | same pattern as purchase: `JwtDecoderConfig` + `oauth2ResourceServer`; `/graphql` stays `permitAll` at HTTP level, resolvers marked `@Authenticated` need a valid token (customer 113 of 124 resolver methods, vat 61 of 65, report all 15 resolver classes, sales 29 of 33 resolver classes). Commits: sales `28196cf` ("security added step1 (client not sending token for inter service call)"), customer `97bf538`, vat `e0c8c3b`/`29e6e9e` ("@authenticated and new pagination"), report `3de790f` |
+| inventory, product, payment, policy, promotion, approval | **No** | `@EnableMethodSecurity` but no resource-server config → anyone who reaches them is anonymous-but-allowed |
 
 > Correction to session 1: it's not "no service verifies the token" — **4 services do**; the other ~10 don't, and Kong/gateway don't.
+>
+> **Update 2026-10-24:** compliance also verifies (found by the drift check, 18 Oct), and Walton rolled the purchase pattern out to customer, vat and report (18–24 Oct). **8 services now verify the JWT**; sales, inventory, product, payment, policy, promotion and approval still don't.
+>
+> **Update 2026-10-25:** sales joined (9 of 18). Its own resolvers now need a token, but its WebClient calls to other services still send **no** `Authorization` header (the commit title says so: "step1"). customer, vat, configuration and accounts now protect most of their resolvers, so sales' calls into them are likely to be rejected until step 2 forwards the token. Watch the next sales commits.
+>
+> authorization (2026-10-24, `0c91e2b`) added merchant-permission operations (`assignPermissionToMerchant`, `getMerchantPermissions`, …). `AuthorizationService.hasPermission()` exists but no API calls it yet, so permissions still only drive the menu. The rollout looks like an ongoing team effort (same "@authenticated and new pagination" commit message), so expect more services to follow.
 
 ## 4. Authorization (RBAC)
 

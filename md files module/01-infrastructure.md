@@ -7,7 +7,7 @@
 - The front door is **Kong 3.9** (`/graphql` → `apollo-server:4000`), not the gateway directly.
 - The running gateway is a **newer TypeScript Apollo gateway** that discovers subgraphs **through Consul** — so Consul *is* used (by the gateway), just not service-to-service. The `gateway-service/` folder locally is an old copy.
 - `pulsehub` = OpenTelemetry Collector; with **Jaeger** (traces), **Prometheus** + **Grafana** (metrics). No Elasticsearch. **But the collector only prints traces to stdout — Jaeger gets nothing** (see 08).
-- JWT: Kong and the gateway don't verify it; **4 services do** (accounts, authorization, configuration, purchase — see 02 §3); the rest don't.
+- JWT: Kong and the gateway don't verify it; **9 services do** as of 2026-10-25 (accounts, authorization, configuration, purchase, compliance, customer, vat, report, sales — see 02 §3); the rest don't.
 - "unhealthy" containers = healthcheck gets 401/403 from Spring Security; Consul uses heartbeats so the gateway still sees them as healthy.
 - Three more services run on the server but aren't in your folder: **compliance (10502), notification (10510), order (10515)**.
 

@@ -171,11 +171,12 @@ function L2(){
   b+=`<text class="tag" x="20" y="262">Where the token comes from</text>`;
   b+=`<g class="${nodeClass("authentication")}" data-id="authentication" tabindex="0" role="button" aria-label="authentication"><rect class="b" x="20" y="274" width="330" height="128" rx="5"/><circle class="dot d-id" cx="32" cy="292" r="4"/><text class="t1" x="42" y="296">authentication-service</text><text class="t3" x="42" y="320">signs JWT RS256 with private_key.pem</text><text class="t3" x="42" y="340">access 7 days · refresh 15 days</text><text class="t3" x="42" y="360">claims: sub, userId, merchantId,</text><text class="t3" x="42" y="380">businessAreaIds (no roles, no admin)</text></g>`;
   b+=`<text class="tag" x="400" y="262">Checks the token with public_key.pem</text>`;
-  JWT_SVCS.forEach((id,i)=>b+=node(id,400+i*(JWT_SVCS.length>4?160:200),274,JWT_SVCS.length>4?150:184,40,id,":"+S[id].port));
-  b+=`<text class="tag" x="400" y="346">Accept calls without checking</text>`;
-  SERVICES.filter(s=>s.jwt!==true).forEach((s,i)=>{ const c=i%7,r=Math.floor(i/7); b+=node(s.id,400+c*114,356+r*46,108,38,s.id,""); });
+  JWT_SVCS.forEach((id,i)=>b+=node(id,400+(i%5)*160,274+Math.floor(i/5)*48,150,40,id,":"+S[id].port));  /* 5 per row */
+  const ay=274+Math.ceil(JWT_SVCS.length/5)*48+24, rest=SERVICES.filter(s=>s.jwt!==true);
+  b+=`<text class="tag" x="400" y="${ay}">Accept calls without checking</text>`;
+  rest.forEach((s,i)=>{ const c=i%7,r=Math.floor(i/7); b+=node(s.id,400+c*114,ay+10+r*46,108,38,s.id,""); });
   b+=pathA("M350,330 H396","ok")+`<text class="lbl ok" x="373" y="322" text-anchor="middle">key</text>`;
-  return svgWrap(1220,460,b,"Request path and security");
+  return svgWrap(1220,Math.max(460,ay+10+Math.ceil(rest.length/7)*46+20),b,"Request path and security");
 }
 
 /* ===================== Level 3 ===================== */
@@ -531,7 +532,7 @@ function syncHTML(){
   let h=`<div class="syncbanner ${ss.cls}"><b>${esc(ss.title)}</b><span>${esc(ss.text)}</span></div>`;
   if(!st.generatedAt) return h;
   const c=st.counts||{};
-  h+=`<div class="stats"><span><b>${c.commits||0}</b> new commits</span><span><b>${c.repos||0}</b> repos changed</span><span><b>${c.schema||0}</b> schema</span><span><b>${c.ops||0}</b> operations</span><span><b>${c.calls||0}</b> calls</span><span><b>${c.kafka||0}</b> Kafka</span><span><b>${c.drift||0}</b> to review</span></div>`;
+  h+=`<div class="stats"><span><b>${c.commits||0}</b> new commits since the ${esc((st.changes&&st.changes.since)||"previous refresh")}</span><span><b>${c.repos||0}</b> repos changed</span><span><b>${c.schema||0}</b> schema</span><span><b>${c.ops||0}</b> operations</span><span><b>${c.calls||0}</b> calls</span><span><b>${c.kafka||0}</b> Kafka</span><span><b>${c.drift||0}</b> to review</span></div>`;
   if(ch.baseline) h+=`<p class="hint">First refresh: this is the baseline. Changes are listed from the next refresh on.</p>`;
   h+=`<h3 class="synch">Repos (origin/dev)</h3><div class="tablewrap"><table class="synct"><thead><tr><th>repo</th><th>commit</th><th>date</th><th>last author</th><th>new</th><th>fetch</th></tr></thead><tbody>${Object.entries(repos).map(([n,r])=>{ const f=fetch[n]||{};
     return `<tr><td>${S[n]?`<button class="lnk" data-sgo='${esc(JSON.stringify({svc:n}))}'>${esc(n)}</button>`:esc(n)}</td><td class="mono">${esc(r.commit||"")}</td><td>${esc(r.date||"")}</td><td>${esc(r.author||"")}</td><td class="num">${r.new||0}</td><td>${f.ok===false?`<span class="chip bad" title="${esc(f.msg)}">failed</span>`:f.ok===null?`<span class="chip">skipped</span>`:`<span class="chip ok">ok</span>`}</td></tr>`; }).join("")}</tbody></table></div>`;

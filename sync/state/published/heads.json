@@ -1,0 +1,20 @@
+{
+ "authentication": "6db47751db9e5c118ce2932c0d4ad1dc68b53761",
+ "authorization": "0c91e2b6f44f9f32ab30f7f079c51a765f8f9c7f",
+ "configuration": "caf2626756b105474347d7ea677a4539b07c68d4",
+ "product": "962dcdf8b322d6f4c5a103899574cc4c305ecfc0",
+ "customer": "97bf5385f2a0e49b2fbf3471ae9cd0757c1ce35e",
+ "purchase": "44ed78ef91f5aa9a461a2c2c94669a729f339610",
+ "approval": "1555a24dbd9c3bcc33d87032aa97c87bd8153fbb",
+ "inventory": "f662e050b95fe809589d21dc5fd4f4efaeacd1c7",
+ "sales": "28196cfa66b93abea32e4d0f1cc492f5f80aa705",
+ "policy": "b16ae576f768c4118b3a9be634ddf909e6410b31",
+ "promotion": "7e0d7f605e21695528859486ca152b935a62970b",
+ "payment": "639ee596b6fa0f8831ed2668eb30f455178ab82e",
+ "accounts": "35d7000318eaba767f871ce40f9671fd19eb7519",
+ "vat": "e0c8c3bad3c388fbd36231e39b992c7c3be81911",
+ "report": "3de790f05529535002aeca99a46f77919a59ae23",
+ "compliance": "07609ab59f0f308ae409181e4e97a76a5d344261",
+ "notification": "46a12a06fe48b20423d2ad7b9f0a3e3690055424",
+ "frontend": "f935110e065157454e8bf2621f46942c195f1789"
+}

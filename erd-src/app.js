@@ -127,7 +127,7 @@ function syncBanner() {
   const cls = !st.fetchOk ? "warn" : "ok";
   const title = st.fetchSkipped ? "Built without fetching from GitLab: showing code as of each repo's last fetch" : !st.fetchOk ? "Last refresh could not reach GitLab: showing code as of each repo's last successful fetch" : "Built from origin/dev of every repo";
   const sch = (st.changes && st.changes.schema) || [];
-  return `<div class="syncb ${cls}"><b>${esc(title)}</b><span>Refreshed ${esc(st.generatedAt.replace("T", " "))} · ${c.commits || 0} new commit(s) since the previous refresh${changed.length ? " in " + esc(changed.join(", ")) : ""} · ${sch.length} schema change(s)</span>
+  return `<div class="syncb ${cls}"><b>${esc(title)}</b><span>Refreshed ${esc(st.generatedAt.replace("T", " "))} · ${c.commits || 0} new commit(s) since the ${esc((st.changes && st.changes.since) || "previous refresh")}${changed.length ? " in " + esc(changed.join(", ")) : ""} · ${sch.length} schema change(s)</span>
    ${sch.length ? `<ul>${sch.slice(0, 40).map(i => `<li>${i[3].includes("removed") ? `<span class="mono">${esc(i[0])}.${esc(i[1])}${i[2] ? "." + esc(i[2]) : ""}</span>` : `<button class="lnk" data-go="${esc(i[0])}|${esc(i[1])}|${esc(i[2])}">${esc(i[0])}.${esc(i[1])}${i[2] ? "." + esc(i[2]) : ""}</button>`} <span class="muted">${esc(i[3])}</span></li>`).join("")}</ul>` : ""}</div>`;
 }
 function propLabel(p) { return p.kind === "table" ? `${p.svc}: new table ${p.table}` : p.kind === "column" ? `${p.svc}: new column ${p.table}.${p.col}` : `${p.svc}: ${p.table}.${p.col} → ${p.to ? p.to.svc + "." + p.to.table : "?"}`; }

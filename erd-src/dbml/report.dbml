@@ -1,4 +1,4 @@
-// UniPOS · report-service · generated from @Entity code (origin/dev 0061597)
+// UniPOS · report-service · generated from @Entity code (origin/dev 3de790f)
 
 Table report.chart_of_accounts [note: 'entity ChartOfAccountSnapshot'] {
   account_id integer [pk]

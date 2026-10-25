@@ -52,7 +52,7 @@ sequenceDiagram
 - Other tables: `sales_offers` (just a title + dates + sales type), sales targets (yearly/monthly/heads), sales-hub incentive settings, processing fee ranges, `policy_execution_logs`.
 
 ### ⚠ Findings
-1. **The server trusts prices from the browser.** MRP, discount, VAT rate and unit cost all come in the request, and sales doesn't recheck them against product-service. Since sales-service doesn't verify the JWT either (session 2), anyone who can reach it could post a sale at any price.
+1. **The server trusts prices from the browser.** MRP, discount, VAT rate and unit cost all come in the request, and sales doesn't recheck them against product-service. Until 24 Oct 2026 sales-service didn't verify the JWT either, so anyone who could reach it could post a sale at any price. It now requires a login token (29 of 33 resolver classes), but any logged-in user can still post any price.
 2. **No distributed rollback.** Up to 7 other services are called one after another. If step 6 fails, the local invoice rolls back, but the customer account, receivable and payment already created in other services stay. The code says "Remote compensation still pending".
 3. **A new customer account is opened in accounts for every sale**, even for the same person.
 4. **Payment is hard-coded:** method 1 (cash), terminal 0, full amount. No split payment (cash + card) and no change calculation, although payment-service's data model supports split payment (`payment_details`).

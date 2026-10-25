@@ -1,6 +1,11 @@
 """UniPOS daily refresh: fetch origin/dev, rebuild Atlas + Living ERD data, report changes and drift.
 Never touches working copies: only `git fetch` (updates remote refs) and reads via `git cat-file`.
-Run:  python3 -I sync/refresh.py      (or sync/refresh.sh, which logs)"""
+Changes are counted against the last *published* build (state/published/), so they add up until you publish,
+however many times a day this runs.
+Run:  python3 -I sync/refresh.py      (or sync/refresh.sh, which logs)
+      --no-fetch        rebuild from what was fetched last time
+      --auto            timer mode: do nothing if today already had a successful fetch
+      --mark-published  record the current build as published (new baseline); no fetch, no rebuild"""
 import datetime, json, os, re, shutil, subprocess, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -8,7 +13,8 @@ STUDY = os.path.dirname(HERE)
 ROOT = os.path.dirname(STUDY)
 ATLAS, ERD = os.path.join(STUDY, "atlas-src"), os.path.join(STUDY, "erd-src")
 STATE, REPORTS = os.path.join(HERE, "state"), os.path.join(HERE, "reports")
-for p in (STATE, REPORTS):
+BASE = os.path.join(STATE, "published")
+for p in (STATE, REPORTS, BASE):
     os.makedirs(p, exist_ok=True)
 sys.path.insert(0, HERE)
 from gitsrc import GitSrc  # noqa: E402
@@ -19,6 +25,7 @@ REPOS = {s: os.path.join(ROOT, s + "-service") for s in SERVICES}
 REPOS["frontend"] = os.path.join(ROOT, "1frontend", "smartpos-web")
 NOW = datetime.datetime.now().replace(microsecond=0)
 NO_FETCH = "--no-fetch" in sys.argv
+AUTO = "--auto" in sys.argv
 
 
 def git(path, *args, timeout=90):
@@ -38,7 +45,28 @@ def load(p, default):
 
 
 prev_status = load(os.path.join(HERE, "status.json"), {})
-prev_repos = prev_status.get("repos", {})
+
+if "--mark-published" in sys.argv:
+    # the pages just published carry the build in status.json: make it the baseline for the next refreshes
+    if not prev_status.get("repos"):
+        raise SystemExit("no build to mark: run refresh first")
+    json.dump({n: h.get("full") for n, h in prev_status["repos"].items() if h.get("full")}, open(os.path.join(BASE, "heads.json"), "w"), indent=1)
+    shutil.copy(os.path.join(STATE, "atlas-prev.json"), os.path.join(BASE, "atlas.json"))
+    shutil.copy(os.path.join(STATE, "schema-prev.json"), os.path.join(BASE, "schema.json"))
+    pub = load(os.path.join(HERE, "published.json"), {})
+    pub.update({"at": NOW.isoformat(timespec="minutes"), "generatedAt": prev_status["generatedAt"]})
+    json.dump(pub, open(os.path.join(HERE, "published.json"), "w"))
+    print("marked build", prev_status["generatedAt"], "as published; changes now count from here")
+    raise SystemExit(0)
+
+if AUTO and prev_status.get("fetchOk") and prev_status.get("generatedAt", "")[:10] == NOW.date().isoformat():
+    print("UniPOS refresh: already fetched today at", prev_status["generatedAt"][11:], "(skipping timer run)")
+    raise SystemExit(0)
+
+# baseline = last published build; before the first --mark-published, fall back to the previous run
+base_heads = load(os.path.join(BASE, "heads.json"), None)
+HAS_BASE = base_heads is not None
+prev_repos = {n: {"full": f} for n, f in base_heads.items()} if HAS_BASE else prev_status.get("repos", {})
 
 # ---------- 1. fetch + heads ----------
 fetch, repos = {}, {}
@@ -66,7 +94,7 @@ for name, path in REPOS.items():
     h["new"], h["commits"] = 0, []
     if prev and prev != full:
         _, cnt, _ = git(path, "rev-list", "--count", f"{prev}..{full}")
-        _, log, _ = git(path, "log", "--format=%h%x09%cs%x09%an%x09%s", f"{prev}..{full}", "-n", "15")
+        _, log, _ = git(path, "log", "--format=%h%x09%cs%x09%an%x09%s", f"{prev}..{full}", "-n", "25")
         h["new"] = int(cnt or 0)
         h["commits"] = [dict(zip(("c", "d", "a", "s"), l.split("\t"))) for l in log.splitlines() if l]
     repos[name] = h
@@ -87,10 +115,12 @@ facts = load(os.path.join(ATLAS, "facts.json"), {})
 raw = load(os.path.join(ERD, "raw.json"), {}).get("services", {})
 schema = {s: {e["table"]: {f["c"]: f["t"] for f in e["fields"] if not f.get("virt")} for e in v["entities"]} for s, v in raw.items()}
 
-# ---------- 3. changes since previous refresh ----------
-prev_code = load(os.path.join(STATE, "atlas-prev.json"), None)
-prev_schema = load(os.path.join(STATE, "schema-prev.json"), None)
-changes = {"baseline": prev_code is None, "schema": [], "ops": [], "calls": [], "kafka": []}
+# ---------- 3. changes since the last publish ----------
+prev_code = load(os.path.join(BASE if HAS_BASE else STATE, "atlas.json" if HAS_BASE else "atlas-prev.json"), None)
+prev_schema = load(os.path.join(BASE if HAS_BASE else STATE, "schema.json" if HAS_BASE else "schema-prev.json"), None)
+published = load(os.path.join(HERE, "published.json"), {})
+SINCE = ("last publish " + published.get("at", "?").replace("T", " ")) if HAS_BASE else "previous refresh"
+changes = {"baseline": prev_code is None, "since": SINCE, "schema": [], "ops": [], "calls": [], "kafka": []}
 
 def url_edges(d):
     out = {}
@@ -197,10 +227,9 @@ for t, ft in f_topics.items():
 changed_svcs = sorted(n for n, h in repos.items() if h.get("new"))
 for s in changed_svcs:
     if s in F_S:
-        drift.append({"kind": "review", "svc": s, "msg": f"{repos[s]['new']} new commit(s): re-check its findings in the Atlas"})
+        drift.append({"kind": "review", "svc": s, "msg": f"{repos[s]['new']} new commit(s) since the {SINCE}: re-check its findings in the Atlas"})
 
 # ---------- 5. status + report ----------
-published = load(os.path.join(HERE, "published.json"), {})
 fetch_ok = bool(fetch) and all(v["ok"] is True for v in fetch.values())
 counts = {"commits": sum(h.get("new", 0) for h in repos.values()), "repos": len(changed_svcs) + (1 if repos.get("frontend", {}).get("new") else 0),
           "schema": len(changes["schema"]), "ops": len(changes["ops"]), "calls": len(changes["calls"]), "kafka": len(changes["kafka"]), "drift": len(drift)}
@@ -212,6 +241,7 @@ shutil.copy(os.path.join(HERE, "status.json"), os.path.join(ERD, "out", "data", 
 
 L = [f"# UniPOS refresh — {NOW:%Y-%m-%d %H:%M}", "",
      f"Source: `origin/dev` of every repo. Fetch: {'OK' if fetch_ok else ('**skipped (--no-fetch)**: showing code as of the last fetch' if NO_FETCH else '**FAILED for some repos — showing code as of their last successful fetch**')}.", "",
+     f"Changes below are counted since the **{SINCE}** and add up until the pages are published again.", "",
      f"**{counts['commits']} new commit(s)** in {counts['repos']} repo(s) · {counts['schema']} schema change(s) · {counts['ops']} GraphQL operation change(s) · "
      f"{counts['calls']} call change(s) · {counts['kafka']} Kafka change(s) · **{counts['drift']} item(s) to review**", ""]
 if changes["baseline"]:
@@ -229,7 +259,7 @@ for key, title in (("schema", "Schema"), ("ops", "GraphQL operations"), ("calls"
         L += ["", f"## {title}", *["- " + " · ".join(str(x) for x in row if x) for row in changes[key]]]
 L += ["", "## To review (Atlas facts vs code)"] + (["- " + (f"**{d['svc']}** " if d["svc"] else "") + d["msg"] for d in drift] or ["- Nothing: the Atlas matches the code."])
 L += ["", "## Published pages", f"- Last publish: {published.get('at', 'never')} (built {published.get('generatedAt', '—')})",
-      f"- This build: {status['generatedAt']} → {'already published' if published.get('generatedAt') == status['generatedAt'] else 'not published yet: ask Claude to “publish the refresh”'}"]
+      f"- This build: {status['generatedAt']} → {'same code as the published pages' if (published.get('generatedAt') == status['generatedAt'] or (HAS_BASE and not counts['commits'] and not any(changes[k] for k in ('schema', 'ops', 'calls', 'kafka')))) else 'not published yet: ask Claude to “publish the refresh”'}"]
 rp = os.path.join(REPORTS, f"{NOW:%Y-%m-%d}.md")
 open(rp, "w").write("\n".join(L) + "\n")
 
@@ -241,7 +271,7 @@ run("python3", "-I", "build.py", cwd=ERD)   # re-embed the fresh status.json in 
 shutil.copy(os.path.join(ATLAS, "data.json"), os.path.join(STATE, "atlas-prev.json"))
 json.dump(schema, open(os.path.join(STATE, "schema-prev.json"), "w"), separators=(",", ":"))
 
-summary = f"{counts['commits']} new commits · {counts['schema']} schema · {counts['ops']} ops · {counts['drift']} to review" + ("" if fetch_ok else (" · NOT FETCHED (--no-fetch)" if NO_FETCH else " · FETCH FAILED"))
+summary = f"{counts['commits']} new commits since {'last publish' if HAS_BASE else 'last run'} · {counts['schema']} schema · {counts['ops']} ops · {counts['drift']} to review" + ("" if fetch_ok else (" · NOT FETCHED (--no-fetch)" if NO_FETCH else " · FETCH FAILED"))
 print("UniPOS refresh:", summary)
 print("report:", rp)
 if shutil.which("notify-send") and os.environ.get("DBUS_SESSION_BUS_ADDRESS"):
