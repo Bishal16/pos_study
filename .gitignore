@@ -1,0 +1,13 @@
+# server copies, archives and secrets: keep on disk, never in git
+walton-infra-copy/
+scripts/script output/
+*.zip
+*.tar.gz
+*.war
+*.jar
+*.env
+*.tfvars
+credentials*
+DB credentials*
+.idea/
+control/runs/
