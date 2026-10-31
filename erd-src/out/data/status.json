@@ -1,93 +1,147 @@
 {
- "generatedAt": "2026-10-25T18:00",
+ "generatedAt": "2026-10-31T16:22",
  "ref": "origin/dev",
- "fetchOk": false,
- "fetchSkipped": true,
+ "fetchOk": true,
+ "fetchSkipped": false,
  "fetch": {
   "authentication": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "authorization": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "configuration": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "product": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "customer": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "purchase": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "approval": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "inventory": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "sales": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "policy": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "promotion": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "payment": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "accounts": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "vat": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "report": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "compliance": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "notification": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   },
   "frontend": {
-   "ok": null,
-   "msg": "skipped (--no-fetch)"
+   "ok": true,
+   "msg": ""
   }
  },
  "repos": {
   "authentication": {
    "branch": "origin/dev",
-   "commit": "a34c6df",
-   "date": "2026-10-25",
-   "author": "imranpranto00",
-   "subject": "converted userReference and documents array to a single object in user",
-   "full": "a34c6df5f32ab856eb9acc44fe36aa0b897ae490",
-   "fetchedAt": "2026-10-25T17:52",
-   "new": 1,
+   "commit": "d358e44",
+   "date": "2026-10-31",
+   "author": "alihossain_t239",
+   "subject": "fixed 403 on user report downloads and removed rar file",
+   "full": "d358e440f02a7ce8c2924602c02f75820cf2c1ab",
+   "fetchedAt": "2026-10-31T16:22",
+   "new": 10,
    "commits": [
+    {
+     "c": "d358e44",
+     "d": "2026-10-31",
+     "a": "alihossain_t239",
+     "s": "fixed 403 on user report downloads and removed rar file"
+    },
+    {
+     "c": "04aef84",
+     "d": "2026-10-31",
+     "a": "alihossain_t239",
+     "s": "fixed issues of report for getAllUsers"
+    },
+    {
+     "c": "f89f5f2",
+     "d": "2026-10-31",
+     "a": "alihossain_t239",
+     "s": "added pdf and csv report for getAllUsers API"
+    },
+    {
+     "c": "14c5a31",
+     "d": "2026-10-31",
+     "a": "alihossain_t239",
+     "s": "added pdf and csv report for getAllUsers API"
+    },
+    {
+     "c": "a2a96fb",
+     "d": "2026-10-29",
+     "a": "Sonjoy Tripura",
+     "s": "updated terraform"
+    },
+    {
+     "c": "672e3d3",
+     "d": "2026-10-27",
+     "a": "Sonjoy Tripura",
+     "s": "Update EmployeeSyncScheduler.java"
+    },
+    {
+     "c": "7eb2018",
+     "d": "2026-10-26",
+     "a": "imranpranto00",
+     "s": "changed the naming convention of user"
+    },
+    {
+     "c": "1becdc3",
+     "d": "2026-10-26",
+     "a": "imranpranto00",
+     "s": "updated the minio and updated businessArea response"
+    },
+    {
+     "c": "e979c20",
+     "d": "2026-10-26",
+     "a": "imranpranto00",
+     "s": "Add businessArea to UserWorkingLocationHistory"
+    },
     {
      "c": "a34c6df",
      "d": "2026-10-25",
@@ -98,14 +152,98 @@
   },
   "authorization": {
    "branch": "origin/dev",
-   "commit": "5535a26",
-   "date": "2026-10-25",
-   "author": "Sonjoy Tripura",
-   "subject": "All active role summary and permission group too",
-   "full": "5535a262ca1cdc1d8dce231fc36a4d8c15896f2d",
-   "fetchedAt": "2026-10-25T17:52",
-   "new": 3,
+   "commit": "d59a32d",
+   "date": "2026-10-29",
+   "author": "alihossain_t239",
+   "subject": "added pdf & csv report for user-role",
+   "full": "d59a32d802592e4d6452fbffb70f6dcbd23a034b",
+   "fetchedAt": "2026-10-31T16:22",
+   "new": 17,
    "commits": [
+    {
+     "c": "d59a32d",
+     "d": "2026-10-29",
+     "a": "alihossain_t239",
+     "s": "added pdf & csv report for user-role"
+    },
+    {
+     "c": "ac4ee68",
+     "d": "2026-10-29",
+     "a": "alihossain_t239",
+     "s": "added pdf & csv report for user-permissions-group"
+    },
+    {
+     "c": "38751ac",
+     "d": "2026-10-29",
+     "a": "alihossain_t239",
+     "s": "added pdf & csv report for user permissions"
+    },
+    {
+     "c": "54a0ac8",
+     "d": "2026-10-29",
+     "a": "alihossain_t239",
+     "s": "added pdf & csv report for merchant-permission and permission-group-permissions"
+    },
+    {
+     "c": "d194cd0",
+     "d": "2026-10-28",
+     "a": "alihossain_t239",
+     "s": "added pdf and csv report for role access"
+    },
+    {
+     "c": "0eef05c",
+     "d": "2026-10-28",
+     "a": "alihossain_t239",
+     "s": "added pdf and csv report for permission and permission group"
+    },
+    {
+     "c": "7fd15af",
+     "d": "2026-10-28",
+     "a": "alihossain_t239",
+     "s": "added pdf and csv report for ROLE"
+    },
+    {
+     "c": "725abda",
+     "d": "2026-10-27",
+     "a": "imranpranto00",
+     "s": "converted local to prod in application properties"
+    },
+    {
+     "c": "c3e12d3",
+     "d": "2026-10-27",
+     "a": "imranpranto00",
+     "s": "Added pdf and csv report for menu"
+    },
+    {
+     "c": "6e3b84f",
+     "d": "2026-10-27",
+     "a": "imranpranto00",
+     "s": "added properties of minio"
+    },
+    {
+     "c": "45dd30c",
+     "d": "2026-10-26",
+     "a": "Sonjoy Tripura",
+     "s": "User role federation issue resolved"
+    },
+    {
+     "c": "d5b6efb",
+     "d": "2026-10-26",
+     "a": "Sonjoy Tripura",
+     "s": "Added kafka and user role federation"
+    },
+    {
+     "c": "0870a23",
+     "d": "2026-10-26",
+     "a": "Sonjoy Tripura",
+     "s": "added Permissions by Menu Route"
+    },
+    {
+     "c": "4e06a2d",
+     "d": "2026-10-26",
+     "a": "Sonjoy Tripura",
+     "s": "Added current user menu permissions schema, resolver, service and repo"
+    },
     {
      "c": "5535a26",
      "d": "2026-10-25",
@@ -128,14 +266,116 @@
   },
   "configuration": {
    "branch": "origin/dev",
-   "commit": "8a54837",
-   "date": "2026-10-25",
+   "commit": "300e0ba",
+   "date": "2026-10-29",
    "author": "imranpranto00",
-   "subject": "Implemented two getAllActiveBusinessAreaTypeSummary and getAllActiveBusinessAreaSummary APIS",
-   "full": "8a54837c85bb17510452933c0553f66e56442c87",
-   "fetchedAt": "2026-10-25T17:52",
-   "new": 2,
+   "subject": "#24150-added pdf and csv report for saleshub",
+   "full": "300e0bab453bca908610d3d6f6d45e69f26dcf42",
+   "fetchedAt": "2026-10-31T16:22",
+   "new": 19,
    "commits": [
+    {
+     "c": "300e0ba",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24150-added pdf and csv report for saleshub"
+    },
+    {
+     "c": "26ebada",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24150-fixed merge issue"
+    },
+    {
+     "c": "6df2485",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24150-fixed issues"
+    },
+    {
+     "c": "6c4375a",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24150-added pdf and csv report for saleshubstore"
+    },
+    {
+     "c": "230e500",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24150-added pdf and csv report for merchantBin"
+    },
+    {
+     "c": "088a635",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24150-added pdf and csv report for opening entry"
+    },
+    {
+     "c": "50f230b",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24150-added pdf and csv report for system parameter"
+    },
+    {
+     "c": "9068bed",
+     "d": "2026-10-28",
+     "a": "imranpranto00",
+     "s": "#24150-added pdf and csv report for version history"
+    },
+    {
+     "c": "cc7e302",
+     "d": "2026-10-28",
+     "a": "imranpranto00",
+     "s": "#24150-fixed pdf and csv report for businessArea and merchant"
+    },
+    {
+     "c": "8055141",
+     "d": "2026-10-28",
+     "a": "imranpranto00",
+     "s": "#24150-fixed pdf and csv report for Incentive Scheme and added pdf and csv report for geography"
+    },
+    {
+     "c": "dcd7aef",
+     "d": "2026-10-28",
+     "a": "imranpranto00",
+     "s": "#24150-Added pdf and csv report for Incentive Scheme"
+    },
+    {
+     "c": "e8e0f98",
+     "d": "2026-10-28",
+     "a": "imranpranto00",
+     "s": "#24150-Added pdf and csv report for Commissionerate"
+    },
+    {
+     "c": "cd075a7",
+     "d": "2026-10-28",
+     "a": "imranpranto00",
+     "s": "#24150-Added pdf and csv report for Merchant"
+    },
+    {
+     "c": "e4580e9",
+     "d": "2026-10-28",
+     "a": "imranpranto00",
+     "s": "#24150-Added pdf and csv report for BusinesAreaType"
+    },
+    {
+     "c": "abe1d9d",
+     "d": "2026-10-28",
+     "a": "imranpranto00",
+     "s": "#24150-Added pdf and csv report for BusinesArea"
+    },
+    {
+     "c": "d1faca5",
+     "d": "2026-10-28",
+     "a": "imranpranto00",
+     "s": "added properties of minio"
+    },
+    {
+     "c": "28936af",
+     "d": "2026-10-26",
+     "a": "imranpranto00",
+     "s": "Add businessAreaType and parentArea to the BusinessArea entity"
+    },
     {
      "c": "8a54837",
      "d": "2026-10-25",
@@ -152,14 +392,152 @@
   },
   "product": {
    "branch": "origin/dev",
-   "commit": "045a941",
-   "date": "2026-10-25",
+   "commit": "ef42dd8",
+   "date": "2026-10-31",
    "author": "imranpranto00",
-   "subject": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/product-service into dev",
-   "full": "045a941767b05da0e07486084273db3ad74efc66",
-   "fetchedAt": "2026-10-25T17:52",
-   "new": 2,
+   "subject": "#24294-added pdf and csv report for product declared price",
+   "full": "ef42dd82256f6fb1a92ca7afc4af8b548749ae41",
+   "fetchedAt": "2026-10-31T16:22",
+   "new": 25,
    "commits": [
+    {
+     "c": "ef42dd8",
+     "d": "2026-10-31",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for product declared price"
+    },
+    {
+     "c": "ddb1fea",
+     "d": "2026-10-31",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for price type"
+    },
+    {
+     "c": "78e0927",
+     "d": "2026-10-31",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for Business Controller and stock controller"
+    },
+    {
+     "c": "0c8b17e",
+     "d": "2026-10-31",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for consumable category"
+    },
+    {
+     "c": "8319e81",
+     "d": "2026-10-31",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for consumable Item"
+    },
+    {
+     "c": "be9fbf6",
+     "d": "2026-10-31",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for consumable supplier"
+    },
+    {
+     "c": "a071798",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for product price"
+    },
+    {
+     "c": "6b7c30d",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for product attribute assigned value"
+    },
+    {
+     "c": "a900b11",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for product attribute"
+    },
+    {
+     "c": "f979e6b",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for Uom"
+    },
+    {
+     "c": "43f655d",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for product batch"
+    },
+    {
+     "c": "983ff92",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for product sku"
+    },
+    {
+     "c": "6d2da38",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for product Model"
+    },
+    {
+     "c": "5ac7120",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for product line"
+    },
+    {
+     "c": "2830715",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for product category"
+    },
+    {
+     "c": "9c63701",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for brands"
+    },
+    {
+     "c": "8d55c23",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24294-added pdf and csv report for product type"
+    },
+    {
+     "c": "51a7e04",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/product-service into dev"
+    },
+    {
+     "c": "912ef04",
+     "d": "2026-10-29",
+     "a": "imranpranto00",
+     "s": "#24294-added properties of minio"
+    },
+    {
+     "c": "a5b31bc",
+     "d": "2026-10-28",
+     "a": "alihossain_t239",
+     "s": "fixed addProductSKU API for uomId null issue"
+    },
+    {
+     "c": "63ab25d",
+     "d": "2026-10-26",
+     "a": "alihossain_t239",
+     "s": "update UOM seed data according to latest excel sheet"
+    },
+    {
+     "c": "7c7c107",
+     "d": "2026-10-25",
+     "a": "imranpranto00",
+     "s": "Implemented @authenticated and new pagination and jpql in repository in APIs as well"
+    },
+    {
+     "c": "9b4ac27",
+     "d": "2026-10-25",
+     "a": "imranpranto00",
+     "s": "restructured the folders"
+    },
     {
      "c": "045a941",
      "d": "2026-10-25",
@@ -176,14 +554,21 @@
   },
   "customer": {
    "branch": "origin/dev",
-   "commit": "97bf538",
-   "date": "2026-10-18",
+   "commit": "c30e1d3",
+   "date": "2026-10-31",
    "author": "imranpranto00",
-   "subject": "#20621-Implemented codes restructure, @authenticated and new pagination in this response",
-   "full": "97bf5385f2a0e49b2fbf3471ae9cd0757c1ce35e",
-   "fetchedAt": "2026-10-25T17:52",
-   "new": 0,
-   "commits": []
+   "subject": "fixed token issues",
+   "full": "c30e1d32ae17ad58a6590520f43cc8fb47ed6183",
+   "fetchedAt": "2026-10-31T16:22",
+   "new": 1,
+   "commits": [
+    {
+     "c": "c30e1d3",
+     "d": "2026-10-31",
+     "a": "imranpranto00",
+     "s": "fixed token issues"
+    }
+   ]
   },
   "purchase": {
    "branch": "origin/dev",
@@ -192,31 +577,98 @@
    "author": "imranpranto00",
    "subject": "fixed merchant wise data",
    "full": "44ed78ef91f5aa9a461a2c2c94669a729f339610",
-   "fetchedAt": "2026-10-25T17:52",
+   "fetchedAt": "2026-10-31T16:22",
    "new": 0,
    "commits": []
   },
   "approval": {
    "branch": "origin/dev",
-   "commit": "1555a24",
-   "date": "2026-10-14",
+   "commit": "55cfecc",
+   "date": "2026-10-31",
    "author": "imranpranto00",
-   "subject": "for approval process",
-   "full": "1555a24dbd9c3bcc33d87032aa97c87bd8153fbb",
-   "fetchedAt": "2026-10-25T17:52",
-   "new": 0,
-   "commits": []
+   "subject": "fixed queries issues",
+   "full": "55cfeccea8559680284a20498d819e74408c154d",
+   "fetchedAt": "2026-10-31T16:22",
+   "new": 4,
+   "commits": [
+    {
+     "c": "55cfecc",
+     "d": "2026-10-31",
+     "a": "imranpranto00",
+     "s": "fixed queries issues"
+    },
+    {
+     "c": "af52cc7",
+     "d": "2026-10-31",
+     "a": "imranpranto00",
+     "s": "added new pagination"
+    },
+    {
+     "c": "be0ad55",
+     "d": "2026-10-31",
+     "a": "imranpranto00",
+     "s": "restructured folder structure"
+    },
+    {
+     "c": "2ade0d0",
+     "d": "2026-10-26",
+     "a": "bishal16",
+     "s": "added security"
+    }
+   ]
   },
   "inventory": {
    "branch": "origin/dev",
-   "commit": "569517b",
-   "date": "2026-10-25",
-   "author": "bishal16",
-   "subject": "added security",
-   "full": "569517b524e3535a199503b568a8949a306b19fb",
-   "fetchedAt": "2026-10-25T17:52",
-   "new": 1,
+   "commit": "d262c00",
+   "date": "2026-10-31",
+   "author": "imranpranto00",
+   "subject": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/inventory-service into dev",
+   "full": "d262c0080ae1929d377d540ae5958ea63a7b60b2",
+   "fetchedAt": "2026-10-31T16:22",
+   "new": 8,
    "commits": [
+    {
+     "c": "d262c00",
+     "d": "2026-10-31",
+     "a": "imranpranto00",
+     "s": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/inventory-service into dev"
+    },
+    {
+     "c": "d44ca33",
+     "d": "2026-10-31",
+     "a": "alihossain_t239",
+     "s": "added pdf and csv report for ItemLedger"
+    },
+    {
+     "c": "a1e7b39",
+     "d": "2026-10-31",
+     "a": "alihossain_t239",
+     "s": "added pdf and csv report for productStockSumary"
+    },
+    {
+     "c": "f8f09cf",
+     "d": "2026-10-31",
+     "a": "imranpranto00",
+     "s": "removed token for inter service communication purpose"
+    },
+    {
+     "c": "d667879",
+     "d": "2026-10-31",
+     "a": "imranpranto00",
+     "s": "fixed pagination, filter and searching"
+    },
+    {
+     "c": "1e868f0",
+     "d": "2026-10-31",
+     "a": "imranpranto00",
+     "s": "restuctured the folders"
+    },
+    {
+     "c": "9dfac68",
+     "d": "2026-10-31",
+     "a": "alihossain_t239",
+     "s": "added settings for pdf and csv report"
+    },
     {
      "c": "569517b",
      "d": "2026-10-25",
@@ -227,14 +679,20 @@
   },
   "sales": {
    "branch": "origin/dev",
-   "commit": "647ed20",
-   "date": "2026-10-25",
-   "author": "Kumaresh Chandra Baruri",
-   "subject": "Improved Autenticated approach.",
-   "full": "647ed20c24853073a09d4dd15198d579cb448efd",
-   "fetchedAt": "2026-10-25T17:52",
-   "new": 2,
+   "commit": "022ba7e",
+   "date": "2026-10-31",
+   "author": "imranpranto00",
+   "subject": "fixed the sales Issue from inventory",
+   "full": "022ba7e0f6074cb5f9b2d75ecc416a7e016b5baa",
+   "fetchedAt": "2026-10-31T16:22",
+   "new": 3,
    "commits": [
+    {
+     "c": "022ba7e",
+     "d": "2026-10-31",
+     "a": "imranpranto00",
+     "s": "fixed the sales Issue from inventory"
+    },
     {
      "c": "647ed20",
      "d": "2026-10-25",
@@ -251,14 +709,32 @@
   },
   "policy": {
    "branch": "origin/dev",
-   "commit": "94c91cc",
-   "date": "2026-10-25",
-   "author": "bishal16",
-   "subject": "modified client",
-   "full": "94c91cca2cd2534839271363078e7a050f6dfa35",
-   "fetchedAt": "2026-10-25T17:52",
-   "new": 1,
+   "commit": "f50cf2e",
+   "date": "2026-10-27",
+   "author": "imranpranto00",
+   "subject": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/policy-service into dev",
+   "full": "f50cf2e42ee4783d172cf1ffda4fe33f04248ae5",
+   "fetchedAt": "2026-10-31T16:22",
+   "new": 4,
    "commits": [
+    {
+     "c": "f50cf2e",
+     "d": "2026-10-27",
+     "a": "imranpranto00",
+     "s": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/policy-service into dev"
+    },
+    {
+     "c": "c04fdee",
+     "d": "2026-10-27",
+     "a": "imranpranto00",
+     "s": "updated application.properties"
+    },
+    {
+     "c": "acf1609",
+     "d": "2026-10-26",
+     "a": "bishal16",
+     "s": "added security"
+    },
     {
      "c": "94c91cc",
      "d": "2026-10-25",
@@ -269,25 +745,38 @@
   },
   "promotion": {
    "branch": "origin/dev",
-   "commit": "7e0d7f6",
-   "date": "2026-10-05",
-   "author": "alihossain_t239",
-   "subject": "added filter by merchantId",
-   "full": "7e0d7f605e21695528859486ca152b935a62970b",
-   "fetchedAt": "2026-10-25T17:52",
-   "new": 0,
-   "commits": []
+   "commit": "c1c17c0",
+   "date": "2026-10-26",
+   "author": "bishal16",
+   "subject": "added security",
+   "full": "c1c17c02eaa15910236ebcf4c3f70962cb610048",
+   "fetchedAt": "2026-10-31T16:22",
+   "new": 1,
+   "commits": [
+    {
+     "c": "c1c17c0",
+     "d": "2026-10-26",
+     "a": "bishal16",
+     "s": "added security"
+    }
+   ]
   },
   "payment": {
    "branch": "origin/dev",
-   "commit": "f10b8f0",
-   "date": "2026-10-25",
-   "author": "imranpranto00",
-   "subject": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/payment-service into dev",
-   "full": "f10b8f0aea83b4f60729170980ea32a458bd6d4f",
-   "fetchedAt": "2026-10-25T17:52",
-   "new": 2,
+   "commit": "1c35a87",
+   "date": "2026-10-26",
+   "author": "bishal16",
+   "subject": "added security",
+   "full": "1c35a874b3f2a3c990e1cc9b2347d741b1b6b9bc",
+   "fetchedAt": "2026-10-31T16:22",
+   "new": 3,
    "commits": [
+    {
+     "c": "1c35a87",
+     "d": "2026-10-26",
+     "a": "bishal16",
+     "s": "added security"
+    },
     {
      "c": "f10b8f0",
      "d": "2026-10-25",
@@ -304,14 +793,26 @@
   },
   "accounts": {
    "branch": "origin/dev",
-   "commit": "174703c",
-   "date": "2026-10-25",
-   "author": "alihossain_t239",
-   "subject": "merchantId field added to entity and did relevant tasks to schema, service, resolver",
-   "full": "174703c9a9a951333fa84546dfd26dce597f5d1b",
-   "fetchedAt": "2026-10-25T17:52",
-   "new": 1,
+   "commit": "d82d3d4",
+   "date": "2026-10-27",
+   "author": "bishal16",
+   "subject": "regained coa",
+   "full": "d82d3d4256a2792ddfdafc3d426087e09d494940",
+   "fetchedAt": "2026-10-31T16:22",
+   "new": 3,
    "commits": [
+    {
+     "c": "d82d3d4",
+     "d": "2026-10-27",
+     "a": "bishal16",
+     "s": "regained coa"
+    },
+    {
+     "c": "7bf6f95",
+     "d": "2026-10-25",
+     "a": "alihossain_t239",
+     "s": "run failed issues solved"
+    },
     {
      "c": "174703c",
      "d": "2026-10-25",
@@ -327,31 +828,50 @@
    "author": "imranpranto00",
    "subject": "#22542-Implemented @authenticated and new pagination in this response",
    "full": "e0c8c3bad3c388fbd36231e39b992c7c3be81911",
-   "fetchedAt": "2026-10-25T17:52",
+   "fetchedAt": "2026-10-31T16:22",
    "new": 0,
    "commits": []
   },
   "report": {
    "branch": "origin/dev",
-   "commit": "3de790f",
-   "date": "2026-10-24",
+   "commit": "cf5c3b9",
+   "date": "2026-10-28",
    "author": "bishal16",
-   "subject": "added security in report service and tested",
-   "full": "3de790f05529535002aeca99a46f77919a59ae23",
-   "fetchedAt": "2026-10-25T17:52",
-   "new": 0,
-   "commits": []
+   "subject": "updated format",
+   "full": "cf5c3b9c02c180b8be0282b581057c17dd2cf063",
+   "fetchedAt": "2026-10-31T16:22",
+   "new": 2,
+   "commits": [
+    {
+     "c": "cf5c3b9",
+     "d": "2026-10-28",
+     "a": "bishal16",
+     "s": "updated format"
+    },
+    {
+     "c": "c4d7360",
+     "d": "2026-10-27",
+     "a": "bishal16",
+     "s": "added stock valuation report"
+    }
+   ]
   },
   "compliance": {
    "branch": "origin/dev",
-   "commit": "bdc7b8c",
-   "date": "2026-10-25",
-   "author": "alihossain_t239",
-   "subject": "Stop tracking IntelliJ workspace.xml",
-   "full": "bdc7b8ca5222aa1c16b6fda0f96dd7825268c287",
-   "fetchedAt": "2026-10-25T17:52",
-   "new": 1,
+   "commit": "98b2806",
+   "date": "2026-10-26",
+   "author": "bishal16",
+   "subject": "update git ignore",
+   "full": "98b2806c1644779b04f71b198cc0c31afca0d5db",
+   "fetchedAt": "2026-10-31T16:22",
+   "new": 2,
    "commits": [
+    {
+     "c": "98b2806",
+     "d": "2026-10-26",
+     "a": "bishal16",
+     "s": "update git ignore"
+    },
     {
      "c": "bdc7b8c",
      "d": "2026-10-25",
@@ -367,7 +887,7 @@
    "author": "alihossain_t239",
    "subject": "filter by keyword was missing, added now",
    "full": "18e859c3c857ccca881dc6bd5fa5b44a84932956",
-   "fetchedAt": "2026-10-25T17:52",
+   "fetchedAt": "2026-10-31T16:22",
    "new": 2,
    "commits": [
     {
@@ -386,14 +906,165 @@
   },
   "frontend": {
    "branch": "origin/dev",
-   "commit": "f935110e",
-   "date": "2026-10-24",
-   "author": "Md. Mohiminur Rahman",
-   "subject": "Merge branch 'stock-lookup' into 'dev'",
-   "full": "f935110e065157454e8bf2621f46942c195f1789",
-   "fetchedAt": "2026-10-25T17:52",
-   "new": 0,
-   "commits": []
+   "commit": "7ba6b847",
+   "date": "2026-10-31",
+   "author": "Abu Sadat",
+   "subject": "Merge branch 'sadat' into 'dev'",
+   "full": "7ba6b847e2af9e4b908246e9cb8f1dea1ec718f1",
+   "fetchedAt": "2026-10-31T16:22",
+   "new": 63,
+   "commits": [
+    {
+     "c": "7ba6b847",
+     "d": "2026-10-31",
+     "a": "Abu Sadat",
+     "s": "Merge branch 'sadat' into 'dev'"
+    },
+    {
+     "c": "932ed78e",
+     "d": "2026-10-31",
+     "a": "mailtoabusadat",
+     "s": "make build success"
+    },
+    {
+     "c": "082d9a89",
+     "d": "2026-10-31",
+     "a": "Md. Mohiminur Rahman",
+     "s": "Merge branch 'rahi-new' into 'dev'"
+    },
+    {
+     "c": "c961dbdd",
+     "d": "2026-10-31",
+     "a": "Mohi Minur",
+     "s": "Merge branch 'dev' into rahi-new"
+    },
+    {
+     "c": "3b4d0851",
+     "d": "2026-10-31",
+     "a": "Mohi Minur",
+     "s": "approval api refactored"
+    },
+    {
+     "c": "1e757e88",
+     "d": "2026-10-31",
+     "a": "Md. Mohiminur Rahman",
+     "s": "Merge branch 'rahi-new' into 'dev'"
+    },
+    {
+     "c": "0b2b7403",
+     "d": "2026-10-31",
+     "a": "Mohi Minur",
+     "s": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/smartpos-web into rahi-new"
+    },
+    {
+     "c": "ff936479",
+     "d": "2026-10-31",
+     "a": "Mohi Minur",
+     "s": "approval api refactored"
+    },
+    {
+     "c": "41cdb736",
+     "d": "2026-10-31",
+     "a": "Abu Sadat",
+     "s": "Merge branch 'sadat' into 'dev'"
+    },
+    {
+     "c": "da65e2b6",
+     "d": "2026-10-31",
+     "a": "mailtoabusadat",
+     "s": "mobile and desktop menu open close issue fixed"
+    },
+    {
+     "c": "cddbbc70",
+     "d": "2026-10-29",
+     "a": "Abu Sadat",
+     "s": "Merge branch 'sadat' into 'dev'"
+    },
+    {
+     "c": "24c3dd2f",
+     "d": "2026-10-29",
+     "a": "mailtoabusadat",
+     "s": "Merge branch 'dev' into sadat"
+    },
+    {
+     "c": "375b9200",
+     "d": "2026-10-29",
+     "a": "mailtoabusadat",
+     "s": "Task #23733 Code optimization and apply secured token for all features inprogress"
+    },
+    {
+     "c": "78cafec1",
+     "d": "2026-10-29",
+     "a": "mailtoabusadat",
+     "s": "make voucher viewable"
+    },
+    {
+     "c": "f6619641",
+     "d": "2026-10-29",
+     "a": "Md. Mohiminur Rahman",
+     "s": "Merge branch 'rahi-new' into 'dev'"
+    },
+    {
+     "c": "5f744ed6",
+     "d": "2026-10-29",
+     "a": "Mohi Minur",
+     "s": "Merge branch 'dev' into rahi-new"
+    },
+    {
+     "c": "25d4a011",
+     "d": "2026-10-29",
+     "a": "Mohi Minur",
+     "s": "survey customer viewable"
+    },
+    {
+     "c": "10acc510",
+     "d": "2026-10-29",
+     "a": "Abu Sadat",
+     "s": "Merge branch 'sadat' into 'dev'"
+    },
+    {
+     "c": "19ad4dd4",
+     "d": "2026-10-29",
+     "a": "mailtoabusadat",
+     "s": "merge with dev"
+    },
+    {
+     "c": "5d5e07e3",
+     "d": "2026-10-29",
+     "a": "mailtoabusadat",
+     "s": "quick fix"
+    },
+    {
+     "c": "b27abf15",
+     "d": "2026-10-29",
+     "a": "Md. Mohiminur Rahman",
+     "s": "Merge branch 'rahi-new' into 'dev'"
+    },
+    {
+     "c": "84e020a4",
+     "d": "2026-10-29",
+     "a": "Mohi Minur",
+     "s": "build success"
+    },
+    {
+     "c": "29b440e4",
+     "d": "2026-10-29",
+     "a": "Mohi Minur",
+     "s": "Merge branch 'dev' into rahi-new"
+    },
+    {
+     "c": "6042a9c6",
+     "d": "2026-10-29",
+     "a": "Mohi Minur",
+     "s": "fixed build issue"
+    },
+    {
+     "c": "6244e593",
+     "d": "2026-10-29",
+     "a": "Mohi Minur",
+     "s": "operation sales implement token"
+    }
+   ]
   }
  },
  "changes": {
@@ -411,6 +1082,60 @@
     "user_working_location_history",
     "business_area_id",
     "type UUID → Integer"
+   ],
+   [
+    "configuration",
+    "incentive_scheme_percentages",
+    "incentive_scheme_ids",
+    "column added"
+   ],
+   [
+    "configuration",
+    "incentive_scheme_percentages",
+    "incentive_schemes",
+    "column removed"
+   ],
+   [
+    "inventory",
+    "consumeable_stocks",
+    "version",
+    "column added"
+   ],
+   [
+    "inventory",
+    "product_instances",
+    "reserved_at",
+    "column added"
+   ],
+   [
+    "inventory",
+    "product_instances",
+    "sold_invoice_number",
+    "column added"
+   ],
+   [
+    "inventory",
+    "product_stock_summary",
+    "version",
+    "column added"
+   ],
+   [
+    "product",
+    "product_price_history",
+    "price_type_id",
+    "type com.walton.pos.product.model.PriceType → com.walton.pos.product.modules.pricetype.entity.PriceType"
+   ],
+   [
+    "report",
+    "item_ledger_entry_snapshots",
+    "product_category",
+    "column added"
+   ],
+   [
+    "report",
+    "item_ledger_entry_snapshots",
+    "unit",
+    "column added"
    ]
   ],
   "ops": [
@@ -430,8 +1155,43 @@
     "operation removed"
    ],
    [
+    "approval",
+    "getAllApprovalPathRoleUsers",
+    "operation added"
+   ],
+   [
+    "approval",
+    "getAllApprovalRequests",
+    "operation added"
+   ],
+   [
+    "authentication",
+    "downloadUsersCsv",
+    "operation added"
+   ],
+   [
+    "authentication",
+    "downloadUsersPdf",
+    "operation added"
+   ],
+   [
+    "authentication",
+    "generateUserDownloadUrl",
+    "operation added"
+   ],
+   [
+    "authentication",
+    "generateUserUploadUrl",
+    "operation added"
+   ],
+   [
     "authentication",
     "getDocumentByUser",
+    "operation added"
+   ],
+   [
+    "authentication",
+    "getUserDocumentDownloadUrl",
     "operation added"
    ],
    [
@@ -451,12 +1211,242 @@
    ],
    [
     "authorization",
+    "downloadMenusCsv",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadMenusPdf",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadMerchantPermissionsCsv",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadMerchantPermissionsPdf",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadPermissionGroupPermissionsCsv",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadPermissionGroupPermissionsPdf",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadPermissionGroupsCsv",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadPermissionGroupsPdf",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadPermissionsCsv",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadPermissionsPdf",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadRoleAccessCsv",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadRoleAccessPdf",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadRolesCsv",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadRolesPdf",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadUserPermissionGroupsCsv",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadUserPermissionGroupsPdf",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadUserPermissionsCsv",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadUserPermissionsPdf",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadUserRolesCsv",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadUserRolesPdf",
+    "operation added"
+   ],
+   [
+    "authorization",
     "getAllActivePermissionGroupSummary",
     "operation added"
    ],
    [
     "authorization",
     "getAllActiveRoleSummary",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "getPermissionsByMenuId",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "getPermissionsByMenuRoute",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadBusinessAreaTypesCsv",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadBusinessAreaTypesPdf",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadBusinessAreasCsv",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadBusinessAreasPdf",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadCommissioneratesCsv",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadCommissioneratesPdf",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadGeographyCsv",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadGeographyPdf",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadIncentiveSchemesCsv",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadIncentiveSchemesPdf",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadMerchantBinsCsv",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadMerchantBinsPdf",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadMerchantsCsv",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadMerchantsPdf",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadOpeningEntriesCsv",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadOpeningEntriesPdf",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadSalesHubStoresCsv",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadSalesHubStoresPdf",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadSalesHubsCsv",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadSalesHubsPdf",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadSystemParametersCsv",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadSystemParametersPdf",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadVersionHistoryCsv",
+    "operation added"
+   ],
+   [
+    "configuration",
+    "downloadVersionHistoryPdf",
     "operation added"
    ],
    [
@@ -467,6 +1457,31 @@
    [
     "configuration",
     "getAllActiveBusinessAreaTypeSummary",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadItemLedgersCsv",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadItemLedgersPdf",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadProductStockSummariesCsv",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadProductStockSummariesPdf",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "reverseInvoiceStock",
     "operation added"
    ],
    [
@@ -693,24 +1708,247 @@
     "notification",
     "smsTemplateContentWithPaginationAndSortingAndOrder",
     "operation removed"
+   ],
+   [
+    "product",
+    "downloadBrandsCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadBrandsPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadBusinessControllersCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadBusinessControllersPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadConsumableCategoriesCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadConsumableCategoriesPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadConsumableItemsCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadConsumableItemsPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadConsumableSuppliersCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadConsumableSuppliersPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadPriceTypesCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadPriceTypesPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductAttributeAssignedValuesCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductAttributeAssignedValuesPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductAttributesCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductAttributesPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductBatchesCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductBatchesPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductCategoriesCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductCategoriesPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductDeclaredPricesCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductDeclaredPricesPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductLinesCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductLinesPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductModelsCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductModelsPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductPricesCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductPricesPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductSKUsCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductSKUsPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductTypesCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadProductTypesPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadStockControllersCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadStockControllersPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadUnitsOfMeasurementCsv",
+    "operation added"
+   ],
+   [
+    "product",
+    "downloadUnitsOfMeasurementPdf",
+    "operation added"
+   ],
+   [
+    "product",
+    "brandByMerchant",
+    "operation removed"
+   ],
+   [
+    "report",
+    "generateStockValuationReport",
+    "operation added"
    ]
   ],
   "calls": [],
-  "kafka": []
+  "kafka": [
+   [
+    "listens",
+    "authorization",
+    "user-roles-topic",
+    "authz-group",
+    "added"
+   ]
+  ]
  },
  "counts": {
-  "commits": 18,
-  "repos": 11,
-  "schema": 2,
-  "ops": 56,
+  "commits": 167,
+  "repos": 17,
+  "schema": 11,
+  "ops": 152,
   "calls": 0,
-  "kafka": 0,
-  "drift": 13
+  "kafka": 1,
+  "drift": 24
  },
  "drift": [
   {
    "kind": "jwt",
+   "svc": "product",
+   "msg": "verifies the JWT in code; the Atlas says the opposite"
+  },
+  {
+   "kind": "jwt",
+   "svc": "approval",
+   "msg": "verifies the JWT in code; the Atlas says the opposite"
+  },
+  {
+   "kind": "jwt",
    "svc": "inventory",
+   "msg": "verifies the JWT in code; the Atlas says the opposite"
+  },
+  {
+   "kind": "jwt",
+   "svc": "policy",
+   "msg": "verifies the JWT in code; the Atlas says the opposite"
+  },
+  {
+   "kind": "jwt",
+   "svc": "promotion",
+   "msg": "verifies the JWT in code; the Atlas says the opposite"
+  },
+  {
+   "kind": "jwt",
+   "svc": "payment",
    "msg": "verifies the JWT in code; the Atlas says the opposite"
   },
   {
@@ -719,34 +1957,54 @@
    "msg": "verifies the JWT in code; the Atlas says the opposite"
   },
   {
+   "kind": "port",
+   "svc": "sales",
+   "msg": "Atlas lists a wrong port sales → order, but code now matches"
+  },
+  {
+   "kind": "kafka",
+   "svc": "authorization",
+   "msg": "authorization listens to user-roles-topic in code; the Atlas doesn't show it"
+  },
+  {
    "kind": "review",
    "svc": "accounts",
-   "msg": "1 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
-  },
-  {
-   "kind": "review",
-   "svc": "authentication",
-   "msg": "1 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
-  },
-  {
-   "kind": "review",
-   "svc": "authorization",
    "msg": "3 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   },
   {
    "kind": "review",
-   "svc": "compliance",
-   "msg": "1 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+   "svc": "approval",
+   "msg": "4 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   },
   {
    "kind": "review",
-   "svc": "configuration",
+   "svc": "authentication",
+   "msg": "10 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "authorization",
+   "msg": "17 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "compliance",
    "msg": "2 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   },
   {
    "kind": "review",
-   "svc": "inventory",
+   "svc": "configuration",
+   "msg": "19 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "customer",
    "msg": "1 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "inventory",
+   "msg": "8 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   },
   {
    "kind": "review",
@@ -756,25 +2014,191 @@
   {
    "kind": "review",
    "svc": "payment",
-   "msg": "2 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+   "msg": "3 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   },
   {
    "kind": "review",
    "svc": "policy",
-   "msg": "1 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+   "msg": "4 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   },
   {
    "kind": "review",
    "svc": "product",
+   "msg": "25 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "promotion",
+   "msg": "1 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "report",
    "msg": "2 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   },
   {
    "kind": "review",
    "svc": "sales",
-   "msg": "2 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+   "msg": "3 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   }
  ],
  "history": [
+  {
+   "at": "2026-10-31T16:22",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 167,
+   "repos": 17,
+   "schema": 11,
+   "ops": 152,
+   "calls": 0,
+   "kafka": 1,
+   "drift": 24
+  },
+  {
+   "at": "2026-10-31T16:22",
+   "fetchOk": false,
+   "fetchSkipped": true,
+   "commits": 167,
+   "repos": 17,
+   "schema": 11,
+   "ops": 152,
+   "calls": 0,
+   "kafka": 1,
+   "drift": 24
+  },
+  {
+   "at": "2026-10-26T15:14",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 31,
+   "repos": 13,
+   "schema": 3,
+   "ops": 59,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 20
+  },
+  {
+   "at": "2026-10-26T15:04",
+   "fetchOk": false,
+   "fetchSkipped": true,
+   "commits": 31,
+   "repos": 13,
+   "schema": 3,
+   "ops": 59,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 20
+  },
+  {
+   "at": "2026-10-26T13:30",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 31,
+   "repos": 13,
+   "schema": 3,
+   "ops": 59,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 20
+  },
+  {
+   "at": "2026-10-26T13:05",
+   "fetchOk": false,
+   "fetchSkipped": true,
+   "commits": 31,
+   "repos": 13,
+   "schema": 3,
+   "ops": 59,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 20
+  },
+  {
+   "at": "2026-10-26T11:30",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 29,
+   "repos": 13,
+   "schema": 3,
+   "ops": 58,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 20
+  },
+  {
+   "at": "2026-10-26T11:25",
+   "fetchOk": false,
+   "fetchSkipped": true,
+   "commits": 29,
+   "repos": 13,
+   "schema": 3,
+   "ops": 58,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 20
+  },
+  {
+   "at": "2026-10-26T11:21",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 29,
+   "repos": 13,
+   "schema": 3,
+   "ops": 58,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 20
+  },
+  {
+   "at": "2026-10-26T09:30",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 20,
+   "repos": 11,
+   "schema": 3,
+   "ops": 57,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 14
+  },
+  {
+   "at": "2026-10-26T09:25",
+   "fetchOk": false,
+   "fetchSkipped": true,
+   "commits": 20,
+   "repos": 11,
+   "schema": 3,
+   "ops": 57,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 14
+  },
+  {
+   "at": "2026-10-26T09:25",
+   "fetchOk": false,
+   "fetchSkipped": true,
+   "commits": 20,
+   "repos": 11,
+   "schema": 3,
+   "ops": 57,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 14
+  },
+  {
+   "at": "2026-10-26T09:00",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 18,
+   "repos": 11,
+   "schema": 2,
+   "ops": 56,
+   "calls": 0,
+   "kafka": 0,
+   "drift": 13
+  },
   {
    "at": "2026-10-25T18:00",
    "fetchOk": false,
@@ -978,102 +2402,6 @@
    "calls": 0,
    "kafka": 0,
    "drift": 8
-  },
-  {
-   "at": "2026-10-24T14:30",
-   "fetchOk": false,
-   "fetchSkipped": true,
-   "commits": 15,
-   "repos": 7,
-   "schema": 0,
-   "ops": 1,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 8
-  },
-  {
-   "at": "2026-10-24T14:29",
-   "fetchOk": false,
-   "fetchSkipped": true,
-   "commits": 15,
-   "repos": 7,
-   "schema": 0,
-   "ops": 1,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 8
-  },
-  {
-   "at": "2026-10-24T14:27",
-   "fetchOk": true,
-   "fetchSkipped": false,
-   "commits": 0,
-   "repos": 0,
-   "schema": 0,
-   "ops": 0,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 3
-  },
-  {
-   "at": "2026-10-24T14:26",
-   "fetchOk": true,
-   "fetchSkipped": false,
-   "commits": 0,
-   "repos": 0,
-   "schema": 0,
-   "ops": 0,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 3
-  },
-  {
-   "at": "2026-10-24T14:26",
-   "fetchOk": true,
-   "fetchSkipped": false,
-   "commits": 15,
-   "repos": 7,
-   "schema": 0,
-   "ops": 1,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 8
-  },
-  {
-   "at": "2026-10-19T09:30",
-   "fetchOk": true,
-   "fetchSkipped": false,
-   "commits": 0,
-   "repos": 0,
-   "schema": 0,
-   "ops": 0,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 0
-  },
-  {
-   "at": "2026-10-18T17:34",
-   "fetchOk": false,
-   "fetchSkipped": true,
-   "commits": 0,
-   "repos": 0,
-   "schema": 0,
-   "ops": 0,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 0
-  },
-  {
-   "at": "2026-10-18T17:24",
-   "fetchOk": false,
-   "fetchSkipped": true,
-   "commits": 0,
-   "repos": 0,
-   "schema": 0,
-   "ops": 0,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 0
   }
  ],
  "published": {

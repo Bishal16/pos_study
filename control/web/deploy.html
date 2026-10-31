@@ -2,39 +2,46 @@
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Deploy · UniPOS Control</title>
-<link rel="stylesheet" href="/app.css"><script src="/app.js"></script>
+<link rel="stylesheet" href="app.css"><script src="app.js"></script>
 </head><body>
 <main>
   <h1>Deploy a service</h1>
   <p class="sub">Runs <code>projects/deploy-script/deploy &lt;env&gt; &lt;service&gt;</code>. It builds from your <b>local folder</b> (uncommitted files included), uploads the WAR, then on the server runs <b>terraform destroy → apply</b> and restarts Apollo.</p>
   <div id="dry"></div>
   <div class="panel">
-    <div class="row">
-      <label>Environment <select id="env"><option value="dev">dev</option><option value="demo">demo</option></select></label>
-      <label>Service <select id="svc"></select></label>
+    <div class="controls">
+      <div class="field"><span>Environment</span>
+        <div class="seg" id="envseg"><button type="button" data-v="dev" class="on">dev</button><button type="button" data-v="demo">demo</button></div>
+        <input type="hidden" id="env" value="dev"></div>
+      <label class="field"><span>Service</span><select id="svc"></select></label>
       <button id="check" class="primary">Pre-check</button>
-      <button id="build" title="mvn clean package -DskipTests in the service folder; nothing is uploaded">Build only</button>
     </div>
   </div>
   <div id="pre"></div>
   <div id="runbox" hidden>
     <h2 id="runtitle"></h2>
-    <div class="steps" id="steps"></div>
-    <div class="row" style="margin-bottom:8px"><span id="state" class="muted"></span><button id="cancel" hidden>Cancel build</button></div>
+    <div class="stepper" id="steps"></div>
+    <div class="row" style="margin-bottom:8px"><button class="estop" id="estop" hidden><span class="sq"></span><span class="t">Emergency stop</span></button><span id="state" class="muted"></span></div>
     <pre class="log" id="log"></pre>
   </div>
 </main>
 <script>
-const PHASES = [['build', '🔨 build', /Building|BUILD/], ['upload', '📤 upload', /Uploading WAR/], ['destroy', '🗑 terraform destroy', /Terraform destroy/],
-  ['apply', '🚀 terraform apply', /Terraform (init|plan|apply)/], ['apollo', '🔄 restart Apollo', /Restarting Apollo/], ['done', '✅ done', /Deployment completed successfully/]];
+const PHASES = [['Build', /Building|BUILD/], ['Upload WAR', /Uploading WAR/], ['Terraform destroy', /Terraform destroy/],
+  ['Terraform apply', /Terraform (init|plan|apply)/], ['Restart Apollo', /Restarting Apollo/], ['Done', /Deployment completed successfully/]];
 let pre = null;
 
-function steps(text, finished, ok) {
+// mode: 'preview' (all pending) | 'running' | 'ok' | 'fail'
+function stepper(text, mode) {
   let reached = -1;
-  PHASES.forEach((p, i) => { if (p[2].test(text)) reached = i; });
-  $('#steps').innerHTML = PHASES.map((p, i) => {
-    const cls = i < reached || (i === reached && finished && ok) ? 'done' : i === reached ? 'on' : '';
-    return `<span class="${cls} ${p[0] === 'destroy' ? 'danger' : ''}">${p[1]}</span>`;
+  PHASES.forEach((p, i) => { if (p[1].test(text)) reached = i; });
+  const cur = Math.max(reached, 0);
+  const state = i => mode === 'preview' ? 'pending' : mode === 'ok' ? 'done'
+    : i < cur ? 'done' : i === cur ? (mode === 'fail' ? 'failed' : 'active') : 'pending';
+  return PHASES.map((p, i) => {
+    const st = state(i);
+    const n = st === 'done' ? '✓' : st === 'failed' ? '✕' : i + 1;
+    return (i ? `<i class="link ${st === 'done' || st === 'active' || st === 'failed' ? 'done' : ''}"></i>` : '') +
+      `<span class="step ${st}"><span class="n">${n}</span>${p[0]}</span>`;
   }).join('');
 }
 
@@ -43,7 +50,7 @@ async function init() {
   $('#svc').innerHTML = s.services.map(x => `<option>${esc(x)}</option>`).join('');
   if (s.dryRun) $('#dry').innerHTML = '<div class="note info">DRY RUN mode (CONTROL_DRY_RUN=1): Deploy only prints what it would run. Nothing is built or uploaded.</div>';
   const h = await api('/api/history');
-  if (h.runningId && /-(deploy|build)$/.test(h.runningId)) attach(h.runningId);
+  if (h.runningId && /-deploy$/.test(h.runningId)) attach(h.runningId);
 }
 
 async function check() {
@@ -69,12 +76,13 @@ async function check() {
       <tr><th>Last deploy here</th><td>${ld ? `${esc(when(ld.end))} · commit <code>${esc(ld.args.commit)}</code> · ${ld.exit === 0 ? '<span class="badge b-ok">ok</span>' : '<span class="badge b-bad">failed</span>'}${ld.dryRun ? ' <span class="badge">dry run</span>' : ''}` : '<span class="muted">none from this site</span>'}</td></tr>
     </table>
     ${warn.map(([k, m]) => `<div class="note ${k}">${esc(m)}</div>`).join('')}
-    <div class="steps">${PHASES.map(p => `<span class="${p[0] === 'destroy' ? 'danger' : ''}">${p[1]}</span>`).join('')}</div>
-    <p class="muted">Once started, a deploy cannot be cancelled from here: stopping halfway through terraform could leave the server torn down.</p>
-    <div class="row"><label>Type <b>${esc(svc)}</b> to confirm <input type="text" id="confirm" autocomplete="off" spellcheck="false"></label>
-      <button class="danger" id="deploy" disabled>Deploy ${esc(svc)} to ${esc(env)}</button></div>
+    <div class="stepper">${stepper('', 'preview')}</div>
+    <p class="muted">While it runs you can press <b>Emergency stop</b>. It kills the local deploy at once, but stopping during terraform can leave the service down on the server: use it only when something is clearly wrong.</p>
+    <div class="controls confirm"><label class="field"><span>Type “${esc(svc)}” to confirm</span><input type="text" id="confirm" placeholder="${esc(svc)}" autocomplete="off" spellcheck="false"></label>
+      <button class="danger" id="deploy" disabled>Deploy ${esc(svc)} to ${esc(env)}</button>
+      <button class="estop" disabled title="Available while a deploy is running"><span class="sq"></span><span class="t">Emergency stop</span></button></div>
   </div>`;
-  $('#confirm').oninput = e => { $('#deploy').disabled = e.target.value !== svc; };
+  $('#confirm').oninput = e => { const ok = e.target.value === svc; $('#deploy').disabled = !ok; e.target.classList.toggle('match', ok); };
   $('#deploy').onclick = () => start('deploy', { env, service: svc, commit: pre.full, confirm: $('#confirm').value });
 }
 
@@ -86,29 +94,54 @@ async function start(action, body) {
   } catch (e) { alertNote(e.message); }
 }
 
+// Emergency stop: first click arms it for 5 s, second click stops.
+function armStop(id) {
+  const b = $('#estop');
+  let armed = null;
+  b.hidden = false; b.disabled = false; b.classList.remove('armed');
+  b.querySelector('.t').textContent = 'Emergency stop';
+  b.onclick = async () => {
+    if (!armed) {
+      b.classList.add('armed');
+      b.querySelector('.t').textContent = 'Click again to stop now';
+      armed = setTimeout(() => { armed = null; b.classList.remove('armed'); b.querySelector('.t').textContent = 'Emergency stop'; }, 5000);
+      return;
+    }
+    clearTimeout(armed);
+    b.disabled = true; b.querySelector('.t').textContent = 'Stopping…';
+    try { await api('/api/cancel/' + id, { emergency: true }); } catch (e) { alertNote(e.message); b.disabled = false; }
+  };
+}
+
 function attach(id) {
-  const action = id.endsWith('-build') ? 'build' : 'deploy';
   $('#runbox').hidden = false;
-  $('#runtitle').textContent = action === 'build' ? 'Build' : 'Deploy';
-  $('#steps').hidden = action === 'build';
+  $('#runtitle').textContent = 'Deploy';
+  $('#steps').innerHTML = stepper('', 'running');
   $('#state').innerHTML = '<span class="spin"></span> running…';
-  $('#check').disabled = $('#build').disabled = true;
+  $('#check').disabled = true;
+  armStop(id);
   attachJob(id, $('#log'), {
-    cancelBtn: $('#cancel'),
-    onText: t => action === 'deploy' && steps(t, false),
+    onText: t => { $('#steps').innerHTML = stepper(t, 'running'); },
     onDone: (s, t) => {
-      const ok = s.job.exit === 0;
-      if (action === 'deploy') steps(t, true, ok);
-      $('#runtitle').textContent = `${action === 'build' ? 'Build' : 'Deploy'} ${s.job.args?.service || ''}${s.job.args?.env ? ' → ' + s.job.args.env : ''}`;
-      $('#state').innerHTML = `${ok ? '<span class="badge b-ok">success</span>' : `<span class="badge b-bad">failed (exit ${s.job.exit})</span>`} ${esc(s.job.summary || '')} · ${esc(dur(s.job))}`;
-      $('#check').disabled = $('#build').disabled = false;
+      const ok = s.job.exit === 0, stopped = /EMERGENCY STOP/.test(s.job.summary || '');
+      $('#steps').innerHTML = stepper(t, ok ? 'ok' : 'fail');
+      $('#estop').hidden = true;
+      $('#runtitle').textContent = `Deploy ${s.job.args?.service || ''}${s.job.args?.env ? ' → ' + s.job.args.env : ''}`;
+      $('#state').innerHTML = (ok ? '<span class="badge b-ok">success</span>' : stopped ? '<span class="badge b-bad">stopped</span>' : `<span class="badge b-bad">failed (exit ${s.job.exit})</span>`) +
+        ` ${esc(s.job.summary || '')} · ${esc(dur(s.job))}`;
+      if (stopped) alertNote('Deploy was stopped. The service may be down or half-deployed on the server: check it, and deploy again when ready.', 'warn');
+      $('#check').disabled = false;
     }
   }).catch(e => alertNote(e.message));
 }
 
 $('#check').onclick = () => check().catch(e => alertNote(e.message));
-$('#build').onclick = () => start('build', { service: $('#svc').value });
-$('#env').onchange = $('#svc').onchange = () => { $('#pre').innerHTML = ''; };
+$('#svc').onchange = () => { $('#pre').innerHTML = ''; };
+$('#envseg').onclick = e => {
+  const b = e.target.closest('button'); if (!b) return;
+  $('#envseg').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+  $('#env').value = b.dataset.v; $('#pre').innerHTML = '';
+};
 init().catch(e => alertNote(e.message));
 </script>
 </body></html>

@@ -1,37 +1,4 @@
-// UniPOS · approval-service · generated from @Entity code (origin/dev 1555a24)
-
-Table approval.approval_action_history [note: 'entity ApprovalActionHistory'] {
-  approval_action_history_id uuid [pk]
-  approval_request_id uuid [not null]
-  approval_request_stage_id uuid
-  actor_id uuid [not null]
-  action_by uuid
-  action_type varchar(30) [not null]
-  comments varchar(250)
-  previous_status varchar(30)
-  current_status varchar(30)
-  action_time timestamp [not null]
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [not null, note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
-}
-
-Table approval.approval_delegations [note: 'entity ApprovalDelegation'] {
-  delegation_id uuid [pk]
-  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
-  from_user_id uuid [not null, note: '→ authentication.users.user_id (other service, no FK)']
-  to_user_id uuid [not null, note: '→ authentication.users.user_id (other service, no FK)']
-  start_date date [not null]
-  end_date date [not null]
-  reason varchar(250)
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [not null, note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
-}
+// UniPOS · approval-service · generated from @Entity code (origin/dev 55cfecc)
 
 Table approval.approval_logs [note: 'entity ApprovalLog'] {
   approval_log_id uuid [pk]
@@ -74,6 +41,27 @@ Table approval.approval_path_roles [note: 'entity ApprovalPathRole'] {
   business_area_type_id integer
 }
 
+Table approval.approval_path_stages [note: 'entity ApprovalPathStage'] {
+  approval_path_stage_id uuid [pk]
+  approval_path_id uuid [not null]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  execution_order_number integer [not null]
+  business_area_type_id integer
+  related_business_area_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
+  completion_rule varchar(20) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table approval.approval_path_stage_roles [note: 'entity ApprovalPathStageRole'] {
+  approval_path_stage_role_id uuid [pk]
+  approval_path_stage_id uuid [not null]
+  role_id bigint [not null, note: '→ authorization.roles.role_id (other service, no FK)']
+}
+
 Table approval.approval_path_role_users [note: 'entity ApprovalPathRoleUser'] {
   approval_path_role_user_id uuid [pk]
   approval_path_role_id uuid [not null]
@@ -104,14 +92,12 @@ Table approval.approval_path_role_users_history [note: 'entity ApprovalPathRoleU
   updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
 }
 
-Table approval.approval_path_stages [note: 'entity ApprovalPathStage'] {
-  approval_path_stage_id uuid [pk]
-  approval_path_id uuid [not null]
-  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
-  execution_order_number integer [not null]
-  business_area_type_id integer
-  related_business_area_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
-  completion_rule varchar(20) [not null]
+Table approval.approval_policies [note: 'entity ApprovalPolicy'] {
+  approval_policy_id uuid [pk]
+  policy_name varchar(255) [not null]
+  workflow_id uuid [not null]
+  condition varchar(255) [not null]
+  comment varchar(255) [not null]
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [not null, note: 'inherited from BaseEntity']
   is_active boolean [not null, note: 'inherited from BaseEntity']
@@ -119,18 +105,17 @@ Table approval.approval_path_stages [note: 'entity ApprovalPathStage'] {
   updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
 }
 
-Table approval.approval_path_stage_roles [note: 'entity ApprovalPathStageRole'] {
-  approval_path_stage_role_id uuid [pk]
-  approval_path_stage_id uuid [not null]
-  role_id bigint [not null, note: '→ authorization.roles.role_id (other service, no FK)']
-}
-
-Table approval.approval_policies [note: 'entity ApprovalPolicy'] {
-  approval_policy_id uuid [pk]
-  policy_name varchar(255) [not null]
-  workflow_id uuid [not null]
-  condition varchar(255) [not null]
-  comment varchar(255) [not null]
+Table approval.approval_action_history [note: 'entity ApprovalActionHistory'] {
+  approval_action_history_id uuid [pk]
+  approval_request_id uuid [not null]
+  approval_request_stage_id uuid
+  actor_id uuid [not null]
+  action_by uuid
+  action_type varchar(30) [not null]
+  comments varchar(250)
+  previous_status varchar(30)
+  current_status varchar(30)
+  action_time timestamp [not null]
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [not null, note: 'inherited from BaseEntity']
   is_active boolean [not null, note: 'inherited from BaseEntity']
@@ -220,6 +205,21 @@ Table approval.approval_workflows [note: 'entity ApprovalWorkflow'] {
   updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
 }
 
+Table approval.approval_delegations [note: 'entity ApprovalDelegation'] {
+  delegation_id uuid [pk]
+  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  from_user_id uuid [not null, note: '→ authentication.users.user_id (other service, no FK)']
+  to_user_id uuid [not null, note: '→ authentication.users.user_id (other service, no FK)']
+  start_date date [not null]
+  end_date date [not null]
+  reason varchar(250)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
 Table approval.outbox [note: 'entity Outbox'] {
   id uuid [pk]
   aggregate_id uuid [not null]
@@ -254,18 +254,18 @@ Table approval.workflow_approval_path_mappings [note: 'entity WorkflowApprovalPa
   updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
 }
 
-Ref: approval.approval_action_history.approval_request_id > approval.approval_requests.approval_request_id
-Ref: approval.approval_action_history.approval_request_stage_id > approval.approval_request_stages.approval_request_stage_id
 Ref: approval.approval_logs.approval_request_id > approval.approval_requests.approval_request_id
 Ref: approval.approval_logs.approval_path_role_user_id > approval.approval_path_role_users.approval_path_role_user_id
 Ref: approval.approval_path_assigned_workflows.approval_path_id > approval.approval_paths.approval_path_id
 Ref: approval.approval_path_assigned_workflows.workflow_id > approval.approval_workflows.workflow_id
 Ref: approval.approval_path_roles.approval_path_id > approval.approval_paths.approval_path_id
-Ref: approval.approval_path_role_users.approval_path_role_id > approval.approval_path_roles.approval_path_role_id
-Ref: approval.approval_path_role_users_history.approval_path_role_id > approval.approval_path_roles.approval_path_role_id
 Ref: approval.approval_path_stages.approval_path_id > approval.approval_paths.approval_path_id
 Ref: approval.approval_path_stage_roles.approval_path_stage_id > approval.approval_path_stages.approval_path_stage_id
+Ref: approval.approval_path_role_users.approval_path_role_id > approval.approval_path_roles.approval_path_role_id
+Ref: approval.approval_path_role_users_history.approval_path_role_id > approval.approval_path_roles.approval_path_role_id
 Ref: approval.approval_policies.workflow_id > approval.approval_workflows.workflow_id
+Ref: approval.approval_action_history.approval_request_id > approval.approval_requests.approval_request_id
+Ref: approval.approval_action_history.approval_request_stage_id > approval.approval_request_stages.approval_request_stage_id
 Ref: approval.approval_requests.workflow_id > approval.approval_workflows.workflow_id
 Ref: approval.approval_requests.path_id > approval.approval_paths.approval_path_id
 Ref: approval.approval_request_stages.approval_request_id > approval.approval_requests.approval_request_id

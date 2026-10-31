@@ -17,9 +17,8 @@ Needs only `python3` (standard library). Only this PC can open it: the server li
 |---|---|---|
 | Home | nothing (local `git` reads only) | no |
 | Pull | `projects/pull-all.sh` (`git pull --ff-only` per repo) | yes, fast-forwards working copies; never merges or overwrites |
-| Status | `projects/status-all.sh` | no |
+| Status | `git fetch` per repo, then `projects/status-all.sh`; adds a "↓ Not pulled" group | no (fetch updates remote refs only) |
 | Deploy | `projects/deploy-script/deploy <dev\|demo> <service>` | **yes, the dev/demo server**: build → upload → terraform destroy → apply → restart Apollo |
-| Deploy · Build only | `mvn -B clean package -DskipTests` in the service | only the service's `target/` folder |
 | Study | `_unipos-study/sync/refresh.sh` (with or without `--no-fetch`) | only `git fetch` + the study files |
 | History | nothing | no |
 
@@ -28,7 +27,7 @@ Also: `/atlas` and `/erd` serve the local Atlas and Living ERD.
 ## Deploy safety
 - Choose env + service → **Pre-check** shows the branch, commit, how far behind origin, and uncommitted files (which *will* be deployed, since the build uses your local folder).
 - Type the service name to enable the button. If the service's commit changes after the pre-check, the deploy is refused.
-- One job at a time. Pull/Status/Refresh/Build can be cancelled; **a deploy cannot** (stopping mid-terraform could leave the server down).
+- One job at a time. Pull/Status/Refresh can be cancelled. A deploy has an **Emergency stop** (click twice within 5 s): it kills the local deploy at once, but commands already sent to the server may finish or be left half-done, so the service can be down until you deploy again.
 
 ## Safety of the server itself
 - The browser sends only an action name; the commands are fixed in `server.py`.

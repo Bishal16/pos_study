@@ -140,7 +140,11 @@ def parse_kafka(src):
     lis, prod = [], []
     for m in re.finditer(r"@KafkaListener\s*\((.*?)\)\s*\n", s, re.S):
         a = m.group(1)
-        topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+        # topics = "a" | {"a", "b"} | AppConstant.A | {X.A, "b"}; constants come back as "@const:A", resolved in main()
+        tm = re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\"|[\w.]+)", a)
+        if re.search(r"topics\s*=", a) and not tm:
+            print("warn: unparsed @KafkaListener topics:", " ".join(a.split())[:120], file=sys.stderr)
+        topics = [x or "@const:" + c.split(".")[-1] for x, c in re.findall(r"\"([\w.${}:-]+)\"|\b([A-Za-z_][\w.]*[A-Z_][A-Z0-9_]*)\b", tm.group(1))] if tm else []
         g = re.search(r"groupId\s*=\s*\"([^\"]+)\"", a)
         for t in topics:
             t = re.sub(r"^\$\{[\w.-]+:([\w.-]+)\}$", r"\1", t)
@@ -191,10 +195,12 @@ def main():
             print("missing", svc, file=sys.stderr)
             continue
         files = repo.files()
-        ents, ops, calls, lis, prod = [], [], {}, [], []
+        ents, ops, calls, lis, prod, consts = [], [], {}, [], [], {}
         for f in files:
             if f.endswith(".java"):
                 src = repo.read(f)
+                for m in re.finditer(r"static\s+final\s+String\s+(\w+)\s*=\s*\"([^\"]+)\"", src):
+                    consts.setdefault(m.group(1), m.group(2))
                 if "@Entity" in src:
                     e = parse_entity(src)
                     if e:
@@ -213,6 +219,8 @@ def main():
                 ops += parse_ops(repo.read(f))
         port, app, urls, ptopics, boot = props(repo, files)
         def resolve(t):
+            if t.startswith("@const:"):
+                t = consts.get(t[7:], t[7:])
             m = re.fullmatch(r"\$\{([\w.-]+)\}", t)
             return ptopics.get(m.group(1), t) if m else t
         lis = [dict(x, t=resolve(x["t"])) for x in lis]

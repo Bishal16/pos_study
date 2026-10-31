@@ -1,4 +1,4 @@
-// UniPOS · promotion-service · generated from @Entity code (origin/dev 7e0d7f6)
+// UniPOS · promotion-service · generated from @Entity code (origin/dev c1c17c0)
 
 Table promotion.customer_feedback [note: 'entity CustomerFeedback'] {
   feedback_id uuid [pk]

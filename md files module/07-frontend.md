@@ -1,8 +1,20 @@
 # 07 — Frontend (smartpos-web)
 
-> Status: **written, awaiting your review**. Last updated 2026-10-17.
-> Repo: `1frontend/smartpos-web`. ⚠ Your local copy is on branch **`sadat`** (a developer's branch, last commit 2026-10-15), not `dev` (`origin/dev` last merge 2026-10-12). Same for reading: what you see may be ahead of `dev`.
-> The repo has its own `CLAUDE.md` (architecture) and `ONBOARDING.md` (a beginner's one-week plan). Both are worth reading.
+> Last updated **2026-10-26** from **`origin/dev`** (`f935110e`, 2026-10-24). The earlier version was read from the `sadat` branch; `sadat` is now 5 commits ahead of dev (EMI / bank card work in progress) and missing nothing.
+> **Interactive version: Atlas level 7 "Frontend"** (screen map, a traced feature, request & login, start with AI). It's rebuilt from the code on every refresh by `atlas-src/extract_fe.py`.
+> `CLAUDE.md` and `ONBOARDING.md` exist only in your local folder. They're git-ignored, so not on GitLab.
+
+## 0. New on 2026-10-26 (from code)
+- **108 GraphQL operations the frontend calls exist in no backend schema**, on 91 pages. Most are in configuration (61) and users & permissions (29), e.g. `allBusinessPartners`, `SearchSalesHub`.
+  - configuration-service marks `SearchSalesHub` as a *deprecated API* (`db-migration-business-area-details.sql`), removed in the sales hub → business area change.
+  - Those screens are likely broken.
+  - authentication-service's own `ConfigurationServiceClient` still calls `SearchSalesHub` too.
+- **8 pages show mock data**: their service files return hard-coded rows, e.g. the sales policy list and approval policies.
+- **Two coding styles, about half the pages each:**
+  - modern: `src/graphql/*.graphql` (83 files, 261 operations) → codegen `XxxDocument` → `serverFetch` / `serverActionFetch`, 243 files;
+  - legacy: `src/services/**` (218 files), browser `fetch` to `NEXT_PUBLIC_GRAPHQL_ENDPOINT`. **204 of these, only 2 send a token.**
+- **No permission check on any page or button.** The menu only hides links.
+- Session: NextAuth cookie, 240 min; `SessionGuard` refreshes the session on activity. The backend refresh token is unused.
 
 ## 1. Stack
 Next.js **16.4** (App Router, Turbopack, `cacheComponents`, `proxy.ts` instead of middleware), React **19**, TypeScript strict, Tailwind v4 + shadcn/ui (`base-nova`), Apollo Client 4 + graphql-codegen, **NextAuth v5 beta**, next-intl (**en / bn**), Zustand, react-hook-form + zod, TanStack Table, recharts, tiptap. **No tests.** Runs under **PM2** as app `UniPosDev` on **192.168.20.192** (`ecosystem.config.js` is git-ignored).

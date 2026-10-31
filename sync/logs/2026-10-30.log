@@ -1,0 +1,270 @@
+=== 2026-10-30 09:00:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 09:30:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 10:00:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 10:30:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 11:00:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 11:30:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 12:00:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 12:30:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 13:00:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 13:30:02 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 14:00:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 14:30:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 15:00:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 15:30:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 16:00:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 16:30:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 17:00:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1
+=== 2026-10-30 17:30:01 refresh --auto
+FAILED: python3 -I extract.py in /home/mahathir/Downloads/projects/_unipos-study/atlas-src
+
+Traceback (most recent call last):
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 241, in <module>
+    main()
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 209, in main
+    l, p = parse_kafka(src)
+           ^^^^^^^^^^^^^^^^
+  File "/home/mahathir/Downloads/projects/_unipos-study/atlas-src/extract.py", line 143, in parse_kafka
+    topics = re.findall(r"\"([\w.${}:-]+)\"", re.search(r"topics\s*=\s*(\{[^}]*\}|\"[^\"]*\")", a).group(1)) if re.search(r"topics\s*=", a) else []
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+
+exit 1

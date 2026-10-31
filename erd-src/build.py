@@ -184,6 +184,15 @@ if os.path.exists(_sp):
 tpl = tpl.replace("<script>/*ERD_CORE*/</script>", '<script type="application/json" id="erd-data">' + json.dumps(_bundle, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + "</script>\n<script>/*ERD_CORE*/</script>")
 page = tpl.replace("/*ERD_CORE*/", open(os.path.join(HERE, "erd-core.js"), encoding="utf-8").read()) \
           .replace("/*APP_JS*/", open(os.path.join(HERE, "app.js"), encoding="utf-8").read())
+# "⌂ Control" button: active only when served by the local control panel (control/server.py)
+_hb = os.path.join(os.path.dirname(HERE), "control", "web", "home-button.html")
+if os.path.exists(_hb):
+    _hbs = open(_hb, encoding="utf-8").read()
+    page = page.replace("</body>", _hbs + "</body>", 1) if "</body>" in page else page + _hbs
+# saved light/dark choice, applied before paint (shared with the control panel)
+_te = os.path.join(os.path.dirname(HERE), "control", "web", "theme-early.js")
+if os.path.exists(_te):
+    page = page.replace('<meta charset="utf-8">\n', '<meta charset="utf-8">\n<script>' + open(_te, encoding="utf-8").read() + '</script>\n', 1)
 open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(page)
 
 n_ref = sum(len(v) for v in refs.values())

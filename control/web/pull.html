@@ -2,39 +2,33 @@
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Pull · UniPOS Control</title>
-<link rel="stylesheet" href="/app.css"><script src="/app.js"></script>
+<link rel="stylesheet" href="app.css"><script src="app.js"></script>
 </head><body>
 <main>
-  <h1>Pull all repos</h1>
-  <p class="sub">Runs <code>projects/pull-all.sh</code>: <code>git pull --ff-only</code> on the checked-out branch of every repo. It never merges, stashes or overwrites; repos with local changes or diverged branches are skipped and listed.</p>
-  <div class="row"><button class="primary" id="go">⬇ Pull all</button><button id="cancel" hidden>Cancel</button><span class="muted" id="state"></span></div>
+  <div class="panel hero">
+    <div><h1>Pull all repos</h1><p class="sub">Runs <code>projects/pull-all.sh</code>: <code>git pull --ff-only</code> on the checked-out branch of every repo. It never merges, stashes or overwrites; repos with local changes or a diverged branch are skipped and listed.</p></div>
+    <div class="act"><div class="btns"><button id="cancel" hidden>Cancel</button><button class="primary" id="go">⬇ Pull all</button></div><div class="lastrun" id="last"></div></div>
+  </div>
+  <div class="panel livecard" id="live" hidden>
+    <div class="stepper" id="steps"></div>
+    <div class="progress"><i id="bar"></i></div>
+    <div class="cur" id="cur"></div>
+  </div>
   <div id="result"></div>
-  <details id="raw"><summary>Full log</summary><pre class="log" id="log"></pre></details>
+  <details class="logcard" id="raw"><summary>Full log</summary><pre class="log" id="log"></pre></details>
 </main>
 <script>
-const ACTION = 'pull';
-function show(s, text) {
-  const ok = s.job.exit === 0;
-  $('#state').innerHTML = `${ok ? '<span class="badge b-ok">done</span>' : `<span class="badge b-bad">exit ${s.job.exit}</span>`} ${esc(when(s.job.end))} · ${esc(dur(s.job))}`;
-  const sec = parseSections(text);
-  $('#result').innerHTML = sec.length ? '<h2>Result</h2>' + renderGroups(sec) : '';
-  $('#go').disabled = false;
-}
-async function go(attachId) {
-  $('#go').disabled = true; $('#raw').open = true; $('#result').innerHTML = '';
-  $('#state').innerHTML = '<span class="spin"></span> running…';
-  try {
-    const opts = { cancelBtn: $('#cancel'), onDone: show };
-    attachId ? await attachJob(attachId, $('#log'), opts) : await runJob(ACTION, {}, $('#log'), opts);
-  } catch (e) { alertNote(e.message); $('#go').disabled = false; $('#state').textContent = ''; }
-}
-$('#go').onclick = () => go();
-(async () => {
-  const h = await api('/api/history');
-  if (h.runningId && h.runningId.endsWith('-' + ACTION)) return go(h.runningId);
-  const lastRun = [...h.history].reverse().find(x => x.action === ACTION);
-  if (new URLSearchParams(location.search).get('run') && !h.runningId) { history.replaceState(null, '', location.pathname); return go(); }
-  if (lastRun) { const s = await attachJob(lastRun.id, $('#log'), { onDone: show }); $('#raw').open = false; }
-})().catch(e => alertNote(e.message));
+runPage({
+  action: 'pull',
+  progress(text) {
+    const seen = [...text.matchAll(/^>> Pulling (\S+)/gm)].map(m => m[1]);
+    const doneAll = /PULL REPORT/.test(text);
+    return { done: doneAll ? seen.length : Math.max(seen.length - 1, 0), label: doneAll ? 'Writing report…' : seen.length ? 'Pulling ' + seen.at(-1) : '' };
+  },
+  render(s, text) {
+    const sec = parseSections(text).filter(x => !/uncommitted local files/i.test(x.title));
+    return sec.length ? renderKpis(sec) + renderGroups(sec) : '';
+  }
+});
 </script>
 </body></html>

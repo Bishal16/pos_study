@@ -26,7 +26,7 @@ ALLOWED_HOSTS = {f"127.0.0.1:{PORT}", f"localhost:{PORT}"}
 STATIC = {"/atlas": os.path.join(STUDY, "atlas-src", "index.html"),
           "/erd": os.path.join(STUDY, "erd-src", "out", "index.html")}
 MASK = re.compile(r"(?i)\b(pass|password|passwd|pwd|token|secret)(\s*[=:]\s*)\S+")
-CANCELLABLE = {"pull", "status", "refresh", "refresh-nofetch", "build"}
+CANCELLABLE = {"pull", "status", "refresh", "refresh-nofetch"}
 os.makedirs(RUNS, exist_ok=True)
 
 
@@ -61,6 +61,9 @@ def repo_info(path):
             info["ahead"], info["behind"] = map(int, lr.split())
     st = git(path, "status", "--porcelain")
     info["dirty"] = len(st.splitlines()) if st else 0
+    if info.get("behind"):
+        inc = git(path, "log", "--format=%h %cs %an: %s", "-20", "HEAD..@{u}")
+        info["incoming"] = inc.splitlines() if inc else []
     fh = os.path.join(path, ".git", "FETCH_HEAD")
     info["fetchedAt"] = datetime.fromtimestamp(os.path.getmtime(fh)).isoformat(timespec="minutes") if os.path.exists(fh) else None
     return info
@@ -81,7 +84,7 @@ def load_history():
 
 def last_deploy(env, svc):
     for h in reversed(load_history()):
-        if h["action"] == "deploy" and h.get("args", {}).get("env") == env and h.get("args", {}).get("service") == svc:
+        if h["action"] == "deploy" and h.get("dryRun", False) == DRY_RUN and h.get("args", {}).get("env") == env and h.get("args", {}).get("service") == svc:
             return h
     return None
 
@@ -107,22 +110,55 @@ JOBS = {}          # id -> job dict (this server run)
 CURRENT = [None]   # id of the running job
 
 
+FETCH_ALL = r"""
+echo "Fetching every repo (updates remote refs only; your files are not touched)..."
+for gitdir in */.git */*/.git; do
+  [ -d "$gitdir" ] || continue
+  repo=$(dirname "$gitdir")
+  git -C "$repo" rev-parse --abbrev-ref @{u} >/dev/null 2>&1 || continue
+  if out=$(GIT_TERMINAL_PROMPT=0 timeout 40 git -C "$repo" fetch --quiet 2>&1); then echo "   fetched $repo"
+  else echo "   FETCH FAILED $repo: $(echo "$out" | head -n 1)"; fi
+done
+echo
+"""
+
+
+DRY_PULL = r"""
+echo "[DRY RUN] nothing is pulled"
+ok=()
+for gitdir in */.git */*/.git; do
+  [ -d "$gitdir" ] || continue
+  repo=$(dirname "$gitdir")
+  echo ">> Pulling $repo ($(git -C "$repo" rev-parse --abbrev-ref HEAD))"; echo "   Already up to date."; sleep 0.25
+  ok+=("$repo (up to date)")
+done
+echo; echo "================ PULL REPORT ================"
+echo; echo "✔ Pulled successfully (${#ok[@]}):"; for i in "${ok[@]}"; do echo "   - $i"; done
+echo; echo "⚠ Not pulled - local changes block it (0):"
+echo; echo "✖ Not pulled - conflict / branch diverged (0):"
+echo; echo "✖ Not pulled - other errors (0):"
+echo "============================================="
+"""
+
+
 def command(action, args):
     if action == "pull":
+        if DRY_RUN:  # same report format as pull-all.sh, nothing pulled
+            return ["bash", "-c", DRY_PULL], PROJECTS
         return ["bash", os.path.join(PROJECTS, "pull-all.sh")], PROJECTS
     if action == "status":
-        return ["bash", os.path.join(PROJECTS, "status-all.sh")], PROJECTS
+        # fetch first (remote refs only, working copies untouched) so "not pulled" is current, then the user's script
+        return ["bash", "-c", FETCH_ALL + 'bash "$1"', "status", os.path.join(PROJECTS, "status-all.sh")], PROJECTS
     if action == "refresh":
         return ["bash", os.path.join(STUDY, "sync", "refresh.sh")], STUDY
     if action == "refresh-nofetch":
         return ["bash", os.path.join(STUDY, "sync", "refresh.sh"), "--no-fetch"], STUDY
-    if action == "build":
-        return ["mvn", "-B", "clean", "package", "-DskipTests"], os.path.join(PROJECTS, f"{args['service']}-service")
     if action == "deploy":
         if DRY_RUN:
-            script = ('echo "[DRY RUN] would run: deploy $1 $2"; echo "🔨 Building $2-service..."; sleep 2; '
-                      'echo "📤 Uploading WAR..."; sleep 1; echo "🗑️  Terraform destroy..."; sleep 1; '
-                      'echo "🚀 Terraform apply..."; sleep 1; echo "✅ Deployment completed successfully!"')
+            script = ('echo "[DRY RUN] would run: deploy $1 $2"; echo "🔨 Building $2-service..."; sleep 3; '
+                      'echo "📤 Uploading WAR..."; sleep 3; echo "🗑️  Terraform destroy..."; sleep 3; '
+                      'echo "🚀 Terraform apply..."; sleep 3; echo "🔄 Restarting Apollo..."; sleep 2; '
+                      'echo "✅ Deployment completed successfully!"')
             return ["bash", "-c", script, "dry", args["env"], args["service"]], PROJECTS
         return [DEPLOY, args["env"], args["service"]], os.path.dirname(DEPLOY)
     raise ValueError("unknown action")
@@ -131,13 +167,11 @@ def command(action, args):
 def validate(action, body):
     if action in ("pull", "status", "refresh", "refresh-nofetch"):
         return {}
-    if action not in ("build", "deploy"):
+    if action != "deploy":
         raise ValueError("unknown action")
     svc = body.get("service", "")
     if not re.fullmatch(r"[a-z]+", svc or "") or svc not in services():
         raise ValueError("unknown service")
-    if action == "build":
-        return {"service": svc}
     if action == "deploy":
         env = body.get("env")
         if env not in ("dev", "demo"):
@@ -163,9 +197,9 @@ def summarize(job, text):
         parts = re.findall(r"^(✔ Clean|⚠ Not committed|↑ Not pushed) \((\d+)\):", text, re.M)
         return " · ".join(f"{t[2:].lower()} {n}" for t, n in parts)
     if a == "deploy":
+        if job.get("stopped"):
+            return "EMERGENCY STOP by user"
         return "deployed" if "Deployment completed successfully" in text else "deploy failed"
-    if a == "build":
-        return "BUILD SUCCESS" if "BUILD SUCCESS" in text else "BUILD FAILED"
     return ""
 
 
@@ -218,7 +252,7 @@ def start(action, body):
             raise RuntimeError(f"busy: {cur['action']} is running")
         jid = datetime.now().strftime("%Y%m%d-%H%M%S") + "-" + action
         job = {"id": jid, "action": action, "args": args, "start": time.time(), "end": None, "exit": None,
-               "summary": "", "dryRun": DRY_RUN and action == "deploy"}
+               "summary": "", "dryRun": DRY_RUN and action in ("deploy", "pull")}
         JOBS[jid] = job
         CURRENT[0] = jid
     open(os.path.join(RUNS, jid + ".log"), "w").close()
@@ -238,16 +272,32 @@ def job_state(jid, offset):
         chunk = f.read()
     return {"job": {k: v for k, v in job.items() if k != "pid"}, "text": chunk.decode("utf-8", "replace"),
             "next": offset + len(chunk), "running": job.get("end") is None and jid in JOBS,
-            "cancellable": job.get("action") in CANCELLABLE}
+            "cancellable": job.get("action") in CANCELLABLE, "stoppable": job.get("action") == "deploy"}
 
 
-def cancel(jid):
+def cancel(jid, body):
     job = JOBS.get(jid)
     if not job or job.get("end") is not None:
         raise ValueError("not running")
-    if job["action"] not in CANCELLABLE:
-        raise ValueError("a deploy cannot be cancelled from here: stopping it halfway could leave the server torn down")
-    os.killpg(job["pid"], signal.SIGTERM)
+    if job["action"] == "deploy":
+        if body.get("emergency") is not True:
+            raise ValueError("a deploy can only be stopped with the emergency stop")
+        job["stopped"] = True
+        with open(os.path.join(RUNS, jid + ".log"), "a") as f:
+            f.write(f"\n⛔ EMERGENCY STOP by user at {datetime.now():%H:%M:%S}. Local deploy process killed; "
+                    "commands already sent to the server may still finish or be left half-done. Check the service on the server.\n")
+    elif job["action"] not in CANCELLABLE:
+        raise ValueError("cannot be cancelled")
+    pgid = job["pid"]
+    os.killpg(pgid, signal.SIGTERM)
+
+    def hard_kill():
+        time.sleep(4)
+        try:
+            os.killpg(pgid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+    threading.Thread(target=hard_kill, daemon=True).start()
 
 
 def study():
@@ -307,7 +357,7 @@ class H(BaseHTTPRequestHandler):
                     return self.send(400, {"error": "bad env or service"})
                 return self.send(200, precheck(env, svc))
             if u.path == "/api/history":
-                return self.send(200, {"history": load_history(), "runningId": CURRENT[0]})
+                return self.send(200, {"history": load_history(), "runningId": CURRENT[0], "dryRun": DRY_RUN})
             if u.path == "/api/study":
                 return self.send(200, study())
             if u.path.startswith("/api/job/"):
@@ -346,7 +396,7 @@ class H(BaseHTTPRequestHandler):
                 job = start(u.path[len("/api/run/"):], body)
                 return self.send(200, {"id": job["id"]})
             if u.path.startswith("/api/cancel/"):
-                cancel(u.path[len("/api/cancel/"):])
+                cancel(u.path[len("/api/cancel/"):], body)
                 return self.send(200, {"ok": True})
             return self.send(404, {"error": "not found"})
         except RuntimeError as e:

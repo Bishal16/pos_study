@@ -1621,5 +1621,110 @@
    "cap": ""
   }
  ],
- "_about": "Hand-written Atlas facts (narrative, findings, flows). Code-derivable facts are checked against code by sync/diff.py; edit here, not in v1-explorer.html."
+ "_about": "Hand-written Atlas facts (narrative, findings, flows). Code-derivable facts are checked against code by sync/diff.py; edit here, not in v1-explorer.html.",
+ "FRONTEND": {
+  "modName": {
+   "accounting": "Accounting",
+   "products": "Products",
+   "sales": "Sales",
+   "inventory": "Inventory",
+   "configuration": "Configuration",
+   "procurement": "Procurement",
+   "identity-access": "Users & permissions",
+   "customers": "Customers",
+   "approvals": "Approvals",
+   "tax-vat": "Tax / VAT",
+   "auth": "Login",
+   "public": "Error & redirect pages",
+   "dashboard": "Dashboard",
+   "profile": "Profile",
+   "forgot-password": "Forgot password",
+   "reset-password": "Reset password",
+   "knowledge-base": "Knowledge base"
+  },
+  "setup": [
+   [
+    "Get the code",
+    "Clone <span class='mono'>smartpos-web</span> and work on a branch made from <span class='mono'>dev</span> (not <span class='mono'>sadat</span>, which is the senior frontend developer's branch): <span class='mono'>git switch dev && git pull && git switch -c feature/&lt;your-task&gt;</span>."
+   ],
+   [
+    "Install",
+    "<span class='mono'>npm install</span>. There is no lock file in git and no tests, so check your work with <span class='mono'>npm run lint</span> and <span class='mono'>npm run type-check</span>."
+   ],
+   [
+    "Environment",
+    "Create <span class='mono'>.env.development</span> (git-ignored). Ask a teammate for the values; the variable names are listed below. Never commit it, and never put a real secret in a <span class='mono'>NEXT_PUBLIC_</span> variable: those are sent to the browser."
+   ],
+   [
+    "Backend must be reachable",
+    "<span class='mono'>npm run dev</span> also runs GraphQL codegen, which downloads the schema from <span class='mono'>GRAPHQL_ENDPOINT</span> (the dev gateway). Off the office network / VPN, codegen fails and the typed <span class='mono'>XxxDocument</span> imports break."
+   ],
+   [
+    "Run",
+    "Open <span class='mono'>http://localhost:3000/en/login</span>. Every logged-in screen acts as the merchant in <span class='mono'>TEMP_MERCHANT_ID</span>, whoever logs in."
+   ],
+   [
+    "Before you push",
+    "<span class='mono'>npm run lint</span>, <span class='mono'>npm run type-check</span>, click through the screen in the browser, then open a merge request into <span class='mono'>dev</span> for the senior frontend developer to review."
+   ]
+  ],
+  "recipe": [
+   [
+    "src/graphql/&lt;entity&gt;.graphql",
+    "Write the queries / mutations (copy one from the backend's .graphqls). Codegen turns each into a typed <span class='mono'>XxxDocument</span>."
+   ],
+   [
+    "…/&lt;page&gt;/page.tsx",
+    "Server Component: <span class='mono'>getUserSession()</span> → <span class='mono'>serverFetch({query: GetAllXxxDocument, token, useCache:{tag}})</span> → pass rows to the table."
+   ],
+   [
+    "…/_components/TableView.tsx",
+    "Client component: <span class='mono'>SharedDataTable</span> + paging, status toggle, delete via <span class='mono'>serverActionFetch</span>."
+   ],
+   [
+    "…/_components/TableColumns.tsx",
+    "Column helpers: <span class='mono'>createSlNoColumn</span>, <span class='mono'>createTextColumn</span>, <span class='mono'>createIsActiveColumn</span>, <span class='mono'>createActionsColumn</span>."
+   ],
+   [
+    "…/_components/CUDialog.tsx or create-update/",
+    "Create / edit form: react-hook-form + zod; submit with <span class='mono'>serverActionFetch({query: AddXxxDocument, token, revalidate:{updateTag}})</span>."
+   ],
+   [
+    "…/_components/schema.ts, types.ts",
+    "Form rules (reuse <span class='mono'>src/utils/sharedSchema.ts</span>) and types derived from <span class='mono'>@/generated/graphql</span>."
+   ],
+   [
+    "Menu entry",
+    "The sidebar comes from the backend menu table (authorization service, screen <b>Users &amp; permissions → Menu</b>), not from code. Add the route there."
+   ],
+   [
+    "Labels",
+    "Text goes in <span class='mono'>src/i18n/messages/en/*.json</span> and the Bangla twin in <span class='mono'>messages/bn/</span>."
+   ]
+  ],
+  "rules": [
+   "Always pass <span class='mono'>token</span> to serverFetch / serverActionFetch: {jwt} backend services already reject calls without it.",
+   "New screens use the modern style (src/graphql + serverFetch). Don't add new files under src/services/.",
+   "Ask the AI to show the diff and explain it before you accept; keep each change to one screen.",
+   "Never paste .env values, tokens or customer data into an AI chat."
+  ],
+  "prompts": [
+   [
+    "Explain a screen",
+    "I am a backend developer new to this Next.js 16 app (App Router, shadcn/ui, Apollo codegen, NextAuth). Explain how the page {file} works: what runs on the server vs in the browser, which GraphQL operations it calls and which files I should open, in order. Don't change anything."
+   ],
+   [
+    "Add a list page",
+    "In smartpos-web, add a list page at {url} following the same pattern as src/app/[locale]/(protected)/procurement/product-procurement/purchase-request: a .graphql file in src/graphql, page.tsx using serverFetch with token and a cache tag, _components/TableView.tsx with SharedDataTable and TableColumns.tsx. Use the backend operation {newop}. Show me the files you will create before writing them."
+   ],
+   [
+    "Fix a removed operation",
+    "The page {file} calls the GraphQL operation {op}, which no longer exists in the backend schema. Find the replacement operation in the backend .graphqls files I give you, update the frontend query and the types, and list every other place that uses {op}."
+   ],
+   [
+    "Move a legacy fetch to the modern style",
+    "Convert {service} (plain fetch to NEXT_PUBLIC_GRAPHQL_ENDPOINT, no token) to the modern pattern: a .graphql document in src/graphql and serverFetch/serverActionFetch with token and merchantId. Keep the function signatures the page uses so nothing else breaks."
+   ]
+  ]
+ }
 }

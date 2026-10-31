@@ -1,4 +1,4 @@
-// UniPOS · authorization-service · generated from @Entity code (origin/dev 5535a26)
+// UniPOS · authorization-service · generated from @Entity code (origin/dev d59a32d)
 
 Table authorization.merchant_permission_groups [note: 'entity MerchantPermissionGroup'] {
   merchant_permission_group_id bigint [pk]

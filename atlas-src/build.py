@@ -12,7 +12,10 @@ data_block = "/* hand-written facts (atlas-src/facts.json) */\nconst __F = " + j
 _sp = os.path.join(os.path.dirname(HERE), "sync", "status.json")
 status = open(_sp, encoding="utf-8").read().replace("</", "<\\/") if os.path.exists(_sp) else "{}"
 code = open(os.path.join(HERE, "data.json"), encoding="utf-8").read().replace("</", "<\\/")
-js = open(os.path.join(HERE, "v2.js"), encoding="utf-8").read()
+# fe.js (Frontend level) goes first: it only defines functions that v2.js calls at render time
+js = open(os.path.join(HERE, "fe.js"), encoding="utf-8").read() + "\n" + open(os.path.join(HERE, "v2.js"), encoding="utf-8").read()
+_fe = os.path.join(HERE, "fe.json")
+fe = (open(_fe, encoding="utf-8").read() if os.path.exists(_fe) else "null").replace("</", "<\\/")
 
 EXTRA_CSS = r"""
 [hidden]{display:none!important}
@@ -122,6 +125,52 @@ ul.cl{margin:0;padding-left:18px;font-size:.86rem;display:flex;flex-direction:co
 ul.cl li.warn{color:var(--warn)}
 details summary{cursor:pointer;font-size:.88rem}
 .hint{color:var(--muted);font-size:.86rem;margin:0}
+/* v2: Frontend level */
+.fesvc{display:inline-flex;align-items:center;gap:5px;font:inherit;font-size:.8rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:1px 8px 1px 6px;cursor:pointer;white-space:nowrap;margin:1px 0}
+button.fesvc:hover{border-color:var(--accent);color:var(--accent)}
+.fesvc i{width:8px;height:8px;border-radius:50%;background:var(--line);display:inline-block}
+.fewarn{display:inline-block;font-family:var(--f-mono);font-size:.74rem;color:var(--bad);border:1px solid var(--bad);border-radius:4px;padding:0 5px;white-space:nowrap}
+.fesearch input{font:inherit;font-size:.9rem;width:100%;box-sizing:border-box;padding:8px 11px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)}
+.fesearch input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.fetiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.fetile{font:inherit;text-align:left;display:flex;flex-direction:column;gap:6px;padding:12px 13px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);cursor:pointer;min-width:0}
+.fetile:hover{border-color:var(--accent)}
+.fetile.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--tint)}
+.fetile .fen{font-weight:700}
+.fetile .fec{font-size:.84rem;color:var(--muted)} .fetile .fec b{color:var(--ink);font-variant-numeric:tabular-nums}
+.febar{height:5px;border-radius:3px;background:color-mix(in srgb,var(--warn) 45%,transparent);overflow:hidden}
+.febar i{display:block;height:100%;background:var(--ok)}
+.fedots{display:flex;flex-wrap:wrap;gap:3px 9px;font-size:.76rem;color:var(--muted)}
+.fedots span{display:inline-flex;align-items:center;gap:4px}
+.fedots i{width:7px;height:7px;border-radius:50%;display:inline-block}
+.fewarns{display:flex;gap:5px;flex-wrap:wrap}
+.fetable tr.on td{background:var(--tint)}
+.fetable td{vertical-align:middle}
+.fetrace{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+.festeps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.festep{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;position:relative;padding-bottom:14px}
+.festep:not(:last-child)::before{content:"";position:absolute;left:14px;top:30px;bottom:0;width:2px;background:var(--line)}
+.festep .fsn{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;font-weight:700;background:var(--accent);color:var(--bg)}
+.festep.gone .fsn{background:var(--bad)}
+.festep p{margin:0}
+.festep .fsw{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.festep .fst{font-weight:600}
+.festep .fsf{color:var(--accent);overflow-wrap:anywhere;margin:2px 0}
+.festep.gone .fsf{color:var(--bad)}
+.festep .fsx{font-size:.88rem;color:var(--muted);margin-bottom:4px}
+.fecols{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px;margin-top:10px}
+.fecols section{min-width:0}
+.fecols .cl li{margin-bottom:6px}
+.cl li.warn{color:var(--warn)}
+ol.cl{margin:0;padding-left:20px;font-size:.86rem;display:flex;flex-direction:column;gap:2px}
+.feprompt{border:1px solid var(--line);border-radius:8px;margin:8px 0;overflow:hidden}
+.feprompt .fph{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid var(--line);font-size:.88rem}
+.feprompt pre{margin:0;padding:9px 11px;white-space:pre-wrap;font-family:var(--f-mono);font-size:.78rem;color:var(--ink)}
+.fecopy{font:inherit;font-size:.8rem;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:5px;padding:3px 10px;cursor:pointer}
+.fecopy:hover{background:var(--tint)}
+.feops{list-style:none;margin:0;padding:0;font-size:.84rem}
+.feops li{padding:2px 0;overflow-wrap:anywhere}
+.feops li.bad{color:var(--bad)}
 """
 
 BODY = """
@@ -160,8 +209,16 @@ head = """<meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 """
+# saved light/dark choice, applied before paint (shared with the control panel)
+_te = os.path.join(os.path.dirname(HERE), "control", "web", "theme-early.js")
+if os.path.exists(_te):
+    head = head.replace('<meta charset="utf-8">\n', '<meta charset="utf-8">\n<script>' + open(_te, encoding="utf-8").read() + '</script>\n', 1)
 html = head + "<style>" + v1css + EXTRA_CSS + "</style>\n" + BODY + \
-    '<script type="application/json" id="code">' + code + "</script>\n" + '<script type="application/json" id="status">' + status + "</script>\n<script>\n" + data_block + "\n" + js + "\n</script>\n"
+    '<script type="application/json" id="code">' + code + "</script>\n" + '<script type="application/json" id="fe">' + fe + "</script>\n" + '<script type="application/json" id="status">' + status + "</script>\n<script>\n" + data_block + "\n" + js + "\n</script>\n"
+# "⌂ Control" button: active only when served by the local control panel (control/server.py)
+_hb = os.path.join(os.path.dirname(HERE), "control", "web", "home-button.html")
+if os.path.exists(_hb):
+    html += open(_hb, encoding="utf-8").read()
 out = os.path.join(HERE, "index.html")
 open(out, "w", encoding="utf-8").write(html)
 open(os.path.join(HERE, "check.js"), "w", encoding="utf-8").write(data_block + "\n" + js)

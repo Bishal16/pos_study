@@ -107,6 +107,7 @@ def run(*cmd, cwd):
     return r.stdout
 
 run("python3", "-I", "extract.py", cwd=ATLAS)
+run("python3", "-I", "extract_fe.py", cwd=ATLAS)   # frontend (Atlas level 7); needs data.json for op owners
 run("python3", "-I", "extract.py", cwd=ERD)
 run("python3", "-I", "build.py", cwd=ERD)
 
@@ -258,6 +259,13 @@ for key, title in (("schema", "Schema"), ("ops", "GraphQL operations"), ("calls"
     if changes[key]:
         L += ["", f"## {title}", *["- " + " · ".join(str(x) for x in row if x) for row in changes[key]]]
 L += ["", "## To review (Atlas facts vs code)"] + (["- " + (f"**{d['svc']}** " if d["svc"] else "") + d["msg"] for d in drift] or ["- Nothing: the Atlas matches the code."])
+try:
+    _fe = json.load(open(os.path.join(ATLAS, "fe.json")))
+    L += ["", "## Frontend (Atlas level 7)", f"- {len(_fe['pages'])} pages in {len(_fe['modules'])} modules, origin/dev `{_fe['head']['commit']}` {_fe['head']['date']}",
+          f"- {len(_fe['unknownOps'])} GraphQL operations called by the frontend are not in any backend schema (screens likely broken)",
+          f"- {sum(p['mock'] for p in _fe['pages'])} pages show mock data"]
+except (OSError, ValueError, KeyError):
+    pass
 L += ["", "## Published pages", f"- Last publish: {published.get('at', 'never')} (built {published.get('generatedAt', '—')})",
       f"- This build: {status['generatedAt']} → {'same code as the published pages' if (published.get('generatedAt') == status['generatedAt'] or (HAS_BASE and not counts['commits'] and not any(changes[k] for k in ('schema', 'ops', 'calls', 'kafka')))) else 'not published yet: ask Claude to “publish the refresh”'}"]
 rp = os.path.join(REPORTS, f"{NOW:%Y-%m-%d}.md")

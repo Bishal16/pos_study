@@ -2,39 +2,46 @@
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Status · UniPOS Control</title>
-<link rel="stylesheet" href="/app.css"><script src="/app.js"></script>
+<link rel="stylesheet" href="app.css"><script src="app.js"></script>
 </head><body>
 <main>
-  <h1>Local work status</h1>
-  <p class="sub">Runs <code>projects/status-all.sh</code> (read-only): files not committed and commits not pushed, in every repo. Click a repo to see its files and commits.</p>
-  <div class="row"><button class="primary" id="go">Check status</button><button id="cancel" hidden>Cancel</button><span class="muted" id="state"></span></div>
+  <div class="panel hero">
+    <div><h1>Local work status</h1><p class="sub">Fetches every repo first (remote refs only; your files are not touched), then runs <code>projects/status-all.sh</code>: commits not pulled, files not committed and commits not pushed. Click a repo to see its commits or files.</p></div>
+    <div class="act"><div class="btns"><button id="cancel" hidden>Cancel</button><button class="primary" id="go">Check status</button></div><div class="lastrun" id="last"></div></div>
+  </div>
+  <div class="panel livecard" id="live" hidden>
+    <div class="stepper" id="steps"></div>
+    <div class="progress"><i id="bar"></i></div>
+    <div class="cur" id="cur"></div>
+  </div>
   <div id="result"></div>
-  <details id="raw"><summary>Full log</summary><pre class="log" id="log"></pre></details>
+  <details class="logcard" id="raw"><summary>Full log</summary><pre class="log" id="log"></pre></details>
 </main>
 <script>
-const ACTION = 'status';
-function show(s, text) {
-  const ok = s.job.exit === 0;
-  $('#state').innerHTML = `${ok ? '<span class="badge b-ok">done</span>' : `<span class="badge b-bad">exit ${s.job.exit}</span>`} ${esc(when(s.job.end))} · ${esc(dur(s.job))}`;
-  const sec = parseSections(text);
-  $('#result').innerHTML = sec.length ? '<h2>Result</h2>' + renderGroups(sec, parseRepoBlocks(text)) : '';
-  $('#go').disabled = false;
-}
-async function go(attachId) {
-  $('#go').disabled = true; $('#raw').open = true; $('#result').innerHTML = '';
-  $('#state').innerHTML = '<span class="spin"></span> running…';
-  try {
-    const opts = { cancelBtn: $('#cancel'), onDone: show };
-    attachId ? await attachJob(attachId, $('#log'), opts) : await runJob(ACTION, {}, $('#log'), opts);
-  } catch (e) { alertNote(e.message); $('#go').disabled = false; $('#state').textContent = ''; }
-}
-$('#go').onclick = () => go();
-(async () => {
-  const h = await api('/api/history');
-  if (h.runningId && h.runningId.endsWith('-' + ACTION)) return go(h.runningId);
-  const lastRun = [...h.history].reverse().find(x => x.action === ACTION);
-  if (new URLSearchParams(location.search).get('run') && !h.runningId) { history.replaceState(null, '', location.pathname); return go(); }
-  if (lastRun) { const s = await attachJob(lastRun.id, $('#log'), { onDone: show }); $('#raw').open = false; }
-})().catch(e => alertNote(e.message));
+runPage({
+  action: 'status',
+  autoRunAfterMin: 5,
+  steps: ['Fetch remotes', 'Check local work', 'Summary'],
+  progress(text, total) {
+    const fetched = [...text.matchAll(/^ +(?:fetched|FETCH FAILED) (\S+?):?(?:\s|$)/gm)].map(m => m[1]);
+    const checked = [...text.matchAll(/^>> (\S+) \(/gm)].map(m => m[1]);
+    if (/SUMMARY/.test(text)) return { step: 2, done: total, label: 'Summarising…' };
+    if (checked.length) return { step: 1, done: Math.max(checked.length - 1, 0), label: 'Checking ' + checked.at(-1) };
+    return { step: 0, done: fetched.length, label: fetched.length ? 'Fetched ' + fetched.at(-1) : 'Fetching…' };
+  },
+  async render(s, text) {
+    const sec = parseSections(text);
+    const failed = [...text.matchAll(/^ +FETCH FAILED (\S+?):/gm)].map(m => m[1]);
+    const r = await api('/api/repos');
+    const behind = r.repos.filter(x => x.behind > 0);
+    const np = { title: '↓ Not pulled', n: behind.length, items: behind.map(x => `${x.name} (${x.behind} new commit${x.behind > 1 ? 's' : ''})`),
+      detail: Object.fromEntries(behind.map(x => [x.name, { lines: x.incoming || [] }])) };
+    const all = [np, ...sec];
+    return (failed.length ? `<div class="note warn">Could not fetch ${failed.length} repo(s) (off the VPN?): ${esc(failed.join(', '))}. Their "not pulled" count is from the last successful fetch.</div>` : '') +
+      renderKpis(all) +
+      (behind.length ? `<div class="note info" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">${behind.length} repo(s) have new commits on GitLab. <a class="btn" href="/pull.html?run=1">⬇ Pull all</a><span class="muted">Pull only fast-forwards; repos with local changes are skipped.</span></div>` : '') +
+      renderGroups(all, parseRepoBlocks(text));
+  }
+});
 </script>
 </body></html>

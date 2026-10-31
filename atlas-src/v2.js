@@ -19,7 +19,8 @@ const S = Object.fromEntries(SERVICES.map(s=>[s.id,s]));
 const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 LEVELS[5].cap = "";
 LEVELS.push({n:6,name:"Inside a service",cap:""});
-LEVELS.push({n:7,name:"Sync",cap:""});
+LEVELS.push({n:7,name:"Frontend",cap:""});
+LEVELS.push({n:8,name:"Sync",cap:""});
 LEVELS[2].cap = "<b>One GraphQL call, hop by hop.</b> Nothing before the service checks the token, and only "+SERVICES.filter(s=>s.jwt===true).length+" of "+SERVICES.length+" services check it at all (from code).";
 LEVELS[3].cap = "<b>Direct GraphQL calls between services.</b> Click a service: its outgoing calls light up teal with the <b>operation names</b> they use, incoming calls orange. Unrelated services fade; click the service again to clear. Hover any arrow for its full list. Red dashed = wrong port in config.";
 /* operation names per flow step (6th element) */
@@ -66,9 +67,9 @@ const VERDICT = {
 const VNAME = {keep:"keep",change:"change",build:"build new",decide:"decide",remove:"remove / hide"};
 
 /* ===================== state ===================== */
-const state = {level:0, flow:"sale", sel:"gateway", lens:"asis", inside:"sales", table:null, ctab:"tables", cfilter:"", step:-1, expand:{}, playing:null};
-try{ const v=JSON.parse(localStorage.getItem("unipos-atlas")||"{}"); ["level","flow","lens","inside"].forEach(k=>{ if(v[k]!=null) state[k]=v[k]; }); if(!(state.level>=0&&state.level<=7)) state.level=0; if(!CODE[state.inside]) state.inside="sales"; }catch(e){}
-const save=()=>{ try{ localStorage.setItem("unipos-atlas",JSON.stringify({level:state.level,flow:state.flow,lens:state.lens,inside:state.inside})); }catch(e){} };
+const state = {level:0, flow:"sale", sel:"gateway", lens:"asis", inside:"sales", table:null, ctab:"tables", cfilter:"", step:-1, expand:{}, playing:null, fetab:"map", femod:null, fepage:null, feq:""};
+try{ const v=JSON.parse(localStorage.getItem("unipos-atlas")||"{}"); ["level","flow","lens","inside","fetab","femod"].forEach(k=>{ if(v[k]!=null) state[k]=v[k]; }); if(v.v!==2&&state.level===7) state.level=8; /* Sync moved from 7 to 8 */ if(!(state.level>=0&&state.level<=8)) state.level=0; if(!FE_TABS.some(t=>t[0]===state.fetab)) state.fetab="map"; if(!CODE[state.inside]) state.inside="sales"; }catch(e){}
+const save=()=>{ try{ localStorage.setItem("unipos-atlas",JSON.stringify({v:2,level:state.level,flow:state.flow,lens:state.lens,inside:state.inside,fetab:state.fetab,femod:state.femod})); }catch(e){} };
 const POS0 = {};
 
 /* ===================== helpers ===================== */
@@ -478,7 +479,8 @@ function stepCard(){
 }
 function card(){
   const el=document.getElementById("card");
-  if(state.level===7){ el.innerHTML=syncCard(); return; }
+  if(state.level===8){ el.innerHTML=syncCard(); return; }
+  if(state.level===7){ const c=feCard(); if(c!==null){ el.innerHTML=c; return; } }
   if(state.level===6){ el.innerHTML=insideCard(); return; }
   if(state.level===5){ el.innerHTML=stepCard(); return; }
   const id=state.sel;
@@ -493,7 +495,7 @@ function card(){
   if(S[id]&&state.level===3){ el.innerHTML=callsSvcCard(id); return; }
   if(S[id]){ el.innerHTML=svcCard(id); return; }
   const i=INFRA[id];
-  if(i){ el.innerHTML=`<p class="kind">${esc(i.kind)}</p><h2>${esc(i.name)}</h2><div class="chips">${verdictChip(id)}</div><dl class="rows">${i.rows.map(r=>`<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join("")}</dl>${i.find.length?`<div><h3>Findings</h3>${li(i.find,"warn")}</div>`:""}${VERDICT[id]&&VERDICT[id][1]?`<div><h3>ODCL plan</h3><p class="hint">${esc(VERDICT[id][1])}</p></div>`:""}${i.notes?`<div><h3>Read more</h3><p class="hint"><span class="mono">_unipos-study/${esc(i.notes)}</span></p></div>`:""}`; return; }
+  if(i){ el.innerHTML=(id==="frontend"&&state.level!==7?`<button class="cta" data-fe="1">Open the Frontend tab: screens, files, API calls ›</button>`:"")+`<p class="kind">${esc(i.kind)}</p><h2>${esc(i.name)}</h2><div class="chips">${verdictChip(id)}</div><dl class="rows">${i.rows.map(r=>`<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join("")}</dl>${i.find.length?`<div><h3>Findings</h3>${li(i.find,"warn")}</div>`:""}${VERDICT[id]&&VERDICT[id][1]?`<div><h3>ODCL plan</h3><p class="hint">${esc(VERDICT[id][1])}</p></div>`:""}${i.notes?`<div><h3>Read more</h3><p class="hint"><span class="mono">_unipos-study/${esc(i.notes)}</span></p></div>`:""}`; return; }
   el.innerHTML=`<p class="hint">No details for this box.</p>`;
 }
 
@@ -558,14 +560,18 @@ function render(){
   document.documentElement.dataset.lens=state.lens;
   document.querySelectorAll("#levels button").forEach(b=>b.setAttribute("aria-selected",String(+b.dataset.l===state.level)));
   document.querySelectorAll("#lens button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.lens===state.lens)));
-  const st=document.getElementById("subtabs"); st.hidden=state.level!==5;
-  st.querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.f===state.flow)));
+  const st=document.getElementById("subtabs"); st.hidden=state.level!==5&&state.level!==7;
+  st.setAttribute("aria-label",state.level===7?"Frontend views":"Flow");
+  st.innerHTML=state.level===7? FE_TABS.map(([k,n])=>`<button role="tab" data-ft="${k}" aria-selected="${k===state.fetab}">${esc(n)}</button>`).join("")
+    : Object.entries(FLOWS).map(([k,f])=>`<button role="tab" data-f="${k}" aria-selected="${k===state.flow}">${esc(f.name)}</button>`).join("");
   const cap=document.getElementById("cap");
   if(state.level===5) cap.innerHTML=`<b>${esc(FLOWS[state.flow].name)}.</b> ${esc(FLOWS[state.flow].cap)}`;
   else if(state.level===6){ const d=CODE[state.inside]; cap.innerHTML=`<b>${esc(state.inside)}-service: ${d.entities.length} tables from its @Entity classes.</b> Solid arrows are JPA relations (* many, 1 one); <span style="color:var(--accent)">→ service</span> marks an id that lives in another service (no foreign key). Click a table for all its columns; click “+ more” to expand a box.`; }
-  else if(state.level===7) cap.innerHTML=syncCap();
+  else if(state.level===8) cap.innerHTML=syncCap();
+  else if(state.level===7) cap.innerHTML=feCap();
   else cap.innerHTML=LEVELS[state.level].cap;
-  if(state.level===7){ document.getElementById("scroller").innerHTML=syncHTML(); legend(); crumbs(); card(); return; }
+  if(state.level===8){ document.getElementById("scroller").innerHTML=syncHTML(); legend(); crumbs(); card(); return; }
+  if(state.level===7){ document.getElementById("scroller").innerHTML=feHTML(); feWire(); document.querySelectorAll("#scroller svg.main .node").forEach(n=>n.classList.toggle("sel",n.dataset.id===state.sel)); legend(); crumbs(); card(); return; }
   let html=`<div class="zoombar"><span class="hint">Drag to pan · Ctrl/⌘ + scroll or pinch to zoom · double-click a service to go inside</span><button id="zOut" aria-label="Zoom out">−</button><button id="zIn" aria-label="Zoom in">+</button><button id="zFit">Fit</button></div>`;
   if(state.level===5) html=playerHTML()+html;
   if(state.level===6) html=`<div class="svcpick"><label for="svcsel">Service</label><select id="svcsel">${Object.keys(CODE).map(k=>`<option value="${k}" ${k===state.inside?"selected":""}>${k}-service (${CODE[k].entities.length} tables)</option>`).join("")}</select></div>`+html;
@@ -595,15 +601,20 @@ function wirePlayer(){
 
 /* ===================== wiring ===================== */
 document.getElementById("levels").innerHTML=LEVELS.map(l=>`<button role="tab" data-l="${l.n}"><span class="n">${l.n}</span>${esc(l.name)}</button>`).join("");
-document.getElementById("subtabs").innerHTML=Object.entries(FLOWS).map(([k,f])=>`<button role="tab" data-f="${k}">${esc(f.name)}</button>`).join("");
 document.getElementById("levels").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; stopPlay(); state.level=+b.dataset.l; if(state.level===3&&!S[state.sel]) state.sel="sales"; save(); render(); });
-document.getElementById("subtabs").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; stopPlay(); state.flow=b.dataset.f; state.step=-1; save(); render(); });
+document.getElementById("subtabs").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; stopPlay();
+  if(b.dataset.ft){ state.fetab=b.dataset.ft; state.sel=null; save(); render(); return; }
+  state.flow=b.dataset.f; state.step=-1; save(); render(); });
 document.getElementById("lens").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; state.lens=b.dataset.lens; save(); render(); });
 document.getElementById("crumbs").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; const c=b.dataset.crumb; stopPlay();
   if(c==="sys"){ state.level=0; state.sel=null; } else if(c==="dom"){ state.level=0; } else if(c==="svc"){ openInside(b.dataset.svc); return; } else if(c==="tbl"){ state.ctab="tables"; }
   save(); render(); });
 const sc=document.getElementById("scroller");
 sc.addEventListener("click",e=>{
+  const cp=e.target.closest("[data-copy]"); if(cp){ feCopy(cp); return; }
+  const ft=e.target.closest("[data-fetab]"); if(ft){ state.fetab=ft.dataset.fetab; save(); render(); window.scrollTo({top:0}); return; }
+  const fp=e.target.closest("[data-fepage]"); if(fp){ if(fp.dataset.femod) state.femod=fp.dataset.femod; state.fepage=fp.dataset.fepage; if(state.fetab!=="map"&&state.fetab!=="ai") state.fetab="map"; save(); render(); return; }
+  const fm=e.target.closest("[data-femod]"); if(fm){ state.femod=state.femod===fm.dataset.femod?null:fm.dataset.femod; state.fepage=null; save(); render(); return; }
   const sg=e.target.closest("[data-sgo]"); if(sg){ try{ go(JSON.parse(sg.dataset.sgo)); }catch(_){} return; }
   const j=e.target.closest("[data-jump]"); if(j){ openInside(j.dataset.jump); return; }
   const m=e.target.closest("[data-more]"); if(m){ const k=m.dataset.more; state.expand[k]=!state.expand[k]; render(); return; }
@@ -615,6 +626,9 @@ sc.addEventListener("keydown",e=>{ if(e.key!=="Enter"&&e.key!==" ") return; cons
   if(n.dataset.ent){ state.table=n.dataset.ent; state.ctab="tables"; render(); } else if(n.dataset.id) select(n.dataset.id); });
 const cardEl=document.getElementById("card");
 cardEl.addEventListener("click",e=>{
+  const cp=e.target.closest("[data-copy]"); if(cp){ feCopy(cp); return; }
+  const cg=e.target.closest("[data-cgo]"); if(cg){ try{ go(JSON.parse(cg.dataset.cgo)); }catch(_){} return; }
+  const fe=e.target.closest("[data-fe]"); if(fe){ stopPlay(); state.level=7; save(); render(); return; }
   const o=e.target.closest("[data-open]"); if(o){ openInside(o.dataset.open); return; }
   const t=e.target.closest("[data-tab]"); if(t){ state.ctab=t.dataset.tab; state.cfilter=""; card(); return; }
   const tb=e.target.closest("[data-table]"); if(tb){ state.table=tb.dataset.table; state.expand[tb.dataset.table]=true; render(); return; }

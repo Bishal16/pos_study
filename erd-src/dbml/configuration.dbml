@@ -1,4 +1,4 @@
-// UniPOS · configuration-service · generated from @Entity code (origin/dev 8a54837)
+// UniPOS · configuration-service · generated from @Entity code (origin/dev 300e0ba)
 
 Table configuration.business_areas [note: 'entity BusinessArea'] {
   business_area_id integer [pk]
@@ -86,7 +86,7 @@ Table configuration.incentive_schemes [note: 'entity IncentiveScheme'] {
 
 Table configuration.incentive_scheme_percentages [note: 'entity IncentiveSchemePercentage'] {
   scheme_allocated_percentage_id uuid [pk]
-  incentive_schemes varchar(255)[] [not null]
+  incentive_scheme_ids uuid[]
   allocated_percentages numeric[] [not null]
   execution_notes varchar(255)[] [not null]
   created_at timestamp [not null, note: 'inherited from BaseEntity']

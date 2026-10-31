@@ -1,4 +1,4 @@
-// UniPOS · customer-service · generated from @Entity code (origin/dev 97bf538)
+// UniPOS · customer-service · generated from @Entity code (origin/dev c30e1d3)
 
 Table customer.business_document_types [note: 'entity BusinessDocumentType'] {
   document_type_id integer [pk]

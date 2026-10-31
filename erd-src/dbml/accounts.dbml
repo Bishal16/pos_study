@@ -1,4 +1,4 @@
-// UniPOS · accounts-service · generated from @Entity code (origin/dev 174703c)
+// UniPOS · accounts-service · generated from @Entity code (origin/dev d82d3d4)
 
 Table accounts.accounting_periods [note: 'entity AccountingPeriod'] {
   accounting_period_id integer [pk]

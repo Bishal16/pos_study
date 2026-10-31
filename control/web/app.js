@@ -1,4 +1,6 @@
 // Shared helpers for the UniPOS Control pages.
+// Saved light/dark choice, applied before paint (same logic as theme-early.js, which the Atlas and ERD inline)
+try { const t = localStorage.getItem('unipos-theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}
 const PAGES = [['index', 'Home'], ['pull', 'Pull'], ['status', 'Status'], ['deploy', 'Deploy'], ['study', 'Study'], ['history', 'History']];
 const PAGE_OF = { pull: 'pull', status: 'status', refresh: 'study', 'refresh-nofetch': 'study', deploy: 'deploy', build: 'deploy' };
 
@@ -30,11 +32,34 @@ function nav() {
   const here = (location.pathname.replace(/^\//, '').replace(/\.html$/, '') || 'index');
   const el = document.createElement('nav');
   el.className = 'top';
-  el.innerHTML = `<span class="brand">UniPOS Control</span>` +
+  el.innerHTML = `<a class="brand" href="/">UniPOS Control</a>` +
     PAGES.map(([p, t]) => `<a href="/${p === 'index' ? '' : p + '.html'}" class="${p === here ? 'on' : ''}">${t}</a>`).join('') +
-    `<span class="run" id="navrun"></span>`;
+    `<span class="run" id="navrun"></span><button class="theme" id="themebtn" type="button"></button>`;
   document.body.prepend(el);
+  themeButton($('#themebtn'));
+  if (location.protocol === 'file:') {
+    // opened from disk: nothing can reach the server, so say how to open it properly
+    el.querySelectorAll('a').forEach(x => { x.removeAttribute('href'); x.title = 'Open http://127.0.0.1:8770/ to use the control panel'; x.style.cursor = 'not-allowed'; });
+    const n = document.createElement('div');
+    n.className = 'note warn';
+    n.innerHTML = 'This page was opened as a file, so it can\'t run anything. Start the control panel with <code>control/start.sh</code>, then open <a href="http://127.0.0.1:8770/">http://127.0.0.1:8770/</a>.';
+    document.querySelector('main').prepend(n);
+    return;
+  }
   pollRunning();
+}
+function themeButton(b) {
+  const mq = matchMedia('(prefers-color-scheme: dark)');
+  const isDark = () => document.documentElement.dataset.theme ? document.documentElement.dataset.theme === 'dark' : mq.matches;
+  const paint = () => { b.textContent = isDark() ? '☀ Light' : '☾ Dark'; b.title = `Switch to ${isDark() ? 'light' : 'dark'} mode`; };
+  b.onclick = () => {
+    const t = isDark() ? 'light' : 'dark';
+    document.documentElement.dataset.theme = t;
+    try { localStorage.setItem('unipos-theme', t); } catch (e) {}
+    paint();
+  };
+  mq.addEventListener('change', paint);
+  paint();
 }
 async function pollRunning() {
   try {
@@ -75,6 +100,7 @@ async function attachJob(id, logEl, opts = {}) {
   }
 }
 function alertNote(msg, kind = 'bad') {
+  if (location.protocol === 'file:') return;  // the file:// banner already explains
   const n = document.createElement('div');
   n.className = 'note ' + kind;
   n.textContent = msg;
@@ -113,16 +139,77 @@ function kindOf(title) {
   if (/^✖/.test(title)) return 'bad';
   return 'info';
 }
+const NICE = { 'Not pulled - local changes block it': 'Blocked by local changes', 'Not pulled - conflict / branch diverged': 'Conflict / diverged', 'Not pulled - other errors': 'Errors', 'Pulled successfully': 'Pulled' };
+const plain = t => { const x = t.replace(/^[^\p{L}\p{N}]+\s*/u, ''); return NICE[x] || x; };
+// "repo (note)" / "repo -> reason" / "repo: n file(s)" → [name, note]
+function splitItem(i) {
+  const m = i.match(/^(\S+)\s*(?:\((.*)\)|->\s*(.*)|:\s*(.*))?$/);
+  return m ? [m[1], m[2] || m[3] || m[4] || ''] : [i, ''];
+}
+// Result cards: one per section, rows expandable when there is detail for the repo
 function renderGroups(sections, detail) {
-  return `<div class="groups">${sections.map(s => `
-    <div class="panel group"><h3><span class="badge b-${kindOf(s.title)}">${s.n}</span> ${esc(s.title)}</h3>
-    ${s.items.length ? `<ul>${s.items.map(i => {
-      const repo = i.split(/[ :]/)[0];
-      const d = detail?.[repo];
+  return `<div class="gcards">${sections.map(s => {
+    const k = kindOf(s.title);
+    const rows = s.items.map(i => {
+      const [name, note] = splitItem(i);
+      const d = (s.detail || detail)?.[name];
+      const chip = note ? `<span class="chip ${/updated|new commit/.test(note) ? 'c-' + k : ''}">${esc(note)}</span>` : '';
       return d && d.lines.length && !(d.lines.length === 1 && /clean/.test(d.lines[0]))
-        ? `<li><details><summary>${esc(i)}</summary><pre class="log">${esc(d.lines.join('\n'))}</pre></details></li>`
-        : `<li>${esc(i)}</li>`;
-    }).join('')}</ul>` : '<span class="muted">none</span>'}</div>`).join('')}</div>`;
+        ? `<details class="grow-d"><summary class="grow"><span class="chev">›</span><span class="nm">${esc(name)}</span>${chip}</summary><pre class="log">${esc(d.lines.join('\n'))}</pre></details>`
+        : `<div class="grow"><span class="chev"></span><span class="nm">${esc(name)}</span>${chip}</div>`;
+    }).join('');
+    return `<section class="gcard c-${k}"><header><span class="dot"></span>${esc(plain(s.title))}<span class="cnt">${s.n}</span></header>
+      <div class="rows">${rows || '<div class="empty">None</div>'}</div></section>`;
+  }).join('')}</div>`;
+}
+function renderKpis(sections) {
+  return `<div class="kpis">${sections.map(s => `<div class="kpi c-${kindOf(s.title)} ${s.n ? '' : 'zero'}"><div class="num">${s.n}</div><div class="lbl">${esc(plain(s.title))}</div></div>`).join('')}</div>`;
+}
+
+// Shared page for Pull / Status. cfg: {action, steps?, progress(text,total)→{step,done,label}, render(state,text)→Promise<html>|html}
+function runPage(cfg) {
+  let total = 0;
+  const live = $('#live'), bar = $('#bar'), cur = $('#cur');
+  const lastLine = j => j ? `Last run ${esc(ago(j.end || j.start))} · ${esc(when(j.end || j.start))}${j.end ? ' · ' + esc(dur(j)) : ''}` : 'Not run yet from this site';
+  function progress(text, mode) {
+    const p = cfg.progress(text, total);
+    const pct = mode === 'done' ? 100 : total ? Math.min(98, Math.round(p.done / total * 100)) : 0;
+    bar.style.width = pct + '%';
+    bar.parentElement.classList.toggle('indet', mode !== 'done' && !p.done);
+    cur.innerHTML = mode === 'done' ? '' : `<span class="pulse"></span>${esc(p.label || 'Starting…')}<span class="muted">${total ? ` · ${p.done}/${total}` : ''}</span>`;
+    if (cfg.steps) $('#steps').innerHTML = cfg.steps.map((t, i) => {
+      const st = mode === 'done' ? 'done' : i < p.step ? 'done' : i === p.step ? 'active' : 'pending';
+      return (i ? `<i class="link ${st !== 'pending' ? 'done' : ''}"></i>` : '') + `<span class="step ${st}"><span class="n">${st === 'done' ? '✓' : i + 1}</span>${t}</span>`;
+    }).join('');
+  }
+  async function show(s, text) {
+    $('#go').disabled = false;
+    live.hidden = true;
+    const ok = s.job.exit === 0;
+    $('#last').innerHTML = (ok ? '<span class="badge b-ok">done</span> ' : `<span class="badge b-bad">exit ${s.job.exit ?? '?'}</span> `) + lastLine(s.job);
+    $('#result').innerHTML = await cfg.render(s, text);
+  }
+  async function go(attachId) {
+    $('#go').disabled = true; $('#result').innerHTML = '';
+    live.hidden = false; progress('', 'run');
+    try {
+      total = (await api('/api/repos')).repos.length;
+      const opts = { cancelBtn: $('#cancel'), onText: t => progress(t, 'run'), onDone: show };
+      attachId ? await attachJob(attachId, $('#log'), opts) : await runJob(cfg.action, {}, $('#log'), opts);
+    } catch (e) { alertNote(e.message); $('#go').disabled = false; live.hidden = true; }
+  }
+  $('#go').onclick = () => go();
+  (async () => {
+    const h = await api('/api/history');
+    if (h.runningId && h.runningId.endsWith('-' + cfg.action)) return go(h.runningId);
+    if (new URLSearchParams(location.search).get('run') && !h.runningId) { history.replaceState(null, '', location.pathname); return go(); }
+    const lastRun = [...h.history].reverse().find(x => x.action === cfg.action && !!x.dryRun === !!h.dryRun);
+    // Read-only pages (Status) re-check by themselves when the saved result is old, so it never shows stale work
+    const age = lastRun ? (Date.now() - new Date(lastRun.end || lastRun.start)) / 60000 : Infinity;
+    if (cfg.autoRunAfterMin && age > cfg.autoRunAfterMin && !h.runningId) return go();
+    $('#last').innerHTML = lastLine(lastRun);
+    if (lastRun) await attachJob(lastRun.id, $('#log'), { onDone: show });
+  })().catch(e => alertNote(e.message));
 }
 
 // Minimal markdown: headings, tables, lists, paragraphs, **bold**, `code`

@@ -1,4 +1,4 @@
-// UniPOS · payment-service · generated from @Entity code (origin/dev f10b8f0)
+// UniPOS · payment-service · generated from @Entity code (origin/dev 1c35a87)
 
 Table payment.bank_deposits [note: 'entity BankDeposit'] {
   bank_deposit_id uuid [pk]

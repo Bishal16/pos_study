@@ -1,4 +1,4 @@
-// UniPOS · report-service · generated from @Entity code (origin/dev 3de790f)
+// UniPOS · report-service · generated from @Entity code (origin/dev cf5c3b9)
 
 Table report.chart_of_accounts [note: 'entity ChartOfAccountSnapshot'] {
   account_id integer [pk]
@@ -98,6 +98,8 @@ Table report.item_ledger_entry_snapshots [note: 'entity ItemLedgerEntrySnapshot'
   product_id uuid
   product_description varchar(250)
   product_code varchar(100)
+  product_category varchar(150)
+  unit varchar(20)
   sales_hub_id integer [note: '→ configuration.business_areas.business_area_id (other service, no FK)']
   sales_hub_name varchar(150)
   sales_hub_address varchar(250)
