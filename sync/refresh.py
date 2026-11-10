@@ -23,6 +23,7 @@ SERVICES = ["authentication", "authorization", "configuration", "product", "cust
             "sales", "policy", "promotion", "payment", "accounts", "vat", "report", "compliance", "notification"]
 REPOS = {s: os.path.join(ROOT, s + "-service") for s in SERVICES}
 REPOS["frontend"] = os.path.join(ROOT, "1frontend", "smartpos-web")
+REPOS["apollo"] = os.path.join(ROOT, "apollo-server")
 NOW = datetime.datetime.now().replace(microsecond=0)
 NO_FETCH = "--no-fetch" in sys.argv
 AUTO = "--auto" in sys.argv
@@ -108,6 +109,7 @@ def run(*cmd, cwd):
 
 run("python3", "-I", "extract.py", cwd=ATLAS)
 run("python3", "-I", "extract_fe.py", cwd=ATLAS)   # frontend (Atlas level 7); needs data.json for op owners
+run("python3", "-I", "extract_apollo.py", cwd=ATLAS)   # gateway (Atlas level 8), with a best-effort read of the dev Consul
 run("python3", "-I", "extract.py", cwd=ERD)
 run("python3", "-I", "build.py", cwd=ERD)
 
@@ -225,9 +227,15 @@ for t, ft in f_topics.items():
         drift.append({"kind": "kafka", "svc": s, "msg": f"{s} listens to {t} in code; the Atlas doesn't show it"})
     for s in sorted(atlas_cons - code_cons):
         drift.append({"kind": "kafka", "svc": s, "msg": f"Atlas shows {s} listening to {t}; no listener in code"})
+try:
+    _cp = json.load(open(os.path.join(ATLAS, "apollo.json"))).get("compose") or {}
+    if _cp and not _cp.get("ok"):
+        drift.append({"kind": "compose", "svc": "apollo", "msg": f"origin/dev's schemas do not compose ({_cp.get('errorCount')} errors): once deployed, the gateway stops taking schema updates"})
+except (OSError, ValueError):
+    pass
 changed_svcs = sorted(n for n, h in repos.items() if h.get("new"))
 for s in changed_svcs:
-    if s in F_S:
+    if s in F_S or s == "apollo":
         drift.append({"kind": "review", "svc": s, "msg": f"{repos[s]['new']} new commit(s) since the {SINCE}: re-check its findings in the Atlas"})
 
 # ---------- 5. status + report ----------
@@ -264,6 +272,15 @@ try:
     L += ["", "## Frontend (Atlas level 7)", f"- {len(_fe['pages'])} pages in {len(_fe['modules'])} modules, origin/dev `{_fe['head']['commit']}` {_fe['head']['date']}",
           f"- {len(_fe['unknownOps'])} GraphQL operations called by the frontend are not in any backend schema (screens likely broken)",
           f"- {sum(p['mock'] for p in _fe['pages'])} pages show mock data"]
+except (OSError, ValueError, KeyError):
+    pass
+try:
+    _ap = json.load(open(os.path.join(ATLAS, "apollo.json")))
+    _lv = _ap.get("live") or {}
+    L += ["", "## Apollo gateway (Atlas level 8)", f"- origin/dev `{_ap['head']['commit']}` {_ap['head']['date']}, {len(_ap['services'])} services, {len(_ap['shared'])} shared types",
+          f"- origin/dev composes: {(_ap.get('compose') or {}).get('ok', 'not checked')}; services whose absence stops updates: {', '.join((_ap.get('compose') or {}).get('blocks', {})) or 'none'}",
+          f"- Live {_lv.get('at', 'not read')}: {_lv.get('rootFields', '?')} operations; instances outside the Docker network: " +
+          (", ".join(f"{n} {v['outside']}" for n, v in (_lv.get('services') or {}).items() if v['outside']) or "none")]
 except (OSError, ValueError, KeyError):
     pass
 L += ["", "## Published pages", f"- Last publish: {published.get('at', 'never')} (built {published.get('generatedAt', '—')})",

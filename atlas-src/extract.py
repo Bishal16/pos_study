@@ -215,7 +215,7 @@ def main():
                     l, p = parse_kafka(src)
                     lis += l
                     prod += p
-            elif f.endswith(".graphqls") and "/schema/" in f:
+            elif f.endswith(".graphqls") and "/schema/" in f and f.startswith("src/"):   # customer-service also commits a stale bin/ copy
                 ops += parse_ops(repo.read(f))
         port, app, urls, ptopics, boot = props(repo, files)
         def resolve(t):

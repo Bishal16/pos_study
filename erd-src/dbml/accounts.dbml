@@ -1,4 +1,4 @@
-// UniPOS · accounts-service · generated from @Entity code (origin/dev d82d3d4)
+// UniPOS · accounts-service · generated from @Entity code (origin/dev 62b66a7)
 
 Table accounts.accounting_periods [note: 'entity AccountingPeriod'] {
   accounting_period_id integer [pk]
@@ -474,6 +474,8 @@ Table accounts.general_ledger_details [note: 'entity GeneralLedgerDetail'] {
   bank_account_id uuid
   customer_id uuid [note: '→ customer.persons.person_id (other service, no FK)']
   particular varchar(250)
+  party_name varchar(250)
+  party_code varchar(50)
 }
 
 Table accounts.general_ledger_headers [note: 'entity GeneralLedgerHeader'] {

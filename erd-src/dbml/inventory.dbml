@@ -1,4 +1,4 @@
-// UniPOS · inventory-service · generated from @Entity code (origin/dev d262c00)
+// UniPOS · inventory-service · generated from @Entity code (origin/dev 0e3b546)
 
 Table inventory.sales_hub_allocated_spaces [note: 'entity SalesHubAllocatedSpace'] {
   sales_hub_allocated_space_id uuid [pk]
@@ -83,8 +83,8 @@ Table inventory.item_ledgers [note: 'entity ItemLedger'] {
   transaction_date timestamp [not null]
   transaction_type varchar(50) [not null]
   operation_name varchar(50) [not null]
-  item_level_id bigint [not null]
-  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  item_level_id bigint
+  related_id uuid [note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
   opening_quantity numeric [not null]
   opening_rate numeric [not null]
   opening_amount numeric [not null]

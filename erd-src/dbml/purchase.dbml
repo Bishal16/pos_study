@@ -1,4 +1,4 @@
-// UniPOS · purchase-service · generated from @Entity code (origin/dev 44ed78e)
+// UniPOS · purchase-service · generated from @Entity code (origin/dev 4fa4695)
 
 Table purchase.delivery_orders [note: 'entity DeliveryOrder'] {
   delivery_order_id uuid [pk]
@@ -78,6 +78,7 @@ Table purchase.supplier_legal_entities [note: 'entity SupplierLegalEntity'] {
   email varchar(255) [not null, unique]
   phone varchar(255) [not null]
   merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  code varchar(255)
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [not null, note: 'inherited from BaseEntity']
   is_active boolean [not null, note: 'inherited from BaseEntity']
@@ -185,11 +186,12 @@ Table purchase.purchase_orders [note: 'entity PurchaseOrder'] {
   grand_total numeric(15) [not null]
   status varchar(50) [not null]
   notes varchar(100)
-  approval_id uuid [note: '→ approval.approval_requests.approval_request_id (other service, no FK)']
+  approval_id bigint [note: '→ approval.approval_requests.approval_request_id (other service, no FK)']
   payment_terms varchar(255)
   requester_type varchar(50)
-  approval_path_id uuid [note: '→ approval.approval_paths.approval_path_id (other service, no FK)']
-  workflow_id uuid [note: '→ approval.approval_workflows.workflow_id (other service, no FK)']
+  approval_path_id bigint [note: '→ approval.approval_paths.approval_path_id (other service, no FK)']
+  workflow_id bigint [note: '→ approval.approval_workflows.workflow_id (other service, no FK)']
+  workflow_code varchar(50)
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [not null, note: 'inherited from BaseEntity']
   is_active boolean [not null, note: 'inherited from BaseEntity']
@@ -278,10 +280,11 @@ Table purchase.purchase_requests [note: 'entity PurchaseRequest'] {
   notes varchar(255) [not null]
   total_estimated_cost numeric [not null]
   is_changed_by_approver boolean [not null]
-  approval_id uuid [note: '→ approval.approval_requests.approval_request_id (other service, no FK)']
+  approval_id bigint [note: '→ approval.approval_requests.approval_request_id (other service, no FK)']
   requester_type varchar(50)
-  approval_path_id uuid [note: '→ approval.approval_paths.approval_path_id (other service, no FK)']
-  workflow_id uuid [note: '→ approval.approval_workflows.workflow_id (other service, no FK)']
+  approval_path_id bigint [note: '→ approval.approval_paths.approval_path_id (other service, no FK)']
+  workflow_id bigint [note: '→ approval.approval_workflows.workflow_id (other service, no FK)']
+  workflow_code varchar(50)
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [not null, note: 'inherited from BaseEntity']
   is_active boolean [not null, note: 'inherited from BaseEntity']

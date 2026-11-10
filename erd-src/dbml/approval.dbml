@@ -1,8 +1,8 @@
-// UniPOS · approval-service · generated from @Entity code (origin/dev 55cfecc)
+// UniPOS · approval-service · generated from @Entity code (origin/dev cbccc31)
 
 Table approval.approval_logs [note: 'entity ApprovalLog'] {
   approval_log_id uuid [pk]
-  approval_request_id uuid [not null]
+  approval_request_id bigint [not null]
   approval_path_role_user_id uuid [not null]
   taken_action varchar(50) [not null]
   notes varchar(255) [not null]
@@ -14,7 +14,7 @@ Table approval.approval_logs [note: 'entity ApprovalLog'] {
 }
 
 Table approval.approval_paths [note: 'entity ApprovalPath'] {
-  approval_path_id uuid [pk]
+  approval_path_id bigint [pk]
   merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
   path_code varchar(50)
   approval_path_name varchar(255) [not null]
@@ -28,13 +28,13 @@ Table approval.approval_paths [note: 'entity ApprovalPath'] {
 
 Table approval.approval_path_assigned_workflows [note: 'entity ApprovalPathAssignedWorkflow'] {
   approval_path_assigned_workflow_id uuid [pk]
-  approval_path_id uuid [not null]
-  workflow_id uuid [not null]
+  approval_path_id bigint [not null]
+  workflow_id bigint [not null]
 }
 
 Table approval.approval_path_roles [note: 'entity ApprovalPathRole'] {
   approval_path_role_id uuid [pk]
-  approval_path_id uuid [not null]
+  approval_path_id bigint [not null]
   role_id bigint [note: '→ authorization.roles.role_id (other service, no FK)']
   action_sequence bigint [not null]
   comment varchar(255) [not null]
@@ -43,7 +43,7 @@ Table approval.approval_path_roles [note: 'entity ApprovalPathRole'] {
 
 Table approval.approval_path_stages [note: 'entity ApprovalPathStage'] {
   approval_path_stage_id uuid [pk]
-  approval_path_id uuid [not null]
+  approval_path_id bigint [not null]
   merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
   execution_order_number integer [not null]
   business_area_type_id integer
@@ -95,7 +95,7 @@ Table approval.approval_path_role_users_history [note: 'entity ApprovalPathRoleU
 Table approval.approval_policies [note: 'entity ApprovalPolicy'] {
   approval_policy_id uuid [pk]
   policy_name varchar(255) [not null]
-  workflow_id uuid [not null]
+  workflow_id bigint [not null]
   condition varchar(255) [not null]
   comment varchar(255) [not null]
   created_at timestamp [not null, note: 'inherited from BaseEntity']
@@ -107,7 +107,7 @@ Table approval.approval_policies [note: 'entity ApprovalPolicy'] {
 
 Table approval.approval_action_history [note: 'entity ApprovalActionHistory'] {
   approval_action_history_id uuid [pk]
-  approval_request_id uuid [not null]
+  approval_request_id bigint [not null]
   approval_request_stage_id uuid
   actor_id uuid [not null]
   action_by uuid
@@ -124,12 +124,12 @@ Table approval.approval_action_history [note: 'entity ApprovalActionHistory'] {
 }
 
 Table approval.approval_requests [note: 'entity ApprovalRequest'] {
-  approval_request_id uuid [pk]
+  approval_request_id bigint [pk]
   merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
   requested_by varchar(50)
-  workflow_id uuid [not null]
+  workflow_id bigint [not null]
   approval_status varchar(50) [not null]
-  path_id uuid [not null]
+  path_id bigint [not null]
   notes varchar(255)
   reference_id varchar(50)
   reference_type varchar(50)
@@ -150,7 +150,7 @@ Table approval.approval_requests [note: 'entity ApprovalRequest'] {
 
 Table approval.approval_request_stages [note: 'entity ApprovalRequestStage'] {
   approval_request_stage_id uuid [pk]
-  approval_request_id uuid [not null]
+  approval_request_id bigint [not null]
   approval_path_stage_id uuid
   execution_order_number integer [not null]
   stage_status varchar(20) [not null]
@@ -180,7 +180,7 @@ Table approval.approval_request_stage_actors [note: 'entity ApprovalRequestStage
 
 Table approval.approval_steps [note: 'entity ApprovalStep'] {
   approval_step_id uuid [pk]
-  approval_request_id uuid [not null]
+  approval_request_id bigint [not null]
   step_no bigint [not null]
   approval_path_role_user_id uuid [not null]
   status varchar(50) [not null]
@@ -193,7 +193,7 @@ Table approval.approval_steps [note: 'entity ApprovalStep'] {
 }
 
 Table approval.approval_workflows [note: 'entity ApprovalWorkflow'] {
-  workflow_id uuid [pk]
+  workflow_id bigint [pk]
   merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
   workflow_name varchar(200) [not null]
   workflow_code varchar(50) [not null]
@@ -222,7 +222,7 @@ Table approval.approval_delegations [note: 'entity ApprovalDelegation'] {
 
 Table approval.outbox [note: 'entity Outbox'] {
   id uuid [pk]
-  aggregate_id uuid [not null]
+  aggregate_id bigint [not null]
   aggregate_type varchar(50) [not null]
   event_type varchar(50) [not null]
   payload varchar(255) [not null]
@@ -231,20 +231,19 @@ Table approval.outbox [note: 'entity Outbox'] {
   updated_at timestamp [not null]
 }
 
-Table approval.path_routing_conditions [note: 'entity PathRoutingCondition'] {
-  path_routing_condition_id uuid [pk]
-  workflow_approval_path_mapping_id uuid [not null]
-  execution_order integer [not null]
-  comparable_field varchar(150) [not null]
-  operator varchar(20) [not null]
-  comparable_value "double precision" [not null]
-  connecting_logical_operator varchar(10)
+Table approval.approval_path_condition_groups [note: 'entity ApprovalPathConditionGroup'] {
+  approval_path_condition_group_id bigint [pk]
+  approval_path_id bigint [not null]
+  group_code varchar(20) [not null]
+  group_sequence integer [not null]
+  logical_operator varchar(10)
+  is_active boolean [not null]
 }
 
-Table approval.workflow_approval_path_mappings [note: 'entity WorkflowApprovalPathMapping'] {
-  workflow_approval_path_mapping_id uuid [pk]
-  workflow_id uuid [not null]
-  approval_path_id uuid [not null]
+Table approval.approval_workflow_paths [note: 'entity ApprovalWorkflowPath'] {
+  workflow_path_id bigint [pk]
+  workflow_id bigint [not null]
+  approval_path_id bigint [not null]
   merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
   priority integer [not null]
   created_at timestamp [not null, note: 'inherited from BaseEntity']
@@ -252,6 +251,16 @@ Table approval.workflow_approval_path_mappings [note: 'entity WorkflowApprovalPa
   is_active boolean [not null, note: 'inherited from BaseEntity']
   created_by varchar(255) [not null, note: 'inherited from BaseEntity']
   updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table approval.path_routing_conditions [note: 'entity PathRoutingCondition'] {
+  path_routing_condition_id bigint [pk]
+  approval_path_condition_group_id bigint [not null]
+  execution_order integer [not null]
+  comparable_field varchar(150) [not null]
+  operator varchar(20) [not null]
+  comparable_value jsonb [not null]
+  connecting_logical_operator varchar(10)
 }
 
 Ref: approval.approval_logs.approval_request_id > approval.approval_requests.approval_request_id
@@ -273,6 +282,7 @@ Ref: approval.approval_request_stages.approval_path_stage_id > approval.approval
 Ref: approval.approval_request_stage_actors.approval_request_stage_id > approval.approval_request_stages.approval_request_stage_id
 Ref: approval.approval_steps.approval_request_id > approval.approval_requests.approval_request_id
 Ref: approval.approval_steps.approval_path_role_user_id > approval.approval_path_role_users.approval_path_role_user_id
-Ref: approval.path_routing_conditions.workflow_approval_path_mapping_id > approval.workflow_approval_path_mappings.workflow_approval_path_mapping_id
-Ref: approval.workflow_approval_path_mappings.workflow_id > approval.approval_workflows.workflow_id
-Ref: approval.workflow_approval_path_mappings.approval_path_id > approval.approval_paths.approval_path_id
+Ref: approval.approval_path_condition_groups.approval_path_id > approval.approval_paths.approval_path_id
+Ref: approval.approval_workflow_paths.workflow_id > approval.approval_workflows.workflow_id
+Ref: approval.approval_workflow_paths.approval_path_id > approval.approval_paths.approval_path_id
+Ref: approval.path_routing_conditions.approval_path_condition_group_id > approval.approval_path_condition_groups.approval_path_condition_group_id

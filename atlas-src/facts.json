@@ -899,28 +899,28 @@
    "rows": [
     [
      "Port",
-     ":4000 (container apollo-server)"
+     ":4000 on dev (container apollo-server; the code's default is 4042)"
     ],
     [
      "Stack",
-     "Node 22, Apollo Gateway 2, Apollo Server 5, Express 5"
+     "Node 22, Apollo Gateway 2, Apollo Server 5, Express 5, TypeScript"
     ],
     [
      "Discovery",
-     "Consul catalog + health?passing, every 30 s (also k8s / static)"
+     "Consul every 30 s: passing + deployment=docker + environment=dev (static list for local runs)"
     ],
     [
      "Forwards",
-     "authorization, merchant-id, user-id, x-tenant-id, x-correlation-id, traceparent"
+     "merchant-id, authorization, user-id, x-tenant-id, x-request-id, x-trace-id, x-correlation-id, traceparent and the Apollo CSRF headers"
     ],
     [
      "Extras",
-     "/health, /ready, file upload route, OTel"
+     "/health, /ready, multipart upload forwarding, /api/upload route, OTel"
     ]
    ],
    "find": [
     "Does not verify the JWT",
-    "A subgraph that fails to compose is silently dropped",
+    "A service that is down or won't return its schema is dropped; a composition error keeps the old supergraph for everyone",
     "Restarted after every service deploy"
    ],
    "notes": "11-infra-sources.md"
@@ -943,7 +943,7 @@
     ]
    ],
    "find": [
-    "Services register with TTL heartbeats",
+    "Services register with TTL heartbeats, except authentication (HTTP check)",
     "Only the gateway uses it for discovery; services call each other by fixed Docker names"
    ]
   },
@@ -1726,5 +1726,163 @@
     "Convert {service} (plain fetch to NEXT_PUBLIC_GRAPHQL_ENDPOINT, no token) to the modern pattern: a .graphql document in src/graphql and serverFetch/serverActionFetch with token and merchantId. Keep the function signatures the page uses so nothing else breaks."
    ]
   ]
+ },
+ "APOLLO": {
+  "steps": [
+   [
+    "Discover",
+    "Ask Consul who is alive",
+    "Reads the catalog, then asks for each name's passing instances. Keeps only instances labelled deployment=docker and environment=dev, and takes the first one.",
+    "discovery/ConsulServiceRegistry.ts",
+    "A service with no matching instance is skipped with a warning. If Consul itself can't be reached, this whole refresh fails and the gateway keeps its current supergraph."
+   ],
+   [
+    "Download schemas",
+    "Ask each service for its schema",
+    "POSTs { _service { sdl } } to http://address:port/graphql/ with no login token, 5 s to answer. Each service returns its own schema text.",
+    "federation/SubgraphIntrospector.ts",
+    "A service that fails is dropped from this round; the others carry on. Only if all of them fail does the refresh stop. A service whose security blocks this call disappears from the API, so _service has to stay open."
+   ],
+   [
+    "Check dependencies",
+    "Drop schemas that extend a missing type",
+    "Removes a service that uses `extend type X` when no other service defines X.",
+    "federation/FederationDependencyResolver.ts",
+    "UniPOS schemas mostly use `type X @extends`, which this check reads as a normal definition, so it rarely removes anything. Those cases reach the next step instead."
+   ],
+   [
+    "Compose",
+    "Merge all schemas into one",
+    "Apollo's composeServices merges everything into one supergraph document. It records every service's URL and which service owns each field.",
+    "federation/SupergraphComposer.ts",
+    "All or nothing: one conflict, or a type that a single service extends with nothing else defining it, fails the whole step. The old supergraph stays in use for everyone, so no service's change goes live until it is fixed."
+   ],
+   [
+    "Save",
+    "Write it to the cache file",
+    "Saves the result to cache/supergraph.graphql inside the container, so the next start can run straight away.",
+    "federation/SupergraphCache.ts",
+    "This is read first at startup. If it exists the gateway starts from it, even when services are down, and refreshes right after."
+   ],
+   [
+    "Go live",
+    "Swap it in, no restart",
+    "If the text changed, it is handed to the running Apollo Gateway, which starts routing with it. If nothing changed, nothing happens.",
+    "federation/DynamicSupergraphManager.ts",
+    "Requests keep flowing during the swap. Every 30 s the whole cycle starts again, one run at a time."
+   ]
+  ],
+  "register": [
+   [
+    "Service starts",
+    "Spring Boot starts with spring-cloud-starter-consul-discovery on the classpath. Nothing in the service's code does this; it is all settings in application.properties.",
+    "config/application.properties"
+   ],
+   [
+    "It registers itself",
+    "It tells Consul its name (spring.application.name), its IP and port, a random instance id, and labels: deployment=docker, environment=dev, project=unipos, protocol=graphql.",
+    "spring.cloud.consul.discovery.*"
+   ],
+   [
+    "It proves it's alive",
+    "With heartbeat on, it pings Consul regularly. If the pings stop, its check turns critical. Authentication has heartbeat off, so Consul calls its /actuator/health instead.",
+    "discovery.heartbeat.enabled"
+   ],
+   [
+    "Consul forgets dead instances",
+    "After 1 minute critical, Consul should remove the instance (deregister-critical-service-after=1m).",
+    "deregister-critical-service-after"
+   ],
+   [
+    "The gateway finds it",
+    "The service never contacts the gateway. Within 30 s the gateway's next refresh sees it, downloads its schema and adds it. There is no list of services to edit.",
+    "discovery/ConsulServiceRegistry.ts"
+   ]
+  ],
+  "scenarios": [
+   [
+    "You deploy a new operation on a service",
+    "It appears in the API within about 30 s of the service becoming healthy, through the normal refresh."
+   ],
+   [
+    "A service goes down, and the others still compose without it",
+    "Within about a minute its operations vanish from the API. Callers get “Cannot query field”, not a connection error. They come back by themselves."
+   ],
+   [
+    "A service goes down, and composition needs it",
+    "Composition fails, so the old supergraph stays. Its operations stay listed but calls to it fail, and no other service's changes go live until it returns."
+   ],
+   [
+    "Two services define the same field differently",
+    "Composition fails with FIELD_TYPE_MISMATCH. The API keeps working on the old supergraph, and the only sign is an error in the gateway's log."
+   ],
+   [
+    "Consul is down",
+    "Refreshes fail and the gateway keeps its current supergraph. Requests still work, because the gateway only needs Consul to find services, not to route."
+   ],
+   [
+    "The gateway restarts",
+    "It starts from the cached supergraph at once, then refreshes. With no cache and nothing reachable, it exits and Docker restarts it."
+   ]
+  ],
+  "request": [
+   [
+    "Kong",
+    "Sends /graphql to apollo-server:4000. No login check here.",
+    "Kong route"
+   ],
+   [
+    "Express",
+    "Applies CORS and JSON parsing, up to 1 MB.",
+    "Server.ts"
+   ],
+   [
+    "Upload?",
+    "A multipart request skips Apollo. The gateway reads which root field it calls, finds the owning service in the supergraph, and forwards the bytes as they are (up to 10 MB).",
+    "middleware/RegisterMultipartForwarding.ts"
+   ],
+   [
+    "Plan",
+    "Apollo checks the query against the supergraph and works out which services must be called, in what order.",
+    "gateway/ApolloServer.ts"
+   ],
+   [
+    "Call the services",
+    "Each call copies the caller's headers (list below) and adds x-gateway-service and x-subgraph-service.",
+    "datasource/AuthenticatedDataSource.ts"
+   ],
+   [
+    "Join",
+    "If the query spans services, the gateway calls the owner first, then sends the key to the next service through _entities, e.g. User by userId from authentication, then authorization.",
+    "@apollo/gateway"
+   ],
+   [
+    "Answer",
+    "Merges the parts and adds extensions: status, code and message. Errors are logged and returned.",
+    "plugins/responseFormatter.plugin.ts"
+   ]
+  ],
+  "newsvc": [
+   "Add spring-cloud-starter-consul-discovery and the DGS GraphQL starter to pom.xml.",
+   "Copy the spring.cloud.consul.discovery.* block from another service, including the docker and dev labels. Without them the gateway skips it.",
+   "Set a unique spring.application.name and spring.graphql.path=/graphql/ (the gateway always calls /graphql/).",
+   "Keep _service reachable with no token if you add JWT security.",
+   "Don't reuse a field name on a shared type with a different type, or composition fails for everyone.",
+   "Deploy, then look for “Supergraph composed successfully” in the gateway's log. You don't change the gateway."
+  ],
+  "roles": {
+   "Server.ts": "Starts everything, in order",
+   "config": "Environment settings and logging",
+   "discovery": "Finds services: Consul, or a fixed list for local runs",
+   "federation": "Builds and refreshes the supergraph",
+   "gateway": "Creates Apollo Gateway and Apollo Server",
+   "datasource": "Calls a service and copies headers",
+   "middleware": "Upload forwarding, CORS, request context",
+   "plugins": "Adds status, code, message to replies",
+   "routes": "/health, /ready, /, /api/upload",
+   "telemetry": "Sends traces to the collector",
+   "utils": "Clean shutdown",
+   "bootstrap": "Empty"
+  }
  }
 }

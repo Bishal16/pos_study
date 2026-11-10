@@ -1,0 +1,63 @@
+=== 2026-11-03 09:00:01 refresh --auto
+UniPOS refresh: 292 new commits since last publish · 12 schema · 256 ops · 26 to review
+report: /home/mahathir/Downloads/projects/_unipos-study/sync/reports/2026-11-03.md
+exit 0
+=== 2026-11-03 09:30:01 refresh --auto
+UniPOS refresh: already fetched today at 09:00 (skipping timer run)
+exit 0
+=== 2026-11-03 10:00:01 refresh --auto
+UniPOS refresh: already fetched today at 09:00 (skipping timer run)
+exit 0
+=== 2026-11-03 10:30:01 refresh --auto
+UniPOS refresh: already fetched today at 09:00 (skipping timer run)
+exit 0
+=== 2026-11-03 11:00:01 refresh --auto
+UniPOS refresh: already fetched today at 09:00 (skipping timer run)
+exit 0
+=== 2026-11-03 11:30:01 refresh --auto
+UniPOS refresh: already fetched today at 09:00 (skipping timer run)
+exit 0
+=== 2026-11-03 11:38:23 refresh --no-fetch
+UniPOS refresh: 297 new commits since last publish · 18 schema · 257 ops · 26 to review · NOT FETCHED (--no-fetch)
+report: /home/mahathir/Downloads/projects/_unipos-study/sync/reports/2026-11-03.md
+exit 0
+=== 2026-11-03 11:40:17 refresh --no-fetch
+UniPOS refresh: 297 new commits since last publish · 18 schema · 257 ops · 27 to review · NOT FETCHED (--no-fetch)
+report: /home/mahathir/Downloads/projects/_unipos-study/sync/reports/2026-11-03.md
+exit 0
+=== 2026-11-03 11:41:20 refresh --no-fetch
+UniPOS refresh: 297 new commits since last publish · 18 schema · 257 ops · 26 to review · NOT FETCHED (--no-fetch)
+report: /home/mahathir/Downloads/projects/_unipos-study/sync/reports/2026-11-03.md
+exit 0
+=== 2026-11-03 11:43:12 refresh --no-fetch
+UniPOS refresh: 297 new commits since last publish · 18 schema · 257 ops · 26 to review · NOT FETCHED (--no-fetch)
+report: /home/mahathir/Downloads/projects/_unipos-study/sync/reports/2026-11-03.md
+exit 0
+=== 2026-11-03 12:00:01 refresh --auto
+UniPOS refresh: 299 new commits since last publish · 18 schema · 261 ops · 26 to review
+report: /home/mahathir/Downloads/projects/_unipos-study/sync/reports/2026-11-03.md
+exit 0
+=== 2026-11-03 12:30:01 refresh --auto
+UniPOS refresh: already fetched today at 12:00 (skipping timer run)
+exit 0
+=== 2026-11-03 14:30:01 refresh --auto
+UniPOS refresh: already fetched today at 12:00 (skipping timer run)
+exit 0
+=== 2026-11-03 15:00:01 refresh --auto
+UniPOS refresh: already fetched today at 12:00 (skipping timer run)
+exit 0
+=== 2026-11-03 15:30:01 refresh --auto
+UniPOS refresh: already fetched today at 12:00 (skipping timer run)
+exit 0
+=== 2026-11-03 16:00:01 refresh --auto
+UniPOS refresh: already fetched today at 12:00 (skipping timer run)
+exit 0
+=== 2026-11-03 16:30:01 refresh --auto
+UniPOS refresh: already fetched today at 12:00 (skipping timer run)
+exit 0
+=== 2026-11-03 17:00:01 refresh --auto
+UniPOS refresh: already fetched today at 12:00 (skipping timer run)
+exit 0
+=== 2026-11-03 17:30:01 refresh --auto
+UniPOS refresh: already fetched today at 12:00 (skipping timer run)
+exit 0

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-31T16:22",
+ "generatedAt": "2026-11-10T09:30",
  "ref": "origin/dev",
  "fetchOk": true,
  "fetchSkipped": false,
@@ -75,19 +75,29 @@
   "frontend": {
    "ok": true,
    "msg": ""
+  },
+  "apollo": {
+   "ok": true,
+   "msg": ""
   }
  },
  "repos": {
   "authentication": {
    "branch": "origin/dev",
-   "commit": "d358e44",
-   "date": "2026-10-31",
-   "author": "alihossain_t239",
-   "subject": "fixed 403 on user report downloads and removed rar file",
-   "full": "d358e440f02a7ce8c2924602c02f75820cf2c1ab",
-   "fetchedAt": "2026-10-31T16:22",
-   "new": 10,
+   "commit": "8cc125c",
+   "date": "2026-11-08",
+   "author": "imranpranto00",
+   "subject": "fixed getAllUsers filter issue",
+   "full": "8cc125cf630ae91038e14ef7dc877ab2b54888f9",
+   "fetchedAt": "2026-11-10T09:30",
+   "new": 11,
    "commits": [
+    {
+     "c": "8cc125c",
+     "d": "2026-11-08",
+     "a": "imranpranto00",
+     "s": "fixed getAllUsers filter issue"
+    },
     {
      "c": "d358e44",
      "d": "2026-10-31",
@@ -152,14 +162,26 @@
   },
   "authorization": {
    "branch": "origin/dev",
-   "commit": "d59a32d",
-   "date": "2026-10-29",
+   "commit": "1b895b8",
+   "date": "2026-11-04",
    "author": "alihossain_t239",
-   "subject": "added pdf & csv report for user-role",
-   "full": "d59a32d802592e4d6452fbffb70f6dcbd23a034b",
-   "fetchedAt": "2026-10-31T16:22",
-   "new": 17,
+   "subject": "merchant name and created by name and user name added to reports",
+   "full": "1b895b819eeb140ea71265647134a784dd188bbc",
+   "fetchedAt": "2026-11-10T09:30",
+   "new": 19,
    "commits": [
+    {
+     "c": "1b895b8",
+     "d": "2026-11-04",
+     "a": "alihossain_t239",
+     "s": "merchant name and created by name and user name added to reports"
+    },
+    {
+     "c": "55c08c3",
+     "d": "2026-11-03",
+     "a": "alihossain_t239",
+     "s": "added pdf and csv report"
+    },
     {
      "c": "d59a32d",
      "d": "2026-10-29",
@@ -266,14 +288,20 @@
   },
   "configuration": {
    "branch": "origin/dev",
-   "commit": "300e0ba",
-   "date": "2026-10-29",
+   "commit": "e556001",
+   "date": "2026-11-08",
    "author": "imranpranto00",
-   "subject": "#24150-added pdf and csv report for saleshub",
-   "full": "300e0bab453bca908610d3d6f6d45e69f26dcf42",
-   "fetchedAt": "2026-10-31T16:22",
-   "new": 19,
+   "subject": "updated getAllActiveBusinessAreaTypeSummary and getAllActiveBusinessAreaSummary",
+   "full": "e556001d06c661bf9efa4a43a09bf6b049455651",
+   "fetchedAt": "2026-11-10T09:30",
+   "new": 20,
    "commits": [
+    {
+     "c": "e556001",
+     "d": "2026-11-08",
+     "a": "imranpranto00",
+     "s": "updated getAllActiveBusinessAreaTypeSummary and getAllActiveBusinessAreaSummary"
+    },
     {
      "c": "300e0ba",
      "d": "2026-10-29",
@@ -392,14 +420,92 @@
   },
   "product": {
    "branch": "origin/dev",
-   "commit": "ef42dd8",
-   "date": "2026-10-31",
-   "author": "imranpranto00",
-   "subject": "#24294-added pdf and csv report for product declared price",
-   "full": "ef42dd82256f6fb1a92ca7afc4af8b548749ae41",
-   "fetchedAt": "2026-10-31T16:22",
-   "new": 25,
+   "commit": "1583d0b",
+   "date": "2026-11-05",
+   "author": "Sonjoy Tripura",
+   "subject": "Added DNS in terraform due to Web client not resolving DNS",
+   "full": "1583d0b0dc6c310d6452d4a53e7718aed49a20ed",
+   "fetchedAt": "2026-11-10T09:30",
+   "new": 38,
    "commits": [
+    {
+     "c": "1583d0b",
+     "d": "2026-11-05",
+     "a": "Sonjoy Tripura",
+     "s": "Added DNS in terraform due to Web client not resolving DNS"
+    },
+    {
+     "c": "245e4a0",
+     "d": "2026-11-04",
+     "a": "Sonjoy Tripura",
+     "s": "Product sync time updated"
+    },
+    {
+     "c": "b13049d",
+     "d": "2026-11-04",
+     "a": "Sonjoy Tripura",
+     "s": "Added Unique Constraint in Product Line, Model, SKU, UOM and Brand. Also commented seed data"
+    },
+    {
+     "c": "c9827ec",
+     "d": "2026-11-03",
+     "a": "Sonjoy Tripura",
+     "s": "Merge branch 'sonjoy_dev' into 'dev'"
+    },
+    {
+     "c": "974c42e",
+     "d": "2026-11-03",
+     "a": "Sonjoy Tripura",
+     "s": "fixed UOM issue"
+    },
+    {
+     "c": "dd8b35d",
+     "d": "2026-11-03",
+     "a": "Sonjoy Tripura",
+     "s": "Merge branch 'sonjoy_dev' into 'dev'"
+    },
+    {
+     "c": "850d348",
+     "d": "2026-11-03",
+     "a": "Sonjoy Tripura",
+     "s": "updated test cases"
+    },
+    {
+     "c": "a900605",
+     "d": "2026-11-03",
+     "a": "Sonjoy Tripura",
+     "s": "Update ProductSKUReportServiceTest.java"
+    },
+    {
+     "c": "95fe830",
+     "d": "2026-11-03",
+     "a": "Sonjoy Tripura",
+     "s": "EBS Product API resolved"
+    },
+    {
+     "c": "cdc98a5",
+     "d": "2026-11-02",
+     "a": "Sonjoy Tripura",
+     "s": "Added null check point before Purchase client calling"
+    },
+    {
+     "c": "4469201",
+     "d": "2026-11-02",
+     "a": "Sonjoy Tripura",
+     "s": "Added purchase client call to sync LE and OU"
+    },
+    {
+     "c": "c3a0a6e",
+     "d": "2026-11-02",
+     "a": "Sonjoy Tripura",
+     "s": "Updated EBS Product Sync"
+    },
+    {
+     "c": "4fa6244",
+     "d": "2026-11-02",
+     "a": "Sonjoy Tripura",
+     "s": "EBS Product sync API and Scheduler added"
+    },
     {
      "c": "ef42dd8",
      "d": "2026-10-31",
@@ -471,97 +577,79 @@
      "d": "2026-10-29",
      "a": "imranpranto00",
      "s": "#24294-added pdf and csv report for product sku"
-    },
-    {
-     "c": "6d2da38",
-     "d": "2026-10-29",
-     "a": "imranpranto00",
-     "s": "#24294-added pdf and csv report for product Model"
-    },
-    {
-     "c": "5ac7120",
-     "d": "2026-10-29",
-     "a": "imranpranto00",
-     "s": "#24294-added pdf and csv report for product line"
-    },
-    {
-     "c": "2830715",
-     "d": "2026-10-29",
-     "a": "imranpranto00",
-     "s": "#24294-added pdf and csv report for product category"
-    },
-    {
-     "c": "9c63701",
-     "d": "2026-10-29",
-     "a": "imranpranto00",
-     "s": "#24294-added pdf and csv report for brands"
-    },
-    {
-     "c": "8d55c23",
-     "d": "2026-10-29",
-     "a": "imranpranto00",
-     "s": "#24294-added pdf and csv report for product type"
-    },
-    {
-     "c": "51a7e04",
-     "d": "2026-10-29",
-     "a": "imranpranto00",
-     "s": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/product-service into dev"
-    },
-    {
-     "c": "912ef04",
-     "d": "2026-10-29",
-     "a": "imranpranto00",
-     "s": "#24294-added properties of minio"
-    },
-    {
-     "c": "a5b31bc",
-     "d": "2026-10-28",
-     "a": "alihossain_t239",
-     "s": "fixed addProductSKU API for uomId null issue"
-    },
-    {
-     "c": "63ab25d",
-     "d": "2026-10-26",
-     "a": "alihossain_t239",
-     "s": "update UOM seed data according to latest excel sheet"
-    },
-    {
-     "c": "7c7c107",
-     "d": "2026-10-25",
-     "a": "imranpranto00",
-     "s": "Implemented @authenticated and new pagination and jpql in repository in APIs as well"
-    },
-    {
-     "c": "9b4ac27",
-     "d": "2026-10-25",
-     "a": "imranpranto00",
-     "s": "restructured the folders"
-    },
-    {
-     "c": "045a941",
-     "d": "2026-10-25",
-     "a": "imranpranto00",
-     "s": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/product-service into dev"
-    },
-    {
-     "c": "b293366",
-     "d": "2026-10-25",
-     "a": "imranpranto00",
-     "s": "fixed the saleshub response"
     }
    ]
   },
   "customer": {
    "branch": "origin/dev",
-   "commit": "c30e1d3",
-   "date": "2026-10-31",
+   "commit": "e2d3a85",
+   "date": "2026-11-08",
    "author": "imranpranto00",
-   "subject": "fixed token issues",
-   "full": "c30e1d32ae17ad58a6590520f43cc8fb47ed6183",
-   "fetchedAt": "2026-10-31T16:22",
-   "new": 1,
+   "subject": "#25277-updated approval paths based on the updated requirements",
+   "full": "e2d3a854d5da41a65105cf6cd8b5ee50a32edf3e",
+   "fetchedAt": "2026-11-10T09:30",
+   "new": 11,
    "commits": [
+    {
+     "c": "e2d3a85",
+     "d": "2026-11-08",
+     "a": "imranpranto00",
+     "s": "#25277-updated approval paths based on the updated requirements"
+    },
+    {
+     "c": "f5b2905",
+     "d": "2026-11-08",
+     "a": "imranpranto00",
+     "s": "converted data type uuid to integer"
+    },
+    {
+     "c": "75c7f30",
+     "d": "2026-11-08",
+     "a": "imranpranto00",
+     "s": "converted uuid to integer in approval"
+    },
+    {
+     "c": "39630d8",
+     "d": "2026-11-05",
+     "a": "alihossain_t239",
+     "s": "workflowId updated to int from uuid"
+    },
+    {
+     "c": "7a00fcf",
+     "d": "2026-11-05",
+     "a": "imranpranto00",
+     "s": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/customer-service into dev"
+    },
+    {
+     "c": "72b508c",
+     "d": "2026-11-05",
+     "a": "imranpranto00",
+     "s": "#24798-To retrieve the information for customersAccounts"
+    },
+    {
+     "c": "dfc9dbe",
+     "d": "2026-11-04",
+     "a": "alihossain_t239",
+     "s": "properties"
+    },
+    {
+     "c": "f88e1fe",
+     "d": "2026-11-04",
+     "a": "alihossain_t239",
+     "s": "added pdf and csv report"
+    },
+    {
+     "c": "ea8ee76",
+     "d": "2026-11-03",
+     "a": "alihossain_t239",
+     "s": "added pdf and csv report"
+    },
+    {
+     "c": "5cac39d",
+     "d": "2026-11-02",
+     "a": "alihossain_t239",
+     "s": "added pdf and csv report"
+    },
     {
      "c": "c30e1d3",
      "d": "2026-10-31",
@@ -572,25 +660,224 @@
   },
   "purchase": {
    "branch": "origin/dev",
-   "commit": "44ed78e",
-   "date": "2026-10-17",
+   "commit": "4fa4695",
+   "date": "2026-11-09",
    "author": "imranpranto00",
-   "subject": "fixed merchant wise data",
-   "full": "44ed78ef91f5aa9a461a2c2c94669a729f339610",
-   "fetchedAt": "2026-10-31T16:22",
-   "new": 0,
-   "commits": []
+   "subject": "fixed deliveryestimate date issues",
+   "full": "4fa46952963f78529f6e9ccad66fc0fdd4b2eedd",
+   "fetchedAt": "2026-11-10T09:30",
+   "new": 38,
+   "commits": [
+    {
+     "c": "4fa4695",
+     "d": "2026-11-09",
+     "a": "imranpranto00",
+     "s": "fixed deliveryestimate date issues"
+    },
+    {
+     "c": "2f7e3a4",
+     "d": "2026-11-08",
+     "a": "imranpranto00",
+     "s": "#25277-for pr and po user is coming from token"
+    },
+    {
+     "c": "af68467",
+     "d": "2026-11-08",
+     "a": "imranpranto00",
+     "s": "#25277-updated approval paths based on the updated requirements"
+    },
+    {
+     "c": "78878ab",
+     "d": "2026-11-08",
+     "a": "imranpranto00",
+     "s": "converted data type uuid to integer"
+    },
+    {
+     "c": "6ae806f",
+     "d": "2026-11-08",
+     "a": "imranpranto00",
+     "s": "converted uuid to integer in approval"
+    },
+    {
+     "c": "c96758a",
+     "d": "2026-11-05",
+     "a": "alihossain_t239",
+     "s": "build issue fixed"
+    },
+    {
+     "c": "c049a3c",
+     "d": "2026-11-05",
+     "a": "alihossain_t239",
+     "s": "approvaWorkflowId is updated to integer from uuid"
+    },
+    {
+     "c": "fd32c6a",
+     "d": "2026-11-05",
+     "a": "imranpranto00",
+     "s": "give unique constraints in legal entity"
+    },
+    {
+     "c": "43c5831",
+     "d": "2026-11-05",
+     "a": "imranpranto00",
+     "s": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/purchase-service into dev"
+    },
+    {
+     "c": "5e4a814",
+     "d": "2026-11-05",
+     "a": "imranpranto00",
+     "s": "give unique constraints in operating unit"
+    },
+    {
+     "c": "f44442e",
+     "d": "2026-11-03",
+     "a": "bishal16",
+     "s": "send supplier name and code in account events"
+    },
+    {
+     "c": "633c44e",
+     "d": "2026-11-02",
+     "a": "imranpranto00",
+     "s": "changed the application.properties"
+    },
+    {
+     "c": "5d5e160",
+     "d": "2026-11-02",
+     "a": "imranpranto00",
+     "s": "Implemented LE and OU synch through Product Service"
+    },
+    {
+     "c": "9c2e896",
+     "d": "2026-11-02",
+     "a": "Sonjoy Tripura",
+     "s": "Added LE and OU synch through Product Service"
+    },
+    {
+     "c": "f77ae0b",
+     "d": "2026-11-02",
+     "a": "imranpranto00",
+     "s": "#24646-added pdf and csv report for purchase request items"
+    },
+    {
+     "c": "fcb744e",
+     "d": "2026-11-02",
+     "a": "imranpranto00",
+     "s": "#24646-added pdf and csv report for purchase order items"
+    },
+    {
+     "c": "eb6a0dc",
+     "d": "2026-11-02",
+     "a": "imranpranto00",
+     "s": "#24646-added pdf and csv report for delivery order items"
+    },
+    {
+     "c": "5be7708",
+     "d": "2026-11-02",
+     "a": "imranpranto00",
+     "s": "#24646-fixed report rows splitting across pdf pages"
+    },
+    {
+     "c": "756d0dc",
+     "d": "2026-11-02",
+     "a": "imranpranto00",
+     "s": "#24646-added pdf and csv report for service purchase order"
+    },
+    {
+     "c": "58813db",
+     "d": "2026-11-02",
+     "a": "imranpranto00",
+     "s": "#24646-added pdf and csv report for service proforma invoice"
+    },
+    {
+     "c": "a800d87",
+     "d": "2026-11-02",
+     "a": "imranpranto00",
+     "s": "#24646-added pdf and csv report for service rfq response"
+    },
+    {
+     "c": "2c8d86a",
+     "d": "2026-11-02",
+     "a": "imranpranto00",
+     "s": "#24646-added pdf and csv report for service rfq"
+    },
+    {
+     "c": "80c7cbd",
+     "d": "2026-11-02",
+     "a": "imranpranto00",
+     "s": "#24646-added pdf and csv report for proforma invoice"
+    },
+    {
+     "c": "be4241b",
+     "d": "2026-11-02",
+     "a": "imranpranto00",
+     "s": "#24646-added pdf and csv report for delivery order"
+    },
+    {
+     "c": "aaf2db1",
+     "d": "2026-11-02",
+     "a": "imranpranto00",
+     "s": "#24646-added pdf and csv report for purchase order"
+    }
+   ]
   },
   "approval": {
    "branch": "origin/dev",
-   "commit": "55cfecc",
-   "date": "2026-10-31",
+   "commit": "cbccc31",
+   "date": "2026-11-09",
    "author": "imranpranto00",
-   "subject": "fixed queries issues",
-   "full": "55cfeccea8559680284a20498d819e74408c154d",
-   "fetchedAt": "2026-10-31T16:22",
-   "new": 4,
+   "subject": "#25277-updated approval paths",
+   "full": "cbccc317212856cc4304753e8cbab5f23b912d91",
+   "fetchedAt": "2026-11-10T09:30",
+   "new": 12,
    "commits": [
+    {
+     "c": "cbccc31",
+     "d": "2026-11-09",
+     "a": "imranpranto00",
+     "s": "#25277-updated approval paths"
+    },
+    {
+     "c": "20eda62",
+     "d": "2026-11-09",
+     "a": "imranpranto00",
+     "s": "#25277-Implemented crud for approvalworkflowpaths"
+    },
+    {
+     "c": "62263df",
+     "d": "2026-11-08",
+     "a": "imranpranto00",
+     "s": "#25277-got the assigned username from authentication service"
+    },
+    {
+     "c": "b378de2",
+     "d": "2026-11-08",
+     "a": "imranpranto00",
+     "s": "#25277-updated approval paths based on the updated requirements"
+    },
+    {
+     "c": "0452969",
+     "d": "2026-11-08",
+     "a": "imranpranto00",
+     "s": "converted data type uuid to integer"
+    },
+    {
+     "c": "10cdc10",
+     "d": "2026-11-08",
+     "a": "imranpranto00",
+     "s": "converted uuid to integer"
+    },
+    {
+     "c": "b42c880",
+     "d": "2026-11-05",
+     "a": "alihossain_t239",
+     "s": "added pdf and csv report"
+    },
+    {
+     "c": "6e25a5f",
+     "d": "2026-11-05",
+     "a": "alihossain_t239",
+     "s": "seed data added for approvalWorkflow"
+    },
     {
      "c": "55cfecc",
      "d": "2026-10-31",
@@ -619,14 +906,62 @@
   },
   "inventory": {
    "branch": "origin/dev",
-   "commit": "d262c00",
-   "date": "2026-10-31",
-   "author": "imranpranto00",
-   "subject": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/inventory-service into dev",
-   "full": "d262c0080ae1929d377d540ae5958ea63a7b60b2",
-   "fetchedAt": "2026-10-31T16:22",
-   "new": 8,
+   "commit": "0e3b546",
+   "date": "2026-11-08",
+   "author": "alihossain_t239",
+   "subject": "itemLevelId and relatedId are now nullable",
+   "full": "0e3b54683155b183051a91bdb2ad5360503a3ca7",
+   "fetchedAt": "2026-11-10T09:30",
+   "new": 16,
    "commits": [
+    {
+     "c": "0e3b546",
+     "d": "2026-11-08",
+     "a": "alihossain_t239",
+     "s": "itemLevelId and relatedId are now nullable"
+    },
+    {
+     "c": "e21bd89",
+     "d": "2026-11-02",
+     "a": "alihossain_t239",
+     "s": "added security"
+    },
+    {
+     "c": "1981d53",
+     "d": "2026-11-01",
+     "a": "alihossain_t239",
+     "s": "added pdf and csv reports"
+    },
+    {
+     "c": "fdcd607",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "updated application.properties"
+    },
+    {
+     "c": "21aa687",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/inventory-service into dev"
+    },
+    {
+     "c": "12ed623",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "removed unused api"
+    },
+    {
+     "c": "011ff0c",
+     "d": "2026-10-31",
+     "a": "alihossain_t239",
+     "s": "added pdf and csv report"
+    },
+    {
+     "c": "28a56de",
+     "d": "2026-10-31",
+     "a": "alihossain_t239",
+     "s": "added pdf and csv report"
+    },
     {
      "c": "d262c00",
      "d": "2026-10-31",
@@ -679,14 +1014,98 @@
   },
   "sales": {
    "branch": "origin/dev",
-   "commit": "022ba7e",
-   "date": "2026-10-31",
-   "author": "imranpranto00",
-   "subject": "fixed the sales Issue from inventory",
-   "full": "022ba7e0f6074cb5f9b2d75ecc416a7e016b5baa",
-   "fetchedAt": "2026-10-31T16:22",
-   "new": 3,
+   "commit": "32c94cb",
+   "date": "2026-11-05",
+   "author": "bishal16",
+   "subject": "reduce response time from 5.5 min to 1.4 sec",
+   "full": "32c94cb10391a650ef1cbb3d2718234806b131db",
+   "fetchedAt": "2026-11-10T09:30",
+   "new": 17,
    "commits": [
+    {
+     "c": "32c94cb",
+     "d": "2026-11-05",
+     "a": "bishal16",
+     "s": "reduce response time from 5.5 min to 1.4 sec"
+    },
+    {
+     "c": "7af16ee",
+     "d": "2026-11-05",
+     "a": "imranpranto00",
+     "s": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/sales-service into dev"
+    },
+    {
+     "c": "0a76ca4",
+     "d": "2026-11-05",
+     "a": "imranpranto00",
+     "s": "for the inforamtion of account-services customer-accounts"
+    },
+    {
+     "c": "f328993",
+     "d": "2026-11-04",
+     "a": "alihossain_t239",
+     "s": "fixed property"
+    },
+    {
+     "c": "f58b39a",
+     "d": "2026-11-04",
+     "a": "alihossain_t239",
+     "s": "merchant updated for product in targetHeadType table"
+    },
+    {
+     "c": "cf17a48",
+     "d": "2026-11-04",
+     "a": "alihossain_t239",
+     "s": "just modified download APIs suffix"
+    },
+    {
+     "c": "01e8653",
+     "d": "2026-11-04",
+     "a": "alihossain_t239",
+     "s": "just modified download APIs suffix"
+    },
+    {
+     "c": "6aafc88",
+     "d": "2026-11-04",
+     "a": "alihossain_t239",
+     "s": "mutation APIs are disabled except update API where only isActive field is kept only"
+    },
+    {
+     "c": "bcef10a",
+     "d": "2026-11-04",
+     "a": "alihossain_t239",
+     "s": "csv upload issue is fixed"
+    },
+    {
+     "c": "17d6b3f",
+     "d": "2026-11-03",
+     "a": "alihossain_t239",
+     "s": "is_yearly_target is now true to fix bulkUpload API issue"
+    },
+    {
+     "c": "c0bbab4",
+     "d": "2026-11-03",
+     "a": "alihossain_t239",
+     "s": "added pdf and csv report also fixed targetHeadId issue for bulkUploadSalesTargetYearly API"
+    },
+    {
+     "c": "5994e67",
+     "d": "2026-11-03",
+     "a": "alihossain_t239",
+     "s": "added seed data"
+    },
+    {
+     "c": "12daacd",
+     "d": "2026-11-03",
+     "a": "alihossain_t239",
+     "s": "added pagination and filter"
+    },
+    {
+     "c": "f1c45d2",
+     "d": "2026-11-03",
+     "a": "alihossain_t239",
+     "s": "PK data type updated to integer from uuid"
+    },
     {
      "c": "022ba7e",
      "d": "2026-10-31",
@@ -714,7 +1133,7 @@
    "author": "imranpranto00",
    "subject": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/policy-service into dev",
    "full": "f50cf2e42ee4783d172cf1ffda4fe33f04248ae5",
-   "fetchedAt": "2026-10-31T16:22",
+   "fetchedAt": "2026-11-10T09:30",
    "new": 4,
    "commits": [
     {
@@ -750,7 +1169,7 @@
    "author": "bishal16",
    "subject": "added security",
    "full": "c1c17c02eaa15910236ebcf4c3f70962cb610048",
-   "fetchedAt": "2026-10-31T16:22",
+   "fetchedAt": "2026-11-10T09:30",
    "new": 1,
    "commits": [
     {
@@ -768,7 +1187,7 @@
    "author": "bishal16",
    "subject": "added security",
    "full": "1c35a874b3f2a3c990e1cc9b2347d741b1b6b9bc",
-   "fetchedAt": "2026-10-31T16:22",
+   "fetchedAt": "2026-11-10T09:30",
    "new": 3,
    "commits": [
     {
@@ -793,55 +1212,290 @@
   },
   "accounts": {
    "branch": "origin/dev",
-   "commit": "d82d3d4",
-   "date": "2026-10-27",
-   "author": "bishal16",
-   "subject": "regained coa",
-   "full": "d82d3d4256a2792ddfdafc3d426087e09d494940",
-   "fetchedAt": "2026-10-31T16:22",
-   "new": 3,
+   "commit": "62b66a7",
+   "date": "2026-11-05",
+   "author": "imranpranto00",
+   "subject": "#24798-To retrieve the information for customersAccounts",
+   "full": "62b66a7008076840a134dac1a868e07c960e3ce3",
+   "fetchedAt": "2026-11-10T09:30",
+   "new": 39,
    "commits": [
     {
-     "c": "d82d3d4",
-     "d": "2026-10-27",
+     "c": "62b66a7",
+     "d": "2026-11-05",
+     "a": "imranpranto00",
+     "s": "#24798-To retrieve the information for customersAccounts"
+    },
+    {
+     "c": "7fb4e25",
+     "d": "2026-11-05",
+     "a": "imranpranto00",
+     "s": "#24798-To retrieve the information for customersAccounts"
+    },
+    {
+     "c": "3f32116",
+     "d": "2026-11-05",
+     "a": "imranpranto00",
+     "s": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/accounts-service into dev"
+    },
+    {
+     "c": "a9b65cc",
+     "d": "2026-11-05",
+     "a": "imranpranto00",
+     "s": "update customer-accounts"
+    },
+    {
+     "c": "7b2ea97",
+     "d": "2026-11-03",
      "a": "bishal16",
-     "s": "regained coa"
+     "s": "added party ledger report"
     },
     {
-     "c": "7bf6f95",
-     "d": "2026-10-25",
-     "a": "alihossain_t239",
-     "s": "run failed issues solved"
+     "c": "ce405a4",
+     "d": "2026-11-02",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for vehicle transaction"
     },
     {
-     "c": "174703c",
-     "d": "2026-10-25",
-     "a": "alihossain_t239",
-     "s": "merchantId field added to entity and did relevant tasks to schema, service, resolver"
+     "c": "fa0c5d6",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for vehicle"
+    },
+    {
+     "c": "2364af3",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for due collection"
+    },
+    {
+     "c": "1cf526a",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for voucher"
+    },
+    {
+     "c": "fa6c9d6",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for voucher type"
+    },
+    {
+     "c": "3afee73",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for receivable"
+    },
+    {
+     "c": "38d9537",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for payable"
+    },
+    {
+     "c": "4f6e4e5",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for expense"
+    },
+    {
+     "c": "eb60df1",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for emi machine charge"
+    },
+    {
+     "c": "56ff585",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for emi bank commission rate"
+    },
+    {
+     "c": "d2d9344",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for emi allowed month"
+    },
+    {
+     "c": "5166ab3",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for emi bank card"
+    },
+    {
+     "c": "2de726d",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for mobile wallet"
+    },
+    {
+     "c": "34ac3f8",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for bank account"
+    },
+    {
+     "c": "7432c1b",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for bank branch"
+    },
+    {
+     "c": "772a9dc",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for bank"
+    },
+    {
+     "c": "db1e83f",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for miscellaneous asset"
+    },
+    {
+     "c": "3ae521e",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for intangible asset"
+    },
+    {
+     "c": "5b951d2",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for fixed asset"
+    },
+    {
+     "c": "0048e0c",
+     "d": "2026-11-01",
+     "a": "imranpranto00",
+     "s": "#24556-added pdf and csv report for financial asset"
     }
    ]
   },
   "vat": {
    "branch": "origin/dev",
-   "commit": "e0c8c3b",
-   "date": "2026-10-19",
+   "commit": "80ba79c",
+   "date": "2026-11-05",
    "author": "imranpranto00",
-   "subject": "#22542-Implemented @authenticated and new pagination in this response",
-   "full": "e0c8c3bad3c388fbd36231e39b992c7c3be81911",
-   "fetchedAt": "2026-10-31T16:22",
-   "new": 0,
-   "commits": []
+   "subject": "fixed productVatSetting issue",
+   "full": "80ba79c0b847a6de943cf234fa9f28aa51423f84",
+   "fetchedAt": "2026-11-10T09:30",
+   "new": 16,
+   "commits": [
+    {
+     "c": "80ba79c",
+     "d": "2026-11-05",
+     "a": "imranpranto00",
+     "s": "fixed productVatSetting issue"
+    },
+    {
+     "c": "cb1e0dd",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24791-fixed vat bugs"
+    },
+    {
+     "c": "f0e928a",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24791-added pdf and csv report for vat return submission form"
+    },
+    {
+     "c": "0771af1",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24791-added pdf and csv report for sub form uma"
+    },
+    {
+     "c": "b733176",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24791-added pdf and csv report for penalty adjustment"
+    },
+    {
+     "c": "cec1a1c",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24791-added pdf and csv report for vat adjustment"
+    },
+    {
+     "c": "3af416e",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24791-added pdf and csv report for vat register book"
+    },
+    {
+     "c": "757c92b",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24791-added pdf and csv report for goods transfer vat invoice"
+    },
+    {
+     "c": "318dc7f",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24791-added pdf and csv report for purchase return vat invoice"
+    },
+    {
+     "c": "b71aac7",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24791-added pdf and csv report for purchase invoice vat"
+    },
+    {
+     "c": "d1113f6",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24791-added pdf and csv report for sales return vat invoice"
+    },
+    {
+     "c": "a82fa09",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24791-added pdf and csv report for sales invoice vat"
+    },
+    {
+     "c": "a4bfdef",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24791-added pdf and csv report for product vat setting"
+    },
+    {
+     "c": "430434c",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24791-added pdf and csv report for vat period"
+    },
+    {
+     "c": "13a166f",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24791-added pdf and csv report for tax code"
+    },
+    {
+     "c": "565a628",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24791-added minio properties"
+    }
+   ]
   },
   "report": {
    "branch": "origin/dev",
-   "commit": "cf5c3b9",
-   "date": "2026-10-28",
+   "commit": "3fe28f5",
+   "date": "2026-11-03",
    "author": "bishal16",
-   "subject": "updated format",
-   "full": "cf5c3b9c02c180b8be0282b581057c17dd2cf063",
-   "fetchedAt": "2026-10-31T16:22",
-   "new": 2,
+   "subject": "added party ledger report",
+   "full": "3fe28f509c51ee765b6b561698b9d2409f76eea4",
+   "fetchedAt": "2026-11-10T09:30",
+   "new": 3,
    "commits": [
+    {
+     "c": "3fe28f5",
+     "d": "2026-11-03",
+     "a": "bishal16",
+     "s": "added party ledger report"
+    },
     {
      "c": "cf5c3b9",
      "d": "2026-10-28",
@@ -858,14 +1512,92 @@
   },
   "compliance": {
    "branch": "origin/dev",
-   "commit": "98b2806",
-   "date": "2026-10-26",
-   "author": "bishal16",
-   "subject": "update git ignore",
-   "full": "98b2806c1644779b04f71b198cc0c31afca0d5db",
-   "fetchedAt": "2026-10-31T16:22",
-   "new": 2,
+   "commit": "1eaf266",
+   "date": "2026-11-08",
+   "author": "alihossain_t239",
+   "subject": "added seed data for assessment type",
+   "full": "1eaf266758a2fa350e4112574d227e47a5a0864f",
+   "fetchedAt": "2026-11-10T09:30",
+   "new": 15,
    "commits": [
+    {
+     "c": "1eaf266",
+     "d": "2026-11-08",
+     "a": "alihossain_t239",
+     "s": "added seed data for assessment type"
+    },
+    {
+     "c": "575b6b4",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24762-restructured folders"
+    },
+    {
+     "c": "156b819",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24762-added pdf and csv report for system event log"
+    },
+    {
+     "c": "0495852",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24762-added pdf and csv report for system error log"
+    },
+    {
+     "c": "cb1f22f",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24762-added pdf and csv report for service request log"
+    },
+    {
+     "c": "64b58e1",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24762-added pdf and csv report for audit trail log"
+    },
+    {
+     "c": "065d1a0",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24762-added pdf and csv report for assessment"
+    },
+    {
+     "c": "2a17c3f",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24762-added pdf and csv report for assessment workflow rule"
+    },
+    {
+     "c": "9546bb3",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24762-added pdf and csv report for assessment template item"
+    },
+    {
+     "c": "a11e49d",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24762-added pdf and csv report for assessment template section"
+    },
+    {
+     "c": "a90c2da",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24762-added pdf and csv report for assessment template"
+    },
+    {
+     "c": "54dcc7d",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "#24762-added pdf and csv report for assessment type"
+    },
+    {
+     "c": "082da94",
+     "d": "2026-11-03",
+     "a": "imranpranto00",
+     "s": "added minio settings"
+    },
     {
      "c": "98b2806",
      "d": "2026-10-26",
@@ -887,7 +1619,7 @@
    "author": "alihossain_t239",
    "subject": "filter by keyword was missing, added now",
    "full": "18e859c3c857ccca881dc6bd5fa5b44a84932956",
-   "fetchedAt": "2026-10-31T16:22",
+   "fetchedAt": "2026-11-10T09:30",
    "new": 2,
    "commits": [
     {
@@ -906,165 +1638,176 @@
   },
   "frontend": {
    "branch": "origin/dev",
-   "commit": "7ba6b847",
-   "date": "2026-10-31",
+   "commit": "0fcb6dc9",
+   "date": "2026-11-09",
    "author": "Abu Sadat",
    "subject": "Merge branch 'sadat' into 'dev'",
-   "full": "7ba6b847e2af9e4b908246e9cb8f1dea1ec718f1",
-   "fetchedAt": "2026-10-31T16:22",
-   "new": 63,
+   "full": "0fcb6dc9a018d5efebaa065f3b61a3b0240d3af0",
+   "fetchedAt": "2026-11-10T09:30",
+   "new": 180,
    "commits": [
     {
-     "c": "7ba6b847",
-     "d": "2026-10-31",
+     "c": "0fcb6dc9",
+     "d": "2026-11-09",
      "a": "Abu Sadat",
      "s": "Merge branch 'sadat' into 'dev'"
     },
     {
-     "c": "932ed78e",
-     "d": "2026-10-31",
-     "a": "mailtoabusadat",
-     "s": "make build success"
+     "c": "543ac768",
+     "d": "2026-11-09",
+     "a": "sadat44556",
+     "s": "merge with dev"
     },
     {
-     "c": "082d9a89",
-     "d": "2026-10-31",
+     "c": "6ef22360",
+     "d": "2026-11-09",
+     "a": "sadat44556",
+     "s": "#25508 Asset Category CRUD Operations & Asset Type Seed Data – Tabular View"
+    },
+    {
+     "c": "6225022e",
+     "d": "2026-11-09",
      "a": "Md. Mohiminur Rahman",
      "s": "Merge branch 'rahi-new' into 'dev'"
     },
     {
-     "c": "c961dbdd",
-     "d": "2026-10-31",
+     "c": "47ce095b",
+     "d": "2026-11-09",
+     "a": "Mohi Minur",
+     "s": "building done"
+    },
+    {
+     "c": "d9458460",
+     "d": "2026-11-09",
      "a": "Mohi Minur",
      "s": "Merge branch 'dev' into rahi-new"
     },
     {
-     "c": "3b4d0851",
-     "d": "2026-10-31",
+     "c": "74169757",
+     "d": "2026-11-09",
      "a": "Mohi Minur",
-     "s": "approval api refactored"
+     "s": "approval path : make responsive"
     },
     {
-     "c": "1e757e88",
-     "d": "2026-10-31",
-     "a": "Md. Mohiminur Rahman",
-     "s": "Merge branch 'rahi-new' into 'dev'"
-    },
-    {
-     "c": "0b2b7403",
-     "d": "2026-10-31",
+     "c": "2f257e7c",
+     "d": "2026-11-09",
      "a": "Mohi Minur",
-     "s": "Merge branch 'dev' of https://gitlab.waltonbd.com/whiplc-com-ict/lab/pos/smartpos-web into rahi-new"
+     "s": "purchase-order : remove approval dropdown and set the code"
     },
     {
-     "c": "ff936479",
-     "d": "2026-10-31",
+     "c": "c6aed5f5",
+     "d": "2026-11-09",
      "a": "Mohi Minur",
-     "s": "approval api refactored"
+     "s": "approval workflow path : fixed error"
     },
     {
-     "c": "41cdb736",
-     "d": "2026-10-31",
-     "a": "Abu Sadat",
-     "s": "Merge branch 'sadat' into 'dev'"
+     "c": "ef46121a",
+     "d": "2026-11-09",
+     "a": "Mohi Minur",
+     "s": "purchase-request :  implement workflow code"
     },
     {
-     "c": "da65e2b6",
-     "d": "2026-10-31",
+     "c": "28522694",
+     "d": "2026-11-09",
+     "a": "sadat44556",
+     "s": "#23959 Display asset type"
+    },
+    {
+     "c": "8f6fdc5b",
+     "d": "2026-11-09",
+     "a": "Mohi Minur",
+     "s": "workflow path : implemented"
+    },
+    {
+     "c": "da0212aa",
+     "d": "2026-11-09",
+     "a": "Mohi Minur",
+     "s": "approval-path : new way implemented"
+    },
+    {
+     "c": "c6572e1d",
+     "d": "2026-11-08",
+     "a": "sadat44556",
+     "s": "#24556 accounts modules emi-machine-charge development inprogress"
+    },
+    {
+     "c": "fff751f0",
+     "d": "2026-11-05",
      "a": "mailtoabusadat",
-     "s": "mobile and desktop menu open close issue fixed"
+     "s": "#25072 Implement Permission-Based Action Handling Across All Tabular Views"
     },
     {
-     "c": "cddbbc70",
-     "d": "2026-10-29",
+     "c": "f89bbce1",
+     "d": "2026-11-05",
+     "a": "Mohi Minur",
+     "s": "chart of account : apni changed issue fixed"
+    },
+    {
+     "c": "cb804479",
+     "d": "2026-11-05",
+     "a": "Mohi Minur",
+     "s": "#24791 : ✨ : [Vat] Dowload PDF and CSV report for VAT service"
+    },
+    {
+     "c": "bff5dca3",
+     "d": "2026-11-05",
      "a": "Abu Sadat",
      "s": "Merge branch 'sadat' into 'dev'"
     },
     {
-     "c": "24c3dd2f",
-     "d": "2026-10-29",
+     "c": "16041bd7",
+     "d": "2026-11-05",
      "a": "mailtoabusadat",
      "s": "Merge branch 'dev' into sadat"
     },
     {
-     "c": "375b9200",
-     "d": "2026-10-29",
+     "c": "7bc63b52",
+     "d": "2026-11-05",
      "a": "mailtoabusadat",
-     "s": "Task #23733 Code optimization and apply secured token for all features inprogress"
+     "s": "#23733 Code optimization"
     },
     {
-     "c": "78cafec1",
-     "d": "2026-10-29",
-     "a": "mailtoabusadat",
-     "s": "make voucher viewable"
-    },
-    {
-     "c": "f6619641",
-     "d": "2026-10-29",
+     "c": "f241af38",
+     "d": "2026-11-05",
      "a": "Md. Mohiminur Rahman",
      "s": "Merge branch 'rahi-new' into 'dev'"
     },
     {
-     "c": "5f744ed6",
-     "d": "2026-10-29",
+     "c": "389ee309",
+     "d": "2026-11-05",
      "a": "Mohi Minur",
      "s": "Merge branch 'dev' into rahi-new"
     },
     {
-     "c": "25d4a011",
-     "d": "2026-10-29",
+     "c": "b26ce7c7",
+     "d": "2026-11-05",
      "a": "Mohi Minur",
-     "s": "survey customer viewable"
+     "s": "dashboard : static design added"
     },
     {
-     "c": "10acc510",
-     "d": "2026-10-29",
-     "a": "Abu Sadat",
-     "s": "Merge branch 'sadat' into 'dev'"
-    },
-    {
-     "c": "19ad4dd4",
-     "d": "2026-10-29",
+     "c": "b85d2f04",
+     "d": "2026-11-04",
      "a": "mailtoabusadat",
-     "s": "merge with dev"
+     "s": "#24556 Dowload PDF and CSV report for accounts modules inprogress"
     },
     {
-     "c": "5d5e07e3",
-     "d": "2026-10-29",
-     "a": "mailtoabusadat",
-     "s": "quick fix"
-    },
-    {
-     "c": "b27abf15",
-     "d": "2026-10-29",
-     "a": "Md. Mohiminur Rahman",
-     "s": "Merge branch 'rahi-new' into 'dev'"
-    },
-    {
-     "c": "84e020a4",
-     "d": "2026-10-29",
+     "c": "ca7dd7eb",
+     "d": "2026-11-04",
      "a": "Mohi Minur",
-     "s": "build success"
-    },
-    {
-     "c": "29b440e4",
-     "d": "2026-10-29",
-     "a": "Mohi Minur",
-     "s": "Merge branch 'dev' into rahi-new"
-    },
-    {
-     "c": "6042a9c6",
-     "d": "2026-10-29",
-     "a": "Mohi Minur",
-     "s": "fixed build issue"
-    },
-    {
-     "c": "6244e593",
-     "d": "2026-10-29",
-     "a": "Mohi Minur",
-     "s": "operation sales implement token"
+     "s": "approval : approval path : fixed"
     }
    ]
+  },
+  "apollo": {
+   "branch": "origin/dev",
+   "commit": "d17b2e6",
+   "date": "2026-11-02",
+   "author": "bishal16",
+   "subject": "Forward multipart GraphQL uploads to the owning subgraph",
+   "full": "d17b2e602bf6228f816ea36a8b9ce6aa1c894537",
+   "fetchedAt": "2026-11-10T09:30",
+   "new": 0,
+   "commits": []
   }
  },
  "changes": {
@@ -1076,6 +1819,84 @@
     "emi_allowed_months",
     "merchant_id",
     "column added"
+   ],
+   [
+    "accounts",
+    "general_ledger_details",
+    "party_code",
+    "column added"
+   ],
+   [
+    "accounts",
+    "general_ledger_details",
+    "party_name",
+    "column added"
+   ],
+   [
+    "approval",
+    "approval_path_condition_groups",
+    "",
+    "table added"
+   ],
+   [
+    "approval",
+    "approval_workflow_paths",
+    "",
+    "table added"
+   ],
+   [
+    "approval",
+    "workflow_approval_path_mappings",
+    "",
+    "table removed"
+   ],
+   [
+    "approval",
+    "approval_paths",
+    "approval_path_id",
+    "type UUID → Long"
+   ],
+   [
+    "approval",
+    "approval_requests",
+    "approval_request_id",
+    "type UUID → Long"
+   ],
+   [
+    "approval",
+    "approval_workflows",
+    "workflow_id",
+    "type UUID → Long"
+   ],
+   [
+    "approval",
+    "outbox",
+    "aggregate_id",
+    "type UUID → Long"
+   ],
+   [
+    "approval",
+    "path_routing_conditions",
+    "approval_path_condition_group_id",
+    "column added"
+   ],
+   [
+    "approval",
+    "path_routing_conditions",
+    "workflow_approval_path_mapping_id",
+    "column removed"
+   ],
+   [
+    "approval",
+    "path_routing_conditions",
+    "comparable_value",
+    "type Double → JsonNode"
+   ],
+   [
+    "approval",
+    "path_routing_conditions",
+    "path_routing_condition_id",
+    "type UUID → Long"
    ],
    [
     "authentication",
@@ -1094,6 +1915,30 @@
     "incentive_scheme_percentages",
     "incentive_schemes",
     "column removed"
+   ],
+   [
+    "customer",
+    "business_organizations",
+    "workflow_code",
+    "column added"
+   ],
+   [
+    "customer",
+    "business_organizations",
+    "approval_id",
+    "type UUID → Long"
+   ],
+   [
+    "customer",
+    "business_organizations",
+    "approval_path_id",
+    "type UUID → Long"
+   ],
+   [
+    "customer",
+    "business_organizations",
+    "workflow_id",
+    "type UUID → Long"
    ],
    [
     "inventory",
@@ -1126,6 +1971,102 @@
     "type com.walton.pos.product.model.PriceType → com.walton.pos.product.modules.pricetype.entity.PriceType"
    ],
    [
+    "product",
+    "product_skus",
+    "ITEM_SIZE",
+    "column added"
+   ],
+   [
+    "product",
+    "product_skus",
+    "SIZE_UOM",
+    "column added"
+   ],
+   [
+    "product",
+    "product_skus",
+    "ebs_inventory_item_id",
+    "type UUID → String"
+   ],
+   [
+    "purchase",
+    "purchase_orders",
+    "workflow_code",
+    "column added"
+   ],
+   [
+    "purchase",
+    "purchase_orders",
+    "approval_id",
+    "type UUID → Long"
+   ],
+   [
+    "purchase",
+    "purchase_orders",
+    "approval_path_id",
+    "type UUID → Long"
+   ],
+   [
+    "purchase",
+    "purchase_orders",
+    "workflow_id",
+    "type UUID → Long"
+   ],
+   [
+    "purchase",
+    "purchase_requests",
+    "workflow_code",
+    "column added"
+   ],
+   [
+    "purchase",
+    "purchase_requests",
+    "approval_id",
+    "type UUID → Long"
+   ],
+   [
+    "purchase",
+    "purchase_requests",
+    "approval_path_id",
+    "type UUID → Long"
+   ],
+   [
+    "purchase",
+    "purchase_requests",
+    "workflow_id",
+    "type UUID → Long"
+   ],
+   [
+    "purchase",
+    "supplier_legal_entities",
+    "code",
+    "column added"
+   ],
+   [
+    "report",
+    "gl_transactions",
+    "party_code",
+    "column added"
+   ],
+   [
+    "report",
+    "gl_transactions",
+    "party_id",
+    "column added"
+   ],
+   [
+    "report",
+    "gl_transactions",
+    "party_name",
+    "column added"
+   ],
+   [
+    "report",
+    "gl_transactions",
+    "party_type",
+    "column added"
+   ],
+   [
     "report",
     "item_ledger_entry_snapshots",
     "product_category",
@@ -1136,9 +2077,291 @@
     "item_ledger_entry_snapshots",
     "unit",
     "column added"
+   ],
+   [
+    "sales",
+    "sales_target_head_types",
+    "target_head_type_id",
+    "type UUID → Integer"
+   ],
+   [
+    "sales",
+    "sales_target_heads",
+    "target_head_id",
+    "type UUID → Integer"
    ]
   ],
   "ops": [
+   [
+    "accounts",
+    "downloadAccountingPeriodStatusLogsCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadAccountingPeriodStatusLogsPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadAccountingProcessesCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadAccountingProcessesPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadAssetItemsCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadAssetItemsPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadAssetModelsCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadAssetModelsPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadBankAccountsCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadBankAccountsPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadBankBranchesCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadBankBranchesPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadBanksCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadBanksPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadCurrentAssetsCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadCurrentAssetsPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadDeferredTaxAssetsCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadDeferredTaxAssetsPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadDueCollectionsCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadDueCollectionsPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadEmiAllowedMonthsCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadEmiAllowedMonthsPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadEmiBankCardsCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadEmiBankCardsPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadEmiBankCommissionRatesCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadEmiBankCommissionRatesPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadEmiMachineChargesCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadEmiMachineChargesPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadExpensesCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadExpensesPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadFinancialAssetsCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadFinancialAssetsPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadFixedAssetsCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadFixedAssetsPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadIntangibleAssetsCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadIntangibleAssetsPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadMiscellaneousAssetsCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadMiscellaneousAssetsPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadMobileWalletsCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadMobileWalletsPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadPayablesCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadPayablesPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadReceivablesCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadReceivablesPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadVehicleTransactionsCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadVehicleTransactionsPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadVehiclesCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadVehiclesPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadVoucherHeaderInfosCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadVoucherHeaderInfosPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadVoucherTypesCsv",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "downloadVoucherTypesPdf",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "getAllCustomerAccountDetails",
+    "operation added"
+   ],
+   [
+    "accounts",
+    "getAllSalesCustomerAccounts",
+    "operation added"
+   ],
    [
     "accounts",
     "addEmiAllowedMonth",
@@ -1156,6 +2379,26 @@
    ],
    [
     "approval",
+    "addApprovalWorkflowPaths",
+    "operation added"
+   ],
+   [
+    "approval",
+    "deleteApprovalWorkflowPath",
+    "operation added"
+   ],
+   [
+    "approval",
+    "downloadApprovalWorkflowPaths",
+    "operation added"
+   ],
+   [
+    "approval",
+    "downloadApprovalWorkflows",
+    "operation added"
+   ],
+   [
+    "approval",
     "getAllApprovalPathRoleUsers",
     "operation added"
    ],
@@ -1163,6 +2406,51 @@
     "approval",
     "getAllApprovalRequests",
     "operation added"
+   ],
+   [
+    "approval",
+    "getAllApprovalWorkflowPaths",
+    "operation added"
+   ],
+   [
+    "approval",
+    "getApprovalWorkflowPaths",
+    "operation added"
+   ],
+   [
+    "approval",
+    "previewApprovalPath",
+    "operation added"
+   ],
+   [
+    "approval",
+    "saveApprovalWorkflowPaths",
+    "operation added"
+   ],
+   [
+    "approval",
+    "searchApprovalWorkflowPathById",
+    "operation added"
+   ],
+   [
+    "approval",
+    "toggleApprovalWorkflowPath",
+    "operation added"
+   ],
+   [
+    "approval",
+    "updateApprovalWorkflowPaths",
+    "operation added"
+   ],
+   [
+    "approval",
+    "addApprovalWorkflow",
+    "operation removed"
+   ],
+   [
+    "approval",
+    "deleteApprovalWorkflow",
+    "operation removed"
    ],
    [
     "authentication",
@@ -1271,6 +2559,26 @@
    ],
    [
     "authorization",
+    "downloadRolePermissionGroupsCsv",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadRolePermissionGroupsPdf",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadRolePermissionsCsv",
+    "operation added"
+   ],
+   [
+    "authorization",
+    "downloadRolePermissionsPdf",
+    "operation added"
+   ],
+   [
+    "authorization",
     "downloadRolesCsv",
     "operation added"
    ],
@@ -1328,6 +2636,61 @@
     "authorization",
     "getPermissionsByMenuRoute",
     "operation added"
+   ],
+   [
+    "compliance",
+    "downloadAssessmentTemplateItems",
+    "operation added"
+   ],
+   [
+    "compliance",
+    "downloadAssessmentTemplateSections",
+    "operation added"
+   ],
+   [
+    "compliance",
+    "downloadAssessmentTemplates",
+    "operation added"
+   ],
+   [
+    "compliance",
+    "downloadAssessmentTypes",
+    "operation added"
+   ],
+   [
+    "compliance",
+    "downloadAssessmentWorkflowRules",
+    "operation added"
+   ],
+   [
+    "compliance",
+    "downloadAssessments",
+    "operation added"
+   ],
+   [
+    "compliance",
+    "downloadAuditTrailLogs",
+    "operation added"
+   ],
+   [
+    "compliance",
+    "downloadServiceRequestLogs",
+    "operation added"
+   ],
+   [
+    "compliance",
+    "downloadSystemErrorLogs",
+    "operation added"
+   ],
+   [
+    "compliance",
+    "downloadSystemEventLogs",
+    "operation added"
+   ],
+   [
+    "compliance",
+    "addAssessmentType",
+    "operation removed"
    ],
    [
     "configuration",
@@ -1460,6 +2823,136 @@
     "operation added"
    ],
    [
+    "customer",
+    "downloadBusinessDocumentTypes",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadBusinessOrganizationApprovalRequests",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadBusinessOrganizations",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadCustomerAccounts",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadCustomerAssignedOpinions",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadCustomerAssociatedRelations",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadCustomerAssociates",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadCustomerOpinionSettings",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadPartyCategories",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadPartyOwnerGroupTeams",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadPartyOwnerGroups",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadPersonInitialSources",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadPersonRelationships",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadPersonRoleTypes",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadPersonRoles",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadPersons",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadRelationships",
+    "operation added"
+   ],
+   [
+    "customer",
+    "downloadSurveyCustomers",
+    "operation added"
+   ],
+   [
+    "customer",
+    "getCustomerPartiesByIds",
+    "operation added"
+   ],
+   [
+    "customer",
+    "getCustomerPartyIds",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadConsumeableStocksCsv",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadConsumeableStocksPdf",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadGoodReceiveNotesCsv",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadGoodReceiveNotesPdf",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadInventoryStockThresholdsCsv",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadInventoryStockThresholdsPdf",
+    "operation added"
+   ],
+   [
     "inventory",
     "downloadItemLedgersCsv",
     "operation added"
@@ -1471,12 +2964,112 @@
    ],
    [
     "inventory",
+    "downloadLineRackFloorsCsv",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadLineRackFloorsPdf",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadLineRackGridsCsv",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadLineRackGridsPdf",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadPosStoreHouseZonesCsv",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadPosStoreHouseZonesPdf",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadPosStoreHousesCsv",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadPosStoreHousesPdf",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadPosStoreZoneLinesCsv",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadPosStoreZoneLinesPdf",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadProductInstancesCsv",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadProductInstancesPdf",
+    "operation added"
+   ],
+   [
+    "inventory",
     "downloadProductStockSummariesCsv",
     "operation added"
    ],
    [
     "inventory",
     "downloadProductStockSummariesPdf",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadRackGridContainersCsv",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadRackGridContainersPdf",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadSalesHubAllocatedSpacesCsv",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadSalesHubAllocatedSpacesPdf",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadStoreHouseTypesCsv",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadStoreHouseTypesPdf",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadStoreZoneLineRacksCsv",
+    "operation added"
+   ],
+   [
+    "inventory",
+    "downloadStoreZoneLineRacksPdf",
     "operation added"
    ],
    [
@@ -1895,12 +3488,238 @@
     "operation removed"
    ],
    [
+    "purchase",
+    "downloadDeliveryOrders",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "downloadProductSupplierTypes",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "downloadProductSuppliers",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "downloadProformaInvoices",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "downloadPurchaseOrders",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "downloadPurchaseRequests",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "downloadRequestForQuotations",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "downloadRfqResponses",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "downloadServiceProformaInvoices",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "downloadServicePurchaseOrders",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "downloadServiceRfqResponses",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "downloadServiceRfqs",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "downloadSourcingRankingCriterias",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "downloadSupplierLegalEntities",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "downloadSupplierOperatingUnits",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "downloadSupplierRankingScores",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "syncProductLEAndOu",
+    "operation added"
+   ],
+   [
+    "purchase",
+    "submitPurchaseOrder",
+    "operation removed"
+   ],
+   [
+    "purchase",
+    "submitPurchaseRequest",
+    "operation removed"
+   ],
+   [
+    "report",
+    "generatePartyLedgerReport",
+    "operation added"
+   ],
+   [
     "report",
     "generateStockValuationReport",
     "operation added"
+   ],
+   [
+    "sales",
+    "downloadTargetHeadTypes",
+    "operation added"
+   ],
+   [
+    "sales",
+    "downloadTargetHeads",
+    "operation added"
+   ],
+   [
+    "sales",
+    "getSalesLinesByCustomerAccountIds",
+    "operation added"
+   ],
+   [
+    "sales",
+    "addTargetHead",
+    "operation removed"
+   ],
+   [
+    "sales",
+    "addTargetHeadType",
+    "operation removed"
+   ],
+   [
+    "sales",
+    "deleteAllTargetHeadTypes",
+    "operation removed"
+   ],
+   [
+    "sales",
+    "deleteAllTargetHeads",
+    "operation removed"
+   ],
+   [
+    "sales",
+    "deleteTargetHead",
+    "operation removed"
+   ],
+   [
+    "sales",
+    "deleteTargetHeadType",
+    "operation removed"
+   ],
+   [
+    "vat",
+    "downloadGoodsTransferVatInvoices",
+    "operation added"
+   ],
+   [
+    "vat",
+    "downloadPenaltyAdjustments",
+    "operation added"
+   ],
+   [
+    "vat",
+    "downloadProductVatSettings",
+    "operation added"
+   ],
+   [
+    "vat",
+    "downloadPurchaseInvoiceVats",
+    "operation added"
+   ],
+   [
+    "vat",
+    "downloadPurchaseReturnVatInvoices",
+    "operation added"
+   ],
+   [
+    "vat",
+    "downloadSalesInvoiceVats",
+    "operation added"
+   ],
+   [
+    "vat",
+    "downloadSalesReturnVatInvoices",
+    "operation added"
+   ],
+   [
+    "vat",
+    "downloadSubFormUmas",
+    "operation added"
+   ],
+   [
+    "vat",
+    "downloadTaxCodes",
+    "operation added"
+   ],
+   [
+    "vat",
+    "downloadVatAdjustments",
+    "operation added"
+   ],
+   [
+    "vat",
+    "downloadVatPeriods",
+    "operation added"
+   ],
+   [
+    "vat",
+    "downloadVatRegisterBooks",
+    "operation added"
+   ],
+   [
+    "vat",
+    "downloadVatReturnSubmissionForms",
+    "operation added"
    ]
   ],
-  "calls": [],
+  "calls": [
+   [
+    "accounts",
+    "product",
+    "call added"
+   ],
+   [
+    "accounts",
+    "sales",
+    "call added"
+   ],
+   [
+    "authorization",
+    "authentication",
+    "call added"
+   ]
+  ],
   "kafka": [
    [
     "listens",
@@ -1908,17 +3727,38 @@
     "user-roles-topic",
     "authz-group",
     "added"
+   ],
+   [
+    "listens",
+    "customer",
+    "approval-request-failed-events",
+    "customer-service-group",
+    "added"
+   ],
+   [
+    "listens",
+    "purchase",
+    "approval-request-failed-events",
+    "purchase-service-group",
+    "added"
+   ],
+   [
+    "publishes",
+    "approval",
+    "approval-request-failed-events",
+    "",
+    "added"
    ]
   ]
  },
  "counts": {
-  "commits": 167,
-  "repos": 17,
-  "schema": 11,
-  "ops": 152,
-  "calls": 0,
-  "kafka": 1,
-  "drift": 24
+  "commits": 445,
+  "repos": 19,
+  "schema": 46,
+  "ops": 322,
+  "calls": 3,
+  "kafka": 4,
+  "drift": 31
  },
  "drift": [
   {
@@ -1957,9 +3797,34 @@
    "msg": "verifies the JWT in code; the Atlas says the opposite"
   },
   {
+   "kind": "call",
+   "svc": "accounts",
+   "msg": "calls product in code; missing from the Atlas call matrix"
+  },
+  {
+   "kind": "call",
+   "svc": "accounts",
+   "msg": "calls sales in code; missing from the Atlas call matrix"
+  },
+  {
+   "kind": "call",
+   "svc": "authorization",
+   "msg": "calls authentication in code; missing from the Atlas call matrix"
+  },
+  {
+   "kind": "port",
+   "svc": "purchase",
+   "msg": "Atlas lists a wrong port purchase → approval, but code now matches"
+  },
+  {
    "kind": "port",
    "svc": "sales",
    "msg": "Atlas lists a wrong port sales → order, but code now matches"
+  },
+  {
+   "kind": "kafka",
+   "svc": "",
+   "msg": "topic approval-request-failed-events used in code; not in the Atlas topic list"
   },
   {
    "kind": "kafka",
@@ -1969,42 +3834,42 @@
   {
    "kind": "review",
    "svc": "accounts",
-   "msg": "3 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+   "msg": "39 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   },
   {
    "kind": "review",
    "svc": "approval",
-   "msg": "4 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+   "msg": "12 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   },
   {
    "kind": "review",
    "svc": "authentication",
-   "msg": "10 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+   "msg": "11 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   },
   {
    "kind": "review",
    "svc": "authorization",
-   "msg": "17 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
-  },
-  {
-   "kind": "review",
-   "svc": "compliance",
-   "msg": "2 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
-  },
-  {
-   "kind": "review",
-   "svc": "configuration",
    "msg": "19 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   },
   {
    "kind": "review",
+   "svc": "compliance",
+   "msg": "15 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "configuration",
+   "msg": "20 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
    "svc": "customer",
-   "msg": "1 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+   "msg": "11 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   },
   {
    "kind": "review",
    "svc": "inventory",
-   "msg": "8 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+   "msg": "16 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   },
   {
    "kind": "review",
@@ -2024,7 +3889,7 @@
   {
    "kind": "review",
    "svc": "product",
-   "msg": "25 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+   "msg": "38 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   },
   {
    "kind": "review",
@@ -2033,16 +3898,218 @@
   },
   {
    "kind": "review",
+   "svc": "purchase",
+   "msg": "38 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
    "svc": "report",
-   "msg": "2 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+   "msg": "3 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   },
   {
    "kind": "review",
    "svc": "sales",
-   "msg": "3 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+   "msg": "17 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
+  },
+  {
+   "kind": "review",
+   "svc": "vat",
+   "msg": "16 new commit(s) since the last publish 2026-10-25 10:03: re-check its findings in the Atlas"
   }
  ],
  "history": [
+  {
+   "at": "2026-11-10T09:30",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 445,
+   "repos": 19,
+   "schema": 46,
+   "ops": 322,
+   "calls": 3,
+   "kafka": 4,
+   "drift": 31
+  },
+  {
+   "at": "2026-11-09T09:30",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 424,
+   "repos": 19,
+   "schema": 46,
+   "ops": 315,
+   "calls": 3,
+   "kafka": 4,
+   "drift": 31
+  },
+  {
+   "at": "2026-11-08T09:00",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 409,
+   "repos": 19,
+   "schema": 27,
+   "ops": 309,
+   "calls": 3,
+   "kafka": 1,
+   "drift": 30
+  },
+  {
+   "at": "2026-11-07T09:00",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 409,
+   "repos": 19,
+   "schema": 27,
+   "ops": 309,
+   "calls": 3,
+   "kafka": 1,
+   "drift": 30
+  },
+  {
+   "at": "2026-11-06T09:00",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 409,
+   "repos": 19,
+   "schema": 27,
+   "ops": 309,
+   "calls": 3,
+   "kafka": 1,
+   "drift": 30
+  },
+  {
+   "at": "2026-11-05T11:39",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 391,
+   "repos": 19,
+   "schema": 23,
+   "ops": 301,
+   "calls": 1,
+   "kafka": 1,
+   "drift": 28
+  },
+  {
+   "at": "2026-11-05T11:37",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 391,
+   "repos": 19,
+   "schema": 23,
+   "ops": 301,
+   "calls": 1,
+   "kafka": 1,
+   "drift": 28
+  },
+  {
+   "at": "2026-11-05T09:30",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 383,
+   "repos": 19,
+   "schema": 23,
+   "ops": 301,
+   "calls": 1,
+   "kafka": 1,
+   "drift": 28
+  },
+  {
+   "at": "2026-11-03T12:00",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 299,
+   "repos": 18,
+   "schema": 18,
+   "ops": 261,
+   "calls": 0,
+   "kafka": 1,
+   "drift": 26
+  },
+  {
+   "at": "2026-11-03T11:43",
+   "fetchOk": false,
+   "fetchSkipped": true,
+   "commits": 297,
+   "repos": 18,
+   "schema": 18,
+   "ops": 257,
+   "calls": 0,
+   "kafka": 1,
+   "drift": 26
+  },
+  {
+   "at": "2026-11-03T11:41",
+   "fetchOk": false,
+   "fetchSkipped": true,
+   "commits": 297,
+   "repos": 18,
+   "schema": 18,
+   "ops": 257,
+   "calls": 0,
+   "kafka": 1,
+   "drift": 26
+  },
+  {
+   "at": "2026-11-03T11:40",
+   "fetchOk": false,
+   "fetchSkipped": true,
+   "commits": 297,
+   "repos": 18,
+   "schema": 18,
+   "ops": 257,
+   "calls": 0,
+   "kafka": 1,
+   "drift": 27
+  },
+  {
+   "at": "2026-11-03T11:38",
+   "fetchOk": false,
+   "fetchSkipped": true,
+   "commits": 297,
+   "repos": 18,
+   "schema": 18,
+   "ops": 257,
+   "calls": 0,
+   "kafka": 1,
+   "drift": 26
+  },
+  {
+   "at": "2026-11-03T09:00",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 292,
+   "repos": 18,
+   "schema": 12,
+   "ops": 256,
+   "calls": 0,
+   "kafka": 1,
+   "drift": 26
+  },
+  {
+   "at": "2026-11-02T09:30",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 235,
+   "repos": 18,
+   "schema": 11,
+   "ops": 230,
+   "calls": 0,
+   "kafka": 1,
+   "drift": 26
+  },
+  {
+   "at": "2026-11-01T09:30",
+   "fetchOk": true,
+   "fetchSkipped": false,
+   "commits": 171,
+   "repos": 18,
+   "schema": 11,
+   "ops": 158,
+   "calls": 0,
+   "kafka": 1,
+   "drift": 26
+  },
   {
    "at": "2026-10-31T16:22",
    "fetchOk": true,
@@ -2210,198 +4277,6 @@
    "calls": 0,
    "kafka": 0,
    "drift": 13
-  },
-  {
-   "at": "2026-10-25T17:59",
-   "fetchOk": false,
-   "fetchSkipped": true,
-   "commits": 18,
-   "repos": 11,
-   "schema": 2,
-   "ops": 56,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 13
-  },
-  {
-   "at": "2026-10-25T17:47",
-   "fetchOk": true,
-   "fetchSkipped": false,
-   "commits": 18,
-   "repos": 11,
-   "schema": 2,
-   "ops": 56,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 13
-  },
-  {
-   "at": "2026-10-25T17:44",
-   "fetchOk": false,
-   "fetchSkipped": true,
-   "commits": 17,
-   "repos": 11,
-   "schema": 2,
-   "ops": 54,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 13
-  },
-  {
-   "at": "2026-10-25T17:30",
-   "fetchOk": true,
-   "fetchSkipped": false,
-   "commits": 17,
-   "repos": 11,
-   "schema": 2,
-   "ops": 54,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 13
-  },
-  {
-   "at": "2026-10-25T17:02",
-   "fetchOk": false,
-   "fetchSkipped": true,
-   "commits": 15,
-   "repos": 9,
-   "schema": 1,
-   "ops": 51,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 11
-  },
-  {
-   "at": "2026-10-25T17:01",
-   "fetchOk": true,
-   "fetchSkipped": false,
-   "commits": 15,
-   "repos": 9,
-   "schema": 1,
-   "ops": 51,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 11
-  },
-  {
-   "at": "2026-10-25T10:03",
-   "fetchOk": true,
-   "fetchSkipped": false,
-   "commits": 0,
-   "repos": 0,
-   "schema": 0,
-   "ops": 0,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 0
-  },
-  {
-   "at": "2026-10-25T10:03",
-   "fetchOk": true,
-   "fetchSkipped": false,
-   "commits": 2,
-   "repos": 2,
-   "schema": 0,
-   "ops": 6,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 2
-  },
-  {
-   "at": "2026-10-25T10:01",
-   "fetchOk": true,
-   "fetchSkipped": false,
-   "commits": 2,
-   "repos": 2,
-   "schema": 0,
-   "ops": 6,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 3
-  },
-  {
-   "at": "2026-10-24T15:08",
-   "fetchOk": true,
-   "fetchSkipped": false,
-   "commits": 0,
-   "repos": 0,
-   "schema": 0,
-   "ops": 0,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 0
-  },
-  {
-   "at": "2026-10-24T14:37",
-   "fetchOk": true,
-   "fetchSkipped": false,
-   "commits": 0,
-   "repos": 0,
-   "schema": 0,
-   "ops": 0,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 0
-  },
-  {
-   "at": "2026-10-24T14:37",
-   "fetchOk": false,
-   "fetchSkipped": true,
-   "commits": 0,
-   "repos": 0,
-   "schema": 0,
-   "ops": 0,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 0
-  },
-  {
-   "at": "2026-10-24T14:37",
-   "fetchOk": true,
-   "fetchSkipped": false,
-   "commits": 15,
-   "repos": 7,
-   "schema": 0,
-   "ops": 1,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 5
-  },
-  {
-   "at": "2026-10-24T14:36",
-   "fetchOk": false,
-   "fetchSkipped": true,
-   "commits": 15,
-   "repos": 7,
-   "schema": 0,
-   "ops": 1,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 5
-  },
-  {
-   "at": "2026-10-24T14:30",
-   "fetchOk": false,
-   "fetchSkipped": true,
-   "commits": 15,
-   "repos": 7,
-   "schema": 0,
-   "ops": 1,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 8
-  },
-  {
-   "at": "2026-10-24T14:30",
-   "fetchOk": true,
-   "fetchSkipped": false,
-   "commits": 15,
-   "repos": 7,
-   "schema": 0,
-   "ops": 1,
-   "calls": 0,
-   "kafka": 0,
-   "drift": 8
   }
  ],
  "published": {

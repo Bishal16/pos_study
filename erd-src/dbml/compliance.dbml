@@ -1,4 +1,4 @@
-// UniPOS · compliance-service · generated from @Entity code (origin/dev 98b2806)
+// UniPOS · compliance-service · generated from @Entity code (origin/dev 1eaf266)
 
 Table compliance.assessments [note: 'entity Assessment'] {
   assessment_id uuid [pk]
@@ -91,82 +91,6 @@ Table compliance.assessment_response_evidences [note: 'entity AssessmentResponse
   updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
 }
 
-Table compliance.assessment_templates [note: 'entity AssessmentTemplate'] {
-  assessment_template_id bigint [pk]
-  assessment_type_id bigint [not null]
-  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
-  template_code varchar(50) [not null]
-  template_name varchar(150) [not null]
-  template_format varchar(50) [not null]
-  version_no integer
-  status varchar(50)
-  scoring_enabled boolean [not null]
-  approval_required boolean [not null]
-  approval_mode varchar(50) [not null]
-  passing_score "double precision"
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [not null, note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
-}
-
-Table compliance.assessment_template_items [note: 'entity AssessmentTemplateItem'] {
-  assessment_template_item_id bigint [pk]
-  section_id bigint [not null]
-  question_text varchar(150)
-  response_type varchar(50)
-  max_score "double precision"
-  weight "double precision"
-  is_critical boolean
-  requires_evidence boolean
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [not null, note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
-}
-
-Table compliance.assessment_template_sections [note: 'entity AssessmentTemplateSection'] {
-  assessment_template_section_id bigint [pk]
-  template_id bigint [not null]
-  section_name varchar(150) [not null]
-  sequence_no integer
-  is_mandatory boolean
-  description varchar(250)
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [not null, note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
-}
-
-Table compliance.assessment_types [note: 'entity AssessmentType'] {
-  assessment_type_id bigint [pk]
-  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
-  type_code varchar(50) [not null]
-  type_name varchar(150) [not null]
-  description varchar(250)
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [not null, note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
-}
-
-Table compliance.assessment_workflow_rules [note: 'entity AssessmentWorkflowRule'] {
-  assessment_workflow_rule_id bigint [pk]
-  assessment_template_id bigint [not null]
-  condition_type varchar(50) [not null]
-  condition_value varchar(50)
-  action_type varchar(50) [not null]
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [not null, note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
-}
-
 Table compliance.audit_trail_logs [note: 'entity AuditTrailLog'] {
   audit_trail_log_id uuid [pk]
   merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
@@ -237,6 +161,82 @@ Table compliance.system_event_logs [note: 'entity SystemEventLog'] {
   updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
 }
 
+Table compliance.assessment_templates [note: 'entity AssessmentTemplate'] {
+  assessment_template_id bigint [pk]
+  assessment_type_id bigint [not null]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  template_code varchar(50) [not null]
+  template_name varchar(150) [not null]
+  template_format varchar(50) [not null]
+  version_no integer
+  status varchar(50)
+  scoring_enabled boolean [not null]
+  approval_required boolean [not null]
+  approval_mode varchar(50) [not null]
+  passing_score "double precision"
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table compliance.assessment_template_sections [note: 'entity AssessmentTemplateSection'] {
+  assessment_template_section_id bigint [pk]
+  template_id bigint [not null]
+  section_name varchar(150) [not null]
+  sequence_no integer
+  is_mandatory boolean
+  description varchar(250)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table compliance.assessment_template_items [note: 'entity AssessmentTemplateItem'] {
+  assessment_template_item_id bigint [pk]
+  section_id bigint [not null]
+  question_text varchar(150)
+  response_type varchar(50)
+  max_score "double precision"
+  weight "double precision"
+  is_critical boolean
+  requires_evidence boolean
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table compliance.assessment_types [note: 'entity AssessmentType'] {
+  assessment_type_id bigint [pk]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  type_code varchar(50) [not null]
+  type_name varchar(150) [not null]
+  description varchar(250)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table compliance.assessment_workflow_rules [note: 'entity AssessmentWorkflowRule'] {
+  assessment_workflow_rule_id bigint [pk]
+  assessment_template_id bigint [not null]
+  condition_type varchar(50) [not null]
+  condition_value varchar(50)
+  action_type varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
 Ref: compliance.assessments.assessment_type_id > compliance.assessment_types.assessment_type_id
 Ref: compliance.assessments.template_id > compliance.assessment_templates.assessment_template_id
 Ref: compliance.assessment_approvals.assessment_id - compliance.assessments.assessment_id
@@ -247,6 +247,6 @@ Ref: compliance.assessment_responses.template_item_id > compliance.assessment_te
 Ref: compliance.assessment_response_evidences.assessment_response_id > compliance.assessment_responses.assessment_response_id
 Ref: compliance.assessment_response_evidences.narrative_report_id > compliance.assessment_narrative_reports.assessment_narrative_report_id
 Ref: compliance.assessment_templates.assessment_type_id > compliance.assessment_types.assessment_type_id
-Ref: compliance.assessment_template_items.section_id > compliance.assessment_template_sections.assessment_template_section_id
 Ref: compliance.assessment_template_sections.template_id > compliance.assessment_templates.assessment_template_id
+Ref: compliance.assessment_template_items.section_id > compliance.assessment_template_sections.assessment_template_section_id
 Ref: compliance.assessment_workflow_rules.assessment_template_id > compliance.assessment_templates.assessment_template_id

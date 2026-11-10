@@ -13,9 +13,11 @@ _sp = os.path.join(os.path.dirname(HERE), "sync", "status.json")
 status = open(_sp, encoding="utf-8").read().replace("</", "<\\/") if os.path.exists(_sp) else "{}"
 code = open(os.path.join(HERE, "data.json"), encoding="utf-8").read().replace("</", "<\\/")
 # fe.js (Frontend level) goes first: it only defines functions that v2.js calls at render time
-js = open(os.path.join(HERE, "fe.js"), encoding="utf-8").read() + "\n" + open(os.path.join(HERE, "v2.js"), encoding="utf-8").read()
+js = "\n".join(open(os.path.join(HERE, _f), encoding="utf-8").read() for _f in ("fe.js", "apollo.js", "v2.js"))
 _fe = os.path.join(HERE, "fe.json")
 fe = (open(_fe, encoding="utf-8").read() if os.path.exists(_fe) else "null").replace("</", "<\\/")
+_ap = os.path.join(HERE, "apollo.json")
+apollo = (open(_ap, encoding="utf-8").read() if os.path.exists(_ap) else "null").replace("</", "<\\/")
 
 EXTRA_CSS = r"""
 [hidden]{display:none!important}
@@ -171,6 +173,26 @@ ol.cl{margin:0;padding-left:20px;font-size:.86rem;display:flex;flex-direction:co
 .feops{list-style:none;margin:0;padding:0;font-size:.84rem}
 .feops li{padding:2px 0;overflow-wrap:anywhere}
 .feops li.bad{color:var(--bad)}
+.legend span{flex-wrap:wrap}
+/* Level 8: Apollo gateway */
+.apfind{list-style:none;padding:0}
+.apfind li{padding:6px 0 6px 12px;border-left:3px solid var(--line);margin-bottom:6px;overflow-wrap:anywhere}
+.apfind li.bad{border-left-color:var(--bad)} ul.apfind li.warn{border-left-color:var(--warn);color:var(--ink)}
+.apf{display:inline-block;margin:1px 6px 1px 0;font-size:.76rem}
+.apf.off{text-decoration:line-through;color:var(--muted)}
+table.synct.apwrap td{white-space:normal;vertical-align:top}
+.apflow{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.apstep{font:inherit;text-align:left;display:flex;flex-direction:column;gap:4px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);cursor:pointer;min-width:0}
+.apstep:hover{border-color:var(--accent)}
+.apstep.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--tint)}
+.apstep small{color:var(--muted);font-size:.8rem}
+.apstep .fsn{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:.76rem;font-weight:700;background:var(--accent);color:var(--bg)}
+.apdetail{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-top:10px}
+.apdetail p{margin:0 0 8px} .apdetail p:last-child{margin:0}
+.apdetail .fsf{color:var(--accent);overflow-wrap:anywhere}
+.apfail{color:var(--muted)} .apfail b{color:var(--ink)}
+.apcode{margin:4px 0;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-family:var(--f-mono);font-size:.76rem;overflow-x:auto;color:var(--ink);white-space:pre}
+.apchips{display:flex;flex-wrap:wrap;gap:5px;margin:4px 0}
 """
 
 BODY = """
@@ -214,7 +236,7 @@ _te = os.path.join(os.path.dirname(HERE), "control", "web", "theme-early.js")
 if os.path.exists(_te):
     head = head.replace('<meta charset="utf-8">\n', '<meta charset="utf-8">\n<script>' + open(_te, encoding="utf-8").read() + '</script>\n', 1)
 html = head + "<style>" + v1css + EXTRA_CSS + "</style>\n" + BODY + \
-    '<script type="application/json" id="code">' + code + "</script>\n" + '<script type="application/json" id="fe">' + fe + "</script>\n" + '<script type="application/json" id="status">' + status + "</script>\n<script>\n" + data_block + "\n" + js + "\n</script>\n"
+    '<script type="application/json" id="code">' + code + "</script>\n" + '<script type="application/json" id="fe">' + fe + "</script>\n" + '<script type="application/json" id="apollo">' + apollo + "</script>\n" + '<script type="application/json" id="status">' + status + "</script>\n<script>\n" + data_block + "\n" + js + "\n</script>\n"
 # "⌂ Control" button: active only when served by the local control panel (control/server.py)
 _hb = os.path.join(os.path.dirname(HERE), "control", "web", "home-button.html")
 if os.path.exists(_hb):

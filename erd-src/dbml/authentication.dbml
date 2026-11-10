@@ -1,4 +1,4 @@
-// UniPOS · authentication-service · generated from @Entity code (origin/dev d358e44)
+// UniPOS · authentication-service · generated from @Entity code (origin/dev 8cc125c)
 
 Table authentication.password_reset_token [note: 'entity PasswordResetToken'] {
   id bigint [pk]

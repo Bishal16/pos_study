@@ -1,4 +1,4 @@
-// UniPOS · vat-service · generated from @Entity code (origin/dev e0c8c3b)
+// UniPOS · vat-service · generated from @Entity code (origin/dev 80ba79c)
 
 Table vat.goods_transfer_vat_invoices [note: 'entity GoodsTransferVatInvoice'] {
   goods_transfer_vat_invoice_id uuid [pk]

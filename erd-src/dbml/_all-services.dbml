@@ -956,7 +956,7 @@ Table product.product_price_history [note: 'entity ProductPriceHistory'] {
   grade_level varchar(50) [not null]
   price numeric [not null]
   start_date timestamp [not null]
-  end_date timestamp [not null]
+  end_date timestamp
   enterprice_sku_id uuid
   enterprice_price_list_line_id uuid
   currency varchar(50) [not null]
@@ -976,10 +976,12 @@ Table product.product_skus [note: 'entity ProductSKU'] {
   uom_id integer [not null]
   product_type_id integer [not null]
   operating_unit_id integer
-  ebs_inventory_item_id uuid
+  ebs_inventory_item_id varchar(255)
   is_hot_sale boolean
   ebs_item_code varchar(255)
   description varchar(255)
+  "ITEM_SIZE" varchar(255)
+  "SIZE_UOM" varchar(255)
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [note: 'inherited from BaseEntity']
   is_active boolean [not null, note: 'inherited from BaseEntity']
@@ -1114,9 +1116,10 @@ Table customer.business_organizations [note: 'entity BusinessOrganization'] {
   outstanding_balance numeric
   is_approved boolean
   sales_type_code varchar(255)
-  workflow_id uuid [note: '→ approval.approval_workflows.workflow_id (other service, no FK)']
-  approval_path_id uuid [note: '→ approval.approval_paths.approval_path_id (other service, no FK)']
-  approval_id uuid [note: '→ approval.approval_requests.approval_request_id (other service, no FK)']
+  workflow_id bigint [note: '→ approval.approval_workflows.workflow_id (other service, no FK)']
+  workflow_code varchar(50)
+  approval_path_id bigint [note: '→ approval.approval_paths.approval_path_id (other service, no FK)']
+  approval_id bigint [note: '→ approval.approval_requests.approval_request_id (other service, no FK)']
   status varchar(50)
   step integer
   created_at timestamp [not null, note: 'inherited from BaseEntity']
@@ -1593,6 +1596,7 @@ Table purchase.supplier_legal_entities [note: 'entity SupplierLegalEntity'] {
   email varchar(255) [not null, unique]
   phone varchar(255) [not null]
   merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  code varchar(255)
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [not null, note: 'inherited from BaseEntity']
   is_active boolean [not null, note: 'inherited from BaseEntity']
@@ -1700,11 +1704,12 @@ Table purchase.purchase_orders [note: 'entity PurchaseOrder'] {
   grand_total numeric(15) [not null]
   status varchar(50) [not null]
   notes varchar(100)
-  approval_id uuid [note: '→ approval.approval_requests.approval_request_id (other service, no FK)']
+  approval_id bigint [note: '→ approval.approval_requests.approval_request_id (other service, no FK)']
   payment_terms varchar(255)
   requester_type varchar(50)
-  approval_path_id uuid [note: '→ approval.approval_paths.approval_path_id (other service, no FK)']
-  workflow_id uuid [note: '→ approval.approval_workflows.workflow_id (other service, no FK)']
+  approval_path_id bigint [note: '→ approval.approval_paths.approval_path_id (other service, no FK)']
+  workflow_id bigint [note: '→ approval.approval_workflows.workflow_id (other service, no FK)']
+  workflow_code varchar(50)
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [not null, note: 'inherited from BaseEntity']
   is_active boolean [not null, note: 'inherited from BaseEntity']
@@ -1793,10 +1798,11 @@ Table purchase.purchase_requests [note: 'entity PurchaseRequest'] {
   notes varchar(255) [not null]
   total_estimated_cost numeric [not null]
   is_changed_by_approver boolean [not null]
-  approval_id uuid [note: '→ approval.approval_requests.approval_request_id (other service, no FK)']
+  approval_id bigint [note: '→ approval.approval_requests.approval_request_id (other service, no FK)']
   requester_type varchar(50)
-  approval_path_id uuid [note: '→ approval.approval_paths.approval_path_id (other service, no FK)']
-  workflow_id uuid [note: '→ approval.approval_workflows.workflow_id (other service, no FK)']
+  approval_path_id bigint [note: '→ approval.approval_paths.approval_path_id (other service, no FK)']
+  workflow_id bigint [note: '→ approval.approval_workflows.workflow_id (other service, no FK)']
+  workflow_code varchar(50)
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [not null, note: 'inherited from BaseEntity']
   is_active boolean [not null, note: 'inherited from BaseEntity']
@@ -2071,7 +2077,7 @@ Ref: purchase.product_supplier_types.merchant_id > configuration.merchants.merch
 
 Table approval.approval_logs [note: 'entity ApprovalLog'] {
   approval_log_id uuid [pk]
-  approval_request_id uuid [not null]
+  approval_request_id bigint [not null]
   approval_path_role_user_id uuid [not null]
   taken_action varchar(50) [not null]
   notes varchar(255) [not null]
@@ -2083,7 +2089,7 @@ Table approval.approval_logs [note: 'entity ApprovalLog'] {
 }
 
 Table approval.approval_paths [note: 'entity ApprovalPath'] {
-  approval_path_id uuid [pk]
+  approval_path_id bigint [pk]
   merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
   path_code varchar(50)
   approval_path_name varchar(255) [not null]
@@ -2097,13 +2103,13 @@ Table approval.approval_paths [note: 'entity ApprovalPath'] {
 
 Table approval.approval_path_assigned_workflows [note: 'entity ApprovalPathAssignedWorkflow'] {
   approval_path_assigned_workflow_id uuid [pk]
-  approval_path_id uuid [not null]
-  workflow_id uuid [not null]
+  approval_path_id bigint [not null]
+  workflow_id bigint [not null]
 }
 
 Table approval.approval_path_roles [note: 'entity ApprovalPathRole'] {
   approval_path_role_id uuid [pk]
-  approval_path_id uuid [not null]
+  approval_path_id bigint [not null]
   role_id bigint [note: '→ authorization.roles.role_id (other service, no FK)']
   action_sequence bigint [not null]
   comment varchar(255) [not null]
@@ -2112,7 +2118,7 @@ Table approval.approval_path_roles [note: 'entity ApprovalPathRole'] {
 
 Table approval.approval_path_stages [note: 'entity ApprovalPathStage'] {
   approval_path_stage_id uuid [pk]
-  approval_path_id uuid [not null]
+  approval_path_id bigint [not null]
   merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
   execution_order_number integer [not null]
   business_area_type_id integer
@@ -2164,7 +2170,7 @@ Table approval.approval_path_role_users_history [note: 'entity ApprovalPathRoleU
 Table approval.approval_policies [note: 'entity ApprovalPolicy'] {
   approval_policy_id uuid [pk]
   policy_name varchar(255) [not null]
-  workflow_id uuid [not null]
+  workflow_id bigint [not null]
   condition varchar(255) [not null]
   comment varchar(255) [not null]
   created_at timestamp [not null, note: 'inherited from BaseEntity']
@@ -2176,7 +2182,7 @@ Table approval.approval_policies [note: 'entity ApprovalPolicy'] {
 
 Table approval.approval_action_history [note: 'entity ApprovalActionHistory'] {
   approval_action_history_id uuid [pk]
-  approval_request_id uuid [not null]
+  approval_request_id bigint [not null]
   approval_request_stage_id uuid
   actor_id uuid [not null]
   action_by uuid
@@ -2193,12 +2199,12 @@ Table approval.approval_action_history [note: 'entity ApprovalActionHistory'] {
 }
 
 Table approval.approval_requests [note: 'entity ApprovalRequest'] {
-  approval_request_id uuid [pk]
+  approval_request_id bigint [pk]
   merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
   requested_by varchar(50)
-  workflow_id uuid [not null]
+  workflow_id bigint [not null]
   approval_status varchar(50) [not null]
-  path_id uuid [not null]
+  path_id bigint [not null]
   notes varchar(255)
   reference_id varchar(50)
   reference_type varchar(50)
@@ -2219,7 +2225,7 @@ Table approval.approval_requests [note: 'entity ApprovalRequest'] {
 
 Table approval.approval_request_stages [note: 'entity ApprovalRequestStage'] {
   approval_request_stage_id uuid [pk]
-  approval_request_id uuid [not null]
+  approval_request_id bigint [not null]
   approval_path_stage_id uuid
   execution_order_number integer [not null]
   stage_status varchar(20) [not null]
@@ -2249,7 +2255,7 @@ Table approval.approval_request_stage_actors [note: 'entity ApprovalRequestStage
 
 Table approval.approval_steps [note: 'entity ApprovalStep'] {
   approval_step_id uuid [pk]
-  approval_request_id uuid [not null]
+  approval_request_id bigint [not null]
   step_no bigint [not null]
   approval_path_role_user_id uuid [not null]
   status varchar(50) [not null]
@@ -2262,7 +2268,7 @@ Table approval.approval_steps [note: 'entity ApprovalStep'] {
 }
 
 Table approval.approval_workflows [note: 'entity ApprovalWorkflow'] {
-  workflow_id uuid [pk]
+  workflow_id bigint [pk]
   merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
   workflow_name varchar(200) [not null]
   workflow_code varchar(50) [not null]
@@ -2291,7 +2297,7 @@ Table approval.approval_delegations [note: 'entity ApprovalDelegation'] {
 
 Table approval.outbox [note: 'entity Outbox'] {
   id uuid [pk]
-  aggregate_id uuid [not null]
+  aggregate_id bigint [not null]
   aggregate_type varchar(50) [not null]
   event_type varchar(50) [not null]
   payload varchar(255) [not null]
@@ -2300,20 +2306,19 @@ Table approval.outbox [note: 'entity Outbox'] {
   updated_at timestamp [not null]
 }
 
-Table approval.path_routing_conditions [note: 'entity PathRoutingCondition'] {
-  path_routing_condition_id uuid [pk]
-  workflow_approval_path_mapping_id uuid [not null]
-  execution_order integer [not null]
-  comparable_field varchar(150) [not null]
-  operator varchar(20) [not null]
-  comparable_value "double precision" [not null]
-  connecting_logical_operator varchar(10)
+Table approval.approval_path_condition_groups [note: 'entity ApprovalPathConditionGroup'] {
+  approval_path_condition_group_id bigint [pk]
+  approval_path_id bigint [not null]
+  group_code varchar(20) [not null]
+  group_sequence integer [not null]
+  logical_operator varchar(10)
+  is_active boolean [not null]
 }
 
-Table approval.workflow_approval_path_mappings [note: 'entity WorkflowApprovalPathMapping'] {
-  workflow_approval_path_mapping_id uuid [pk]
-  workflow_id uuid [not null]
-  approval_path_id uuid [not null]
+Table approval.approval_workflow_paths [note: 'entity ApprovalWorkflowPath'] {
+  workflow_path_id bigint [pk]
+  workflow_id bigint [not null]
+  approval_path_id bigint [not null]
   merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
   priority integer [not null]
   created_at timestamp [not null, note: 'inherited from BaseEntity']
@@ -2321,6 +2326,16 @@ Table approval.workflow_approval_path_mappings [note: 'entity WorkflowApprovalPa
   is_active boolean [not null, note: 'inherited from BaseEntity']
   created_by varchar(255) [not null, note: 'inherited from BaseEntity']
   updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table approval.path_routing_conditions [note: 'entity PathRoutingCondition'] {
+  path_routing_condition_id bigint [pk]
+  approval_path_condition_group_id bigint [not null]
+  execution_order integer [not null]
+  comparable_field varchar(150) [not null]
+  operator varchar(20) [not null]
+  comparable_value jsonb [not null]
+  connecting_logical_operator varchar(10)
 }
 
 Ref: approval.approval_logs.approval_request_id > approval.approval_requests.approval_request_id
@@ -2363,10 +2378,11 @@ Ref: approval.approval_workflows.merchant_id > configuration.merchants.merchant_
 Ref: approval.approval_delegations.merchant_id > configuration.merchants.merchant_id // cross-service id, no FK
 Ref: approval.approval_delegations.from_user_id > authentication.users.user_id // cross-service id, no FK
 Ref: approval.approval_delegations.to_user_id > authentication.users.user_id // cross-service id, no FK
-Ref: approval.path_routing_conditions.workflow_approval_path_mapping_id > approval.workflow_approval_path_mappings.workflow_approval_path_mapping_id
-Ref: approval.workflow_approval_path_mappings.workflow_id > approval.approval_workflows.workflow_id
-Ref: approval.workflow_approval_path_mappings.approval_path_id > approval.approval_paths.approval_path_id
-Ref: approval.workflow_approval_path_mappings.merchant_id > configuration.merchants.merchant_id // cross-service id, no FK
+Ref: approval.approval_path_condition_groups.approval_path_id > approval.approval_paths.approval_path_id
+Ref: approval.approval_workflow_paths.workflow_id > approval.approval_workflows.workflow_id
+Ref: approval.approval_workflow_paths.approval_path_id > approval.approval_paths.approval_path_id
+Ref: approval.approval_workflow_paths.merchant_id > configuration.merchants.merchant_id // cross-service id, no FK
+Ref: approval.path_routing_conditions.approval_path_condition_group_id > approval.approval_path_condition_groups.approval_path_condition_group_id
 
 Table inventory.sales_hub_allocated_spaces [note: 'entity SalesHubAllocatedSpace'] {
   sales_hub_allocated_space_id uuid [pk]
@@ -2451,8 +2467,8 @@ Table inventory.item_ledgers [note: 'entity ItemLedger'] {
   transaction_date timestamp [not null]
   transaction_type varchar(50) [not null]
   operation_name varchar(50) [not null]
-  item_level_id bigint [not null]
-  related_id uuid [not null, note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
+  item_level_id bigint
+  related_id uuid [note: 'polymorphic → product.product_categories | product.product_lines | product.product_models | product.product_skus | product.product_batches']
   opening_quantity numeric [not null]
   opening_rate numeric [not null]
   opening_amount numeric [not null]
@@ -2981,7 +2997,7 @@ Table sales.sales_target_monthly [note: 'entity SalesTargetMonthly'] {
   sales_target_monthly_id uuid [pk]
   sales_target_yearly_id uuid [not null]
   month_number integer [not null]
-  sales_target_head_id uuid [not null]
+  sales_target_head_id integer [not null]
   target_amount "double precision" [not null]
   achieved_amount "double precision" [not null]
   created_at timestamp [not null, note: 'inherited from BaseEntity']
@@ -2995,7 +3011,7 @@ Table sales.sales_target_yearly [note: 'entity SalesTargetYearly'] {
   sales_target_yearly_id uuid [pk]
   fiscal_year bigint [not null]
   sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
-  sales_target_head_id uuid [not null]
+  sales_target_head_id integer [not null]
   target_amount "double precision" [not null]
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [note: 'inherited from BaseEntity']
@@ -3005,8 +3021,8 @@ Table sales.sales_target_yearly [note: 'entity SalesTargetYearly'] {
 }
 
 Table sales.sales_target_heads [note: 'entity TargetHead'] {
-  target_head_id uuid [pk]
-  target_head_type_id uuid [not null]
+  target_head_id integer [pk]
+  target_head_type_id integer [not null]
   is_for_yearly_target boolean [not null]
   is_amount_based varchar(50) [not null]
   head_name varchar(255) [not null]
@@ -3025,8 +3041,8 @@ Table sales.sales_target_heads [note: 'entity TargetHead'] {
 }
 
 Table sales.sales_target_head_types [note: 'entity TargetHeadType'] {
-  target_head_type_id uuid [pk]
-  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  target_head_type_id integer [pk]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
   target_head_type_name varchar(255) [not null]
   target_head_type_code varchar(255) [not null]
   description varchar(255) [not null]
@@ -4280,6 +4296,8 @@ Table accounts.general_ledger_details [note: 'entity GeneralLedgerDetail'] {
   bank_account_id uuid
   customer_id uuid [note: '→ customer.persons.person_id (other service, no FK)']
   particular varchar(250)
+  party_name varchar(250)
+  party_code varchar(50)
 }
 
 Table accounts.general_ledger_headers [note: 'entity GeneralLedgerHeader'] {
@@ -5056,6 +5074,10 @@ Table report.gl_transactions [note: 'entity GlTransaction'] {
   reference_number varchar(50)
   particulars varchar(250)
   narration varchar(500)
+  party_type varchar(20)
+  party_id varchar(64)
+  party_code varchar(50)
+  party_name varchar(250)
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [not null, note: 'inherited from BaseEntity']
   is_active boolean [not null, note: 'inherited from BaseEntity']
@@ -5375,82 +5397,6 @@ Table compliance.assessment_response_evidences [note: 'entity AssessmentResponse
   updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
 }
 
-Table compliance.assessment_templates [note: 'entity AssessmentTemplate'] {
-  assessment_template_id bigint [pk]
-  assessment_type_id bigint [not null]
-  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
-  template_code varchar(50) [not null]
-  template_name varchar(150) [not null]
-  template_format varchar(50) [not null]
-  version_no integer
-  status varchar(50)
-  scoring_enabled boolean [not null]
-  approval_required boolean [not null]
-  approval_mode varchar(50) [not null]
-  passing_score "double precision"
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [not null, note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
-}
-
-Table compliance.assessment_template_items [note: 'entity AssessmentTemplateItem'] {
-  assessment_template_item_id bigint [pk]
-  section_id bigint [not null]
-  question_text varchar(150)
-  response_type varchar(50)
-  max_score "double precision"
-  weight "double precision"
-  is_critical boolean
-  requires_evidence boolean
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [not null, note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
-}
-
-Table compliance.assessment_template_sections [note: 'entity AssessmentTemplateSection'] {
-  assessment_template_section_id bigint [pk]
-  template_id bigint [not null]
-  section_name varchar(150) [not null]
-  sequence_no integer
-  is_mandatory boolean
-  description varchar(250)
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [not null, note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
-}
-
-Table compliance.assessment_types [note: 'entity AssessmentType'] {
-  assessment_type_id bigint [pk]
-  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
-  type_code varchar(50) [not null]
-  type_name varchar(150) [not null]
-  description varchar(250)
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [not null, note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
-}
-
-Table compliance.assessment_workflow_rules [note: 'entity AssessmentWorkflowRule'] {
-  assessment_workflow_rule_id bigint [pk]
-  assessment_template_id bigint [not null]
-  condition_type varchar(50) [not null]
-  condition_value varchar(50)
-  action_type varchar(50) [not null]
-  created_at timestamp [not null, note: 'inherited from BaseEntity']
-  updated_at timestamp [not null, note: 'inherited from BaseEntity']
-  is_active boolean [not null, note: 'inherited from BaseEntity']
-  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
-  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
-}
-
 Table compliance.audit_trail_logs [note: 'entity AuditTrailLog'] {
   audit_trail_log_id uuid [pk]
   merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
@@ -5521,6 +5467,82 @@ Table compliance.system_event_logs [note: 'entity SystemEventLog'] {
   updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
 }
 
+Table compliance.assessment_templates [note: 'entity AssessmentTemplate'] {
+  assessment_template_id bigint [pk]
+  assessment_type_id bigint [not null]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  template_code varchar(50) [not null]
+  template_name varchar(150) [not null]
+  template_format varchar(50) [not null]
+  version_no integer
+  status varchar(50)
+  scoring_enabled boolean [not null]
+  approval_required boolean [not null]
+  approval_mode varchar(50) [not null]
+  passing_score "double precision"
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table compliance.assessment_template_sections [note: 'entity AssessmentTemplateSection'] {
+  assessment_template_section_id bigint [pk]
+  template_id bigint [not null]
+  section_name varchar(150) [not null]
+  sequence_no integer
+  is_mandatory boolean
+  description varchar(250)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table compliance.assessment_template_items [note: 'entity AssessmentTemplateItem'] {
+  assessment_template_item_id bigint [pk]
+  section_id bigint [not null]
+  question_text varchar(150)
+  response_type varchar(50)
+  max_score "double precision"
+  weight "double precision"
+  is_critical boolean
+  requires_evidence boolean
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table compliance.assessment_types [note: 'entity AssessmentType'] {
+  assessment_type_id bigint [pk]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  type_code varchar(50) [not null]
+  type_name varchar(150) [not null]
+  description varchar(250)
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
+Table compliance.assessment_workflow_rules [note: 'entity AssessmentWorkflowRule'] {
+  assessment_workflow_rule_id bigint [pk]
+  assessment_template_id bigint [not null]
+  condition_type varchar(50) [not null]
+  condition_value varchar(50)
+  action_type varchar(50) [not null]
+  created_at timestamp [not null, note: 'inherited from BaseEntity']
+  updated_at timestamp [not null, note: 'inherited from BaseEntity']
+  is_active boolean [not null, note: 'inherited from BaseEntity']
+  created_by varchar(255) [not null, note: 'inherited from BaseEntity']
+  updated_by varchar(255) [not null, note: 'inherited from BaseEntity']
+}
+
 Ref: compliance.assessments.assessment_type_id > compliance.assessment_types.assessment_type_id
 Ref: compliance.assessments.template_id > compliance.assessment_templates.assessment_template_id
 Ref: compliance.assessments.merchant_id > configuration.merchants.merchant_id // cross-service id, no FK
@@ -5533,16 +5555,16 @@ Ref: compliance.assessment_responses.assessment_id > compliance.assessments.asse
 Ref: compliance.assessment_responses.template_item_id > compliance.assessment_template_items.assessment_template_item_id
 Ref: compliance.assessment_response_evidences.assessment_response_id > compliance.assessment_responses.assessment_response_id
 Ref: compliance.assessment_response_evidences.narrative_report_id > compliance.assessment_narrative_reports.assessment_narrative_report_id
-Ref: compliance.assessment_templates.assessment_type_id > compliance.assessment_types.assessment_type_id
-Ref: compliance.assessment_templates.merchant_id > configuration.merchants.merchant_id // cross-service id, no FK
-Ref: compliance.assessment_template_items.section_id > compliance.assessment_template_sections.assessment_template_section_id
-Ref: compliance.assessment_template_sections.template_id > compliance.assessment_templates.assessment_template_id
-Ref: compliance.assessment_types.merchant_id > configuration.merchants.merchant_id // cross-service id, no FK
-Ref: compliance.assessment_workflow_rules.assessment_template_id > compliance.assessment_templates.assessment_template_id
 Ref: compliance.audit_trail_logs.merchant_id > configuration.merchants.merchant_id // cross-service id, no FK
 Ref: compliance.service_request_logs.merchant_id > configuration.merchants.merchant_id // cross-service id, no FK
 Ref: compliance.system_error_logs.merchant_id > configuration.merchants.merchant_id // cross-service id, no FK
 Ref: compliance.system_event_logs.merchant_id > configuration.merchants.merchant_id // cross-service id, no FK
+Ref: compliance.assessment_templates.assessment_type_id > compliance.assessment_types.assessment_type_id
+Ref: compliance.assessment_templates.merchant_id > configuration.merchants.merchant_id // cross-service id, no FK
+Ref: compliance.assessment_template_sections.template_id > compliance.assessment_templates.assessment_template_id
+Ref: compliance.assessment_template_items.section_id > compliance.assessment_template_sections.assessment_template_section_id
+Ref: compliance.assessment_types.merchant_id > configuration.merchants.merchant_id // cross-service id, no FK
+Ref: compliance.assessment_workflow_rules.assessment_template_id > compliance.assessment_templates.assessment_template_id
 
 Table notification.email_template_contents [note: 'entity EmailTemplateContent'] {
   email_template_content_id uuid [pk]

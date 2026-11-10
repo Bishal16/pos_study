@@ -1,4 +1,4 @@
-// UniPOS · report-service · generated from @Entity code (origin/dev cf5c3b9)
+// UniPOS · report-service · generated from @Entity code (origin/dev 3fe28f5)
 
 Table report.chart_of_accounts [note: 'entity ChartOfAccountSnapshot'] {
   account_id integer [pk]
@@ -38,6 +38,10 @@ Table report.gl_transactions [note: 'entity GlTransaction'] {
   reference_number varchar(50)
   particulars varchar(250)
   narration varchar(500)
+  party_type varchar(20)
+  party_id varchar(64)
+  party_code varchar(50)
+  party_name varchar(250)
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [not null, note: 'inherited from BaseEntity']
   is_active boolean [not null, note: 'inherited from BaseEntity']

@@ -1,4 +1,4 @@
-// UniPOS · customer-service · generated from @Entity code (origin/dev c30e1d3)
+// UniPOS · customer-service · generated from @Entity code (origin/dev e2d3a85)
 
 Table customer.business_document_types [note: 'entity BusinessDocumentType'] {
   document_type_id integer [pk]
@@ -52,9 +52,10 @@ Table customer.business_organizations [note: 'entity BusinessOrganization'] {
   outstanding_balance numeric
   is_approved boolean
   sales_type_code varchar(255)
-  workflow_id uuid [note: '→ approval.approval_workflows.workflow_id (other service, no FK)']
-  approval_path_id uuid [note: '→ approval.approval_paths.approval_path_id (other service, no FK)']
-  approval_id uuid [note: '→ approval.approval_requests.approval_request_id (other service, no FK)']
+  workflow_id bigint [note: '→ approval.approval_workflows.workflow_id (other service, no FK)']
+  workflow_code varchar(50)
+  approval_path_id bigint [note: '→ approval.approval_paths.approval_path_id (other service, no FK)']
+  approval_id bigint [note: '→ approval.approval_requests.approval_request_id (other service, no FK)']
   status varchar(50)
   step integer
   created_at timestamp [not null, note: 'inherited from BaseEntity']

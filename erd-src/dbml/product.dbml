@@ -1,4 +1,4 @@
-// UniPOS · product-service · generated from @Entity code (origin/dev ef42dd8)
+// UniPOS · product-service · generated from @Entity code (origin/dev 1583d0b)
 
 Table product.brands [note: 'entity Brand'] {
   brand_id integer [pk]
@@ -291,7 +291,7 @@ Table product.product_price_history [note: 'entity ProductPriceHistory'] {
   grade_level varchar(50) [not null]
   price numeric [not null]
   start_date timestamp [not null]
-  end_date timestamp [not null]
+  end_date timestamp
   enterprice_sku_id uuid
   enterprice_price_list_line_id uuid
   currency varchar(50) [not null]
@@ -311,10 +311,12 @@ Table product.product_skus [note: 'entity ProductSKU'] {
   uom_id integer [not null]
   product_type_id integer [not null]
   operating_unit_id integer
-  ebs_inventory_item_id uuid
+  ebs_inventory_item_id varchar(255)
   is_hot_sale boolean
   ebs_item_code varchar(255)
   description varchar(255)
+  "ITEM_SIZE" varchar(255)
+  "SIZE_UOM" varchar(255)
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [note: 'inherited from BaseEntity']
   is_active boolean [not null, note: 'inherited from BaseEntity']

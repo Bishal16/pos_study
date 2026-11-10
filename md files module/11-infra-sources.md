@@ -78,3 +78,27 @@ flowchart TB
 - ✅ Everything needed to **stand up the infrastructure** is now in hand: network, Kafka, Consul, MinIO, Redis, Kong, the gateway, observability.
 - ❌ Still missing: **order-service source**.
 - To do in the setup guide: new secrets for every `tfvars`/`.env`, rename network/containers (drop "walton"), decide Kong yes/no, pick the gateway discovery mode (Consul vs static).
+
+## 2026-11-03: Apollo gateway from its own repo (`apollo-server`, origin/dev `d17b2e6`)
+The repo is now in the projects folder. Atlas level 8 "Apollo gateway" is built from it on every refresh (`atlas-src/extract_apollo.py`, `compose_check.cjs`); Sync moved to level 9.
+
+**Registration.** A service never contacts the gateway. Spring Cloud Consul registers it (name, IP, port, labels). The gateway reads the catalog, asks for each name's passing instances, keeps `deployment=docker` + `environment=dev`, and takes the first one.
+
+**Supergraph.** Every 30 s, and at startup if there is no cache: discover → POST `{ _service { sdl } }` to each service with no token → dependency filter → `composeServices` → save `cache/supergraph.graphql` → swap into the running gateway. A failure at any stage keeps the current supergraph.
+
+**Verified on 2026-11-03**
+- Live: all 18 services in Consul, 1,804 root operations on the gateway.
+- Composing origin/dev's real schemas with the gateway's own library succeeds. Without accounts, approval, authorization, configuration, customer, product or purchase it fails with EXTENSION_WITH_NO_BASE, so updates stop. Without any of the other 11 (including authentication) it composes and that service's operations vanish.
+- This test joins each repo's schema files. It approximates what each service returns from `_service`; it doesn't read them from the running services.
+
+**Findings**
+- `customer-service` was usable in Consul at `192.168.222.178`, not a Docker address. The labels are fixed in application.properties, so a run with the local profile looks like a deployed instance. customer-service's committed default profile is `local`; the others are `prod`.
+- The discovery filter is fixed to `environment=dev` in the gateway's code. ODCL should make it a setting.
+- `FederationDependencyResolver` only sees `extend type`; these schemas use `type X @extends`.
+- `authentication-service` has 13 passing entries: HTTP check, same address after each redeploy.
+- Dev `terraform.tfvars` line 11 has an unclosed quote on PORT; `container.tf` maps to internal 4042 while PORT is 4000. The running gateway answers on 4000.
+- `cors()` with no options runs before the allow-list, so the list has no effect. `context.correlationId` is never set, so the gateway doesn't create ids.
+- `/api/upload/:service/:purpose` reads `*_SERVICE_URL` variables the dev Terraform doesn't pass, and the frontend doesn't call it.
+- 7 of 31 source files are not reachable from Server.ts, including the Kubernetes registry (empty) and `SubgraphDependencies`.
+- The deploy script's gateway restart looks unneeded given the 30 s refresh. To confirm with the manager.
+- customer-service commits a stale `bin/` copy of its schemas; the extractors now read `src/` only.

@@ -1,4 +1,4 @@
-// UniPOS · sales-service · generated from @Entity code (origin/dev 022ba7e)
+// UniPOS · sales-service · generated from @Entity code (origin/dev 32c94cb)
 
 Table sales.processing_fee_ranges [note: 'entity ProcessingFeeRange'] {
   processing_fee_range_id integer [pk]
@@ -262,7 +262,7 @@ Table sales.sales_target_monthly [note: 'entity SalesTargetMonthly'] {
   sales_target_monthly_id uuid [pk]
   sales_target_yearly_id uuid [not null]
   month_number integer [not null]
-  sales_target_head_id uuid [not null]
+  sales_target_head_id integer [not null]
   target_amount "double precision" [not null]
   achieved_amount "double precision" [not null]
   created_at timestamp [not null, note: 'inherited from BaseEntity']
@@ -276,7 +276,7 @@ Table sales.sales_target_yearly [note: 'entity SalesTargetYearly'] {
   sales_target_yearly_id uuid [pk]
   fiscal_year bigint [not null]
   sales_hub_id integer [not null, note: '→ configuration.business_areas.business_area_id (other service, no FK)']
-  sales_target_head_id uuid [not null]
+  sales_target_head_id integer [not null]
   target_amount "double precision" [not null]
   created_at timestamp [not null, note: 'inherited from BaseEntity']
   updated_at timestamp [note: 'inherited from BaseEntity']
@@ -286,8 +286,8 @@ Table sales.sales_target_yearly [note: 'entity SalesTargetYearly'] {
 }
 
 Table sales.sales_target_heads [note: 'entity TargetHead'] {
-  target_head_id uuid [pk]
-  target_head_type_id uuid [not null]
+  target_head_id integer [pk]
+  target_head_type_id integer [not null]
   is_for_yearly_target boolean [not null]
   is_amount_based varchar(50) [not null]
   head_name varchar(255) [not null]
@@ -306,8 +306,8 @@ Table sales.sales_target_heads [note: 'entity TargetHead'] {
 }
 
 Table sales.sales_target_head_types [note: 'entity TargetHeadType'] {
-  target_head_type_id uuid [pk]
-  merchant_id uuid [note: '→ configuration.merchants.merchant_id (other service, no FK)']
+  target_head_type_id integer [pk]
+  merchant_id uuid [not null, note: '→ configuration.merchants.merchant_id (other service, no FK)']
   target_head_type_name varchar(255) [not null]
   target_head_type_code varchar(255) [not null]
   description varchar(255) [not null]
